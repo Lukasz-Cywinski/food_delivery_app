@@ -32,7 +32,7 @@ public class RestaurantEntity {
     private OffsetDateTime added;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JoinColumn(name = "restaurant_owner_id", nullable = false)
     private RestaurantOwnerEntity restaurantOwner;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
@@ -40,5 +40,8 @@ public class RestaurantEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private Set<DishEntity> dishes;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 
 }

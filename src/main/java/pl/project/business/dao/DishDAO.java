@@ -1,4 +1,4 @@
 package pl.project.business.dao;
 
-public class DishDAO {
+public interface DishDAO {
 }

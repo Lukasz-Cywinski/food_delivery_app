@@ -1,4 +1,4 @@
 package pl.project.business.dao;
 
-public class OrderDAO {
+public interface OrderDAO {
 }

@@ -5,6 +5,7 @@ CREATE TABLE "customer" (
   "phone_number"        varchar(32)     unique not null,
   "email"               varchar(32)     unique not null,
   "delivery_address_id" int             not null,
+  "is_active"           boolean         not null,
   PRIMARY KEY ("id"),
   CONSTRAINT "FK_customer.delivery_address_id"
     FOREIGN KEY ("delivery_address_id")

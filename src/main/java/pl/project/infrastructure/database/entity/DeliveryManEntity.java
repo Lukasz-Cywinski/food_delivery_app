@@ -35,4 +35,10 @@ public class DeliveryManEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "deliveryMan")
     private Set<DeliveryServiceEntity> deliveryServices;
+
+    @Column(name = "is_available", nullable = false)
+    private boolean isAvailable;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 }

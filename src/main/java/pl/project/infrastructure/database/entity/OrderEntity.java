@@ -9,7 +9,7 @@ import java.util.Set;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
-@ToString(of = {"orderCode","receivedDateTime" ,"completedDateTime" , "opinion"})
+@ToString(of = {"orderCode","receivedDateTime" ,"completedDateTime"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,9 +30,6 @@ public class OrderEntity {
 
     @Column(name = "completed_date_time", nullable = true)
     private OffsetDateTime completedDateTime;
-
-    @Column(name = "opinion", nullable = true)
-    private  String opinion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)

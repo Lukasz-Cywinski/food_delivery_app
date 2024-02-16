@@ -3,7 +3,6 @@ CREATE TABLE "order" (
   "order_code"              varchar(32)     unique not null,
   "received_date_time"      timestamptz     not null,
   "completed_date_time"     timestamptz     ,
-  "opinion"                 varchar(64)     ,
   "customer_id"             int             not null,
   "delivery_service_id"     int             not null,
   PRIMARY KEY ("id"),

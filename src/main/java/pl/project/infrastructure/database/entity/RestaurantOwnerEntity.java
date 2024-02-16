@@ -36,4 +36,7 @@ public class RestaurantOwnerEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurantOwner")
     private Set<RestaurantEntity> restaurants;
 
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
+
 }

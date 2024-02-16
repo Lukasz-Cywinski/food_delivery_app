@@ -9,7 +9,7 @@ import java.util.Set;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
-@ToString(of = {"name", "description", "price", "avergePreparationTimeMin"})
+@ToString(of = {"name", "description", "price", "averagePreparationTimeMin"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,8 +34,8 @@ public class DishEntity {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    @Column(name = "averge_preparation_time_min", nullable = false)
-    private Integer avergePreparationTimeMin;
+    @Column(name = "average_preparation_time_min", nullable = false)
+    private Integer averagePreparationTimeMin;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -54,5 +54,8 @@ public class DishEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "dish")
     private Set<DishOpinionEntity> dishOpinions;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 
 }

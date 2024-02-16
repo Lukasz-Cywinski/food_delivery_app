@@ -42,4 +42,7 @@ public class CustomerEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     private Set<OrderEntity> orders;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 }
