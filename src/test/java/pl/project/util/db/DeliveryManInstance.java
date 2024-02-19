@@ -1,4 +1,4 @@
-package pl.project.util;
+package pl.project.util.db;
 
 
 import pl.project.infrastructure.database.entity.DeliveryManEntity;

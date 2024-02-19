@@ -31,7 +31,7 @@ public class DeliveryServiceEntity {
     @Column(name = "completed_date_time", nullable = true)
     private OffsetDateTime completedDateTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_man_id")
     private DeliveryManEntity deliveryMan;
 

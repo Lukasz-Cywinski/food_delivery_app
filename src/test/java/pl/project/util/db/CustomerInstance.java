@@ -1,37 +1,41 @@
-package pl.project.util;
+package pl.project.util.db;
 
 
-import pl.project.infrastructure.database.entity.RestaurantOwnerEntity;
+import pl.project.infrastructure.database.entity.CustomerEntity;
 
-public class RestaurantOwnerInstance {
-    public static RestaurantOwnerEntity someRestaurantOwner1(){
-        return RestaurantOwnerEntity.builder()
+import static pl.project.util.db.DeliveryAddressInstance.*;
+
+public class CustomerInstance {
+    public static CustomerEntity someCustomer1(){
+        return CustomerEntity.builder()
                 .name("name1")
                 .surname("surname1")
                 .phoneNumber("111")
                 .email("email1@mail.com")
+                .deliveryAddress(someDeliveryAddress1())
                 .isActive(true)
                 .build();
     }
 
-    public static RestaurantOwnerEntity someRestaurantOwner2(){
-        return RestaurantOwnerEntity.builder()
+    public static CustomerEntity someCustomer2(){
+        return CustomerEntity.builder()
                 .name("name2")
                 .surname("surname2")
                 .phoneNumber("222")
                 .email("email2@mail.com")
+                .deliveryAddress(someDeliveryAddress2())
                 .isActive(true)
                 .build();
     }
 
-    public static RestaurantOwnerEntity someRestaurantOwner3(){
-        return RestaurantOwnerEntity.builder()
+    public static CustomerEntity someCustomer3(){
+        return CustomerEntity.builder()
                 .name("name3")
                 .surname("surname3")
                 .phoneNumber("333")
                 .email("email3@mail.com")
+                .deliveryAddress(someDeliveryAddress3())
                 .isActive(true)
                 .build();
     }
-
 }

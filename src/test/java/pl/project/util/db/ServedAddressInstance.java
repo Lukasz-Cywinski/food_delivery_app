@@ -1,10 +1,12 @@
-package pl.project.util;
+package pl.project.util.db;
 
 
+import lombok.Setter;
 import pl.project.infrastructure.database.entity.ServedAddressEntity;
 
-import static pl.project.util.RestaurantInstance.*;
+import static pl.project.util.db.RestaurantInstance.*;
 
+@Setter
 public class ServedAddressInstance {
 
     public static ServedAddressEntity someServedAddress1(){

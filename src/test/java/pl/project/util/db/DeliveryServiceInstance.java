@@ -1,4 +1,4 @@
-package pl.project.util;
+package pl.project.util.db;
 
 
 import pl.project.infrastructure.database.entity.DeliveryServiceEntity;
@@ -6,7 +6,7 @@ import pl.project.infrastructure.database.entity.DeliveryServiceEntity;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static pl.project.util.DeliveryManInstance.*;
+import static pl.project.util.db.DeliveryManInstance.*;
 
 public class DeliveryServiceInstance {
 

@@ -1,10 +1,10 @@
-package pl.project.util;
+package pl.project.util.db;
 
 
 import pl.project.infrastructure.database.entity.DishCompositionEntity;
 
-import static pl.project.util.DishInstance.*;
-import static pl.project.util.OrderInstance.*;
+import static pl.project.util.db.DishInstance.*;
+import static pl.project.util.db.OrderInstance.*;
 
 public class DishCompositionInstance {
 

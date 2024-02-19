@@ -10,10 +10,20 @@ import pl.project.infrastructure.database.repository.mapper.RestaurantOwnerMappe
 public class RestaurantOwnerMapperImp implements RestaurantOwnerMapper {
 
     public RestaurantOwner mapFromEntity(RestaurantOwnerEntity entity){
-        return null;
+        return RestaurantOwner.builder()
+                .name(entity.getName())
+                .surname(entity.getSurname())
+                .phoneNumber(entity.getPhoneNumber())
+                .email(entity.getEmail())
+                .build();
     }
 
     public RestaurantOwnerEntity mapToEntity(RestaurantOwner domainObj){
-        return null;
+        return RestaurantOwnerEntity.builder()
+                .name(domainObj.getName())
+                .surname(domainObj.getSurname())
+                .phoneNumber(domainObj.getPhoneNumber())
+                .email(domainObj.getEmail())
+                .build();
     }
 }

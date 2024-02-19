@@ -1,4 +1,4 @@
-package pl.project.util;
+package pl.project.util.db;
 
 
 import pl.project.infrastructure.database.entity.OrderEntity;
@@ -6,8 +6,8 @@ import pl.project.infrastructure.database.entity.OrderEntity;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static pl.project.util.CustomerInstance.*;
-import static pl.project.util.DeliveryServiceInstance.*;
+import static pl.project.util.db.CustomerInstance.*;
+import static pl.project.util.db.DeliveryServiceInstance.*;
 
 public class OrderInstance {
 

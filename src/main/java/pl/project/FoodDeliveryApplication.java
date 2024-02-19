@@ -8,6 +8,8 @@ public class FoodDeliveryApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FoodDeliveryApplication.class, args);
+
+//		https://app.zajavka.pl/user/page/zajavka-projekt
 	}
 
 }

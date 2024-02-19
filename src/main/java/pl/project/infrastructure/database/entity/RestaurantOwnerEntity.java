@@ -7,6 +7,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@With
 @EqualsAndHashCode(of = "id")
 @ToString(of = {"name", "surname", "phoneNumber", "email"})
 @Builder

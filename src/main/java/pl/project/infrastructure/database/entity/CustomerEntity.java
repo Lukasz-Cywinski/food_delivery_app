@@ -33,7 +33,7 @@ public class CustomerEntity {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_address_id")
     private DeliveryAddressEntity deliveryAddress;
 

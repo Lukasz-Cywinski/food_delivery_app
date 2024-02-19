@@ -31,7 +31,7 @@ public class RestaurantEntity {
     @Column(name = "added", nullable = false)
     private OffsetDateTime added;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "restaurant_owner_id", nullable = false)
     private RestaurantOwnerEntity restaurantOwner;
 

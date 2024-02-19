@@ -1,12 +1,12 @@
-package pl.project.util;
+package pl.project.util.db;
 
 
 import pl.project.infrastructure.database.entity.DishOpinionEntity;
 
 import java.math.BigDecimal;
 
-import static pl.project.util.CustomerInstance.*;
-import static pl.project.util.DishInstance.*;
+import static pl.project.util.db.CustomerInstance.*;
+import static pl.project.util.db.DishInstance.*;
 
 public class DishOpinionInstance {
 

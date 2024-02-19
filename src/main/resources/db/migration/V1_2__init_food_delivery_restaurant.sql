@@ -7,6 +7,6 @@ CREATE TABLE "restaurant" (
   "is_active"               boolean         not null,
   PRIMARY KEY ("id"),
   CONSTRAINT "FK_restaurant.owner_id"
-    FOREIGN KEY ("owner_id")
+    FOREIGN KEY ("restaurant_owner_id")
       REFERENCES "restaurant_owner"("id")
 );

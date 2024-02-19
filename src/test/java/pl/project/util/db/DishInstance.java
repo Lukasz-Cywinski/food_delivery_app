@@ -1,13 +1,13 @@
-package pl.project.util;
+package pl.project.util.db;
 
 
 import pl.project.infrastructure.database.entity.DishEntity;
 
 import java.math.BigDecimal;
 
-import static pl.project.util.DishCategoryInstance.*;
-import static pl.project.util.DishPhotoInstance.*;
-import static pl.project.util.RestaurantInstance.*;
+import static pl.project.util.db.DishCategoryInstance.*;
+import static pl.project.util.db.DishPhotoInstance.*;
+import static pl.project.util.db.RestaurantInstance.*;
 
 public class DishInstance{
 

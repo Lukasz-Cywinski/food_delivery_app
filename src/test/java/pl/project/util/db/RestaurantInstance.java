@@ -1,4 +1,4 @@
-package pl.project.util;
+package pl.project.util.db;
 
 
 import pl.project.infrastructure.database.entity.RestaurantEntity;
@@ -6,7 +6,7 @@ import pl.project.infrastructure.database.entity.RestaurantEntity;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static pl.project.util.RestaurantOwnerInstance.*;
+import static pl.project.util.db.RestaurantOwnerInstance.*;
 
 public class RestaurantInstance {
 
