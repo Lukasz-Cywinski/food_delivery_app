@@ -27,7 +27,7 @@ public interface CustomerJpaRepository extends JpaRepository<CustomerEntity, Int
                 WHERE c.email = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeName(String newName, String email);
+    Integer changeName(String newName, String email);
 
     @Query("""
                 UPDATE CustomerEntity c
@@ -35,7 +35,7 @@ public interface CustomerJpaRepository extends JpaRepository<CustomerEntity, Int
                 WHERE c.email = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeSurname(String newSurname, String email);
+    Integer changeSurname(String newSurname, String email);
 
     @Query("""
                 UPDATE CustomerEntity c
@@ -43,7 +43,7 @@ public interface CustomerJpaRepository extends JpaRepository<CustomerEntity, Int
                 WHERE c.email = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changePhoneNumber(String newPhoneNumber, String email);
+    Integer changePhoneNumber(String newPhoneNumber, String email);
 
     @Query("""
                 UPDATE CustomerEntity c
@@ -51,7 +51,7 @@ public interface CustomerJpaRepository extends JpaRepository<CustomerEntity, Int
                 WHERE c.email = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeEmail(String newEmail, String oldEmail);
+    Integer changeEmail(String newEmail, String oldEmail);
 
     @Query("""
                 UPDATE CustomerEntity c
@@ -59,7 +59,7 @@ public interface CustomerJpaRepository extends JpaRepository<CustomerEntity, Int
                 WHERE c.email = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeDeliveryAddress(DeliveryAddressEntity newDeliveryAddress, String oldEmail);
+    Integer changeDeliveryAddress(DeliveryAddressEntity newDeliveryAddress, String oldEmail);
 
     @Query("""
                 UPDATE CustomerEntity c
@@ -67,6 +67,6 @@ public interface CustomerJpaRepository extends JpaRepository<CustomerEntity, Int
                 WHERE c.email = ?1
                 """)
     @Modifying(clearAutomatically = true)
-    void deactivate(String personalCode);
+    Integer deactivate(String personalCode);
 
 }

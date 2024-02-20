@@ -15,5 +15,5 @@ public interface DishCategoryJpaRepository extends JpaRepository<DishCategoryEnt
                 WHERE d_ca.id = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeDescription(String newDescription, Integer dishCategoryId);
+    Integer changeDescription(String newDescription, Integer dishCategoryId);
 }

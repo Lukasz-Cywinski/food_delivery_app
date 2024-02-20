@@ -4,10 +4,10 @@ package pl.project.infrastructure.database.repository.mapper.imp;
 import org.springframework.stereotype.Component;
 import pl.project.domain.model.RestaurantOwner;
 import pl.project.infrastructure.database.entity.RestaurantOwnerEntity;
-import pl.project.infrastructure.database.repository.mapper.RestaurantOwnerMapper;
+import pl.project.infrastructure.database.repository.mapper.RestaurantOwnerEntityMapper;
 
 @Component
-public class RestaurantOwnerMapperImp implements RestaurantOwnerMapper {
+public class RestaurantOwnerEntityMapperImp implements RestaurantOwnerEntityMapper {
 
     public RestaurantOwner mapFromEntity(RestaurantOwnerEntity entity){
         return RestaurantOwner.builder()

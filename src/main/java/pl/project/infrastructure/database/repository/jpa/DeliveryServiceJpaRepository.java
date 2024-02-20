@@ -20,5 +20,5 @@ public interface DeliveryServiceJpaRepository extends JpaRepository<DeliveryServ
                 WHERE d_se.deliveryServiceCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void reportCompletedDateTime(OffsetDateTime deliveryDateTime, String deliveryServiceCode);
+    Integer reportCompletedDateTime(OffsetDateTime deliveryDateTime, String deliveryServiceCode);
 }

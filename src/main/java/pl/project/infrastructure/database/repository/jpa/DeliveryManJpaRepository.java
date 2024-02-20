@@ -33,7 +33,7 @@ public interface DeliveryManJpaRepository extends JpaRepository<DeliveryManEntit
                 WHERE d_ma.personalCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changePhoneNumber(String newPhoneNumber, String personalCode);
+    Integer changePhoneNumber(String newPhoneNumber, String personalCode);
 
     @Query("""
                 UPDATE DeliveryManEntity d_ma
@@ -41,7 +41,7 @@ public interface DeliveryManJpaRepository extends JpaRepository<DeliveryManEntit
                 WHERE d_ma.personalCode = ?1
                 """)
     @Modifying(clearAutomatically = true)
-    void deactivate(String personalCode);
+    Integer deactivate(String personalCode);
 
     @Query("""
                 UPDATE DeliveryManEntity d_ma
@@ -49,5 +49,5 @@ public interface DeliveryManJpaRepository extends JpaRepository<DeliveryManEntit
                 WHERE d_ma.personalCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeAvailabilityStatus(boolean availabilityStatus, String personalCode);
+    Integer changeAvailabilityStatus(boolean availabilityStatus, String personalCode);
 }

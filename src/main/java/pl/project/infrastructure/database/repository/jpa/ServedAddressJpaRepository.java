@@ -15,7 +15,7 @@ public interface ServedAddressJpaRepository extends JpaRepository<ServedAddressE
                 WHERE s_ad.id = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeCity(String newCity, Integer servedAddressId);
+    Integer changeCity(String newCity, Integer servedAddressId);
 
     @Query("""
                 UPDATE ServedAddressEntity s_ad
@@ -23,5 +23,5 @@ public interface ServedAddressJpaRepository extends JpaRepository<ServedAddressE
                 WHERE s_ad.id = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeStreet(String newStreet, Integer servedAddressId);
+    Integer changeStreet(String newStreet, Integer servedAddressId);
 }

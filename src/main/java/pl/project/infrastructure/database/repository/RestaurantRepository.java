@@ -4,13 +4,82 @@ package pl.project.infrastructure.database.repository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import pl.project.business.dao.RestaurantDAO;
+import pl.project.domain.model.Dish;
+import pl.project.domain.model.Restaurant;
+import pl.project.domain.model.RestaurantOwner;
+import pl.project.domain.model.ServedAddress;
 import pl.project.infrastructure.database.repository.jpa.RestaurantJpaRepository;
-import pl.project.infrastructure.database.repository.mapper.RestaurantMapper;
+import pl.project.infrastructure.database.repository.mapper.DishEntityMapper;
+import pl.project.infrastructure.database.repository.mapper.RestaurantEntityMapper;
+import pl.project.infrastructure.database.repository.mapper.RestaurantOwnerEntityMapper;
+import pl.project.infrastructure.database.repository.mapper.ServedAddressEntityMapper;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class RestaurantRepository implements RestaurantDAO {
 
     private final RestaurantJpaRepository restaurantOwnerJpaRepository;
-    private final RestaurantMapper restaurantMapper;
+    private final RestaurantEntityMapper restaurantEntityMapper;
+    private final RestaurantOwnerEntityMapper restaurantOwnerEntityMapper;
+    private final DishEntityMapper dishEntityMapper;
+    private final ServedAddressEntityMapper servedAddressEntityMapper;
+
+    @Override
+    public Optional<Restaurant> createRestaurant(Restaurant restaurant) {
+        return Optional.ofNullable(
+                restaurantEntityMapper.mapFromEntity(
+                        restaurantOwnerJpaRepository.save(
+                                restaurantEntityMapper.mapToEntity(restaurant)
+                        )
+                ));
+    }
+
+    @Override
+    public Optional<Restaurant> findRestaurantByRestaurantCode(String restaurantCode) {
+        return restaurantOwnerJpaRepository.findByRestaurantCode(restaurantCode)
+                .map(restaurantEntityMapper::mapFromEntity);
+    }
+
+    @Override
+    public List<Restaurant> findActiveRestaurants() {
+        return restaurantOwnerJpaRepository.findActive().stream()
+                .map(restaurantEntityMapper::mapFromEntity)
+                .toList();
+    }
+
+    @Override
+    public List<Dish> findActiveDishesForRestaurant(Restaurant restaurant) {
+        return restaurantOwnerJpaRepository.findActiveDishes(
+                restaurantEntityMapper.mapToEntity(restaurant)).stream()
+                .map(dishEntityMapper::mapFromEntity)
+                .toList();
+    }
+
+    @Override
+    public List<ServedAddress> findServedAddressesForRestaurant(Restaurant restaurant) {
+        return restaurantOwnerJpaRepository.findServedAddresses(
+                        restaurantEntityMapper.mapToEntity(restaurant)).stream()
+                .map(servedAddressEntityMapper::mapFromEntity)
+                .toList();
+    }
+
+    @Override
+    public Integer changeRestaurantName(String newRestaurantName, String restaurantCode) {
+        return restaurantOwnerJpaRepository.changeName(newRestaurantName, restaurantCode);
+    }
+
+    @Override
+    public Integer changeRestaurantOwner(RestaurantOwner newRestaurantOwner, String restaurantCode) {
+        return restaurantOwnerJpaRepository.changeOwner(
+                restaurantOwnerEntityMapper.mapToEntity(newRestaurantOwner),
+                restaurantCode);
+    }
+
+    @Override
+    public Integer deactivateRestaurant(String restaurantCode) {
+        return restaurantOwnerJpaRepository.deactivate(restaurantCode);
+    }
 }

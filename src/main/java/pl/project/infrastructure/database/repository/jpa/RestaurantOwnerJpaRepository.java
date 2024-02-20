@@ -26,7 +26,7 @@ public interface RestaurantOwnerJpaRepository extends JpaRepository<RestaurantOw
                 WHERE r_ow.email = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeEmail(String newEmail, String oldEmail);
+    Integer changeEmail(String newEmail, String oldEmail);
 
     @Query("""
                 UPDATE RestaurantOwnerEntity r_ow
@@ -34,7 +34,7 @@ public interface RestaurantOwnerJpaRepository extends JpaRepository<RestaurantOw
                 WHERE r_ow.email = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changePhoneNumber(String newPhoneNumber, String email);
+    Integer changePhoneNumber(String newPhoneNumber, String email);
 
     @Query("""
                 UPDATE RestaurantOwnerEntity r_ow
@@ -42,5 +42,5 @@ public interface RestaurantOwnerJpaRepository extends JpaRepository<RestaurantOw
                 WHERE r_ow.email = ?1
                 """)
     @Modifying(clearAutomatically = true)
-    void deactivate(String email);
+    Integer deactivate(String email);
 }

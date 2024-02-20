@@ -20,5 +20,5 @@ public interface OrderJpaRepository extends JpaRepository<OrderEntity, Integer> 
                 WHERE o.orderCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void reportCompletedDateTime(OffsetDateTime deliveryDateTime, String orderCode);
+    Integer reportCompletedDateTime(OffsetDateTime deliveryDateTime, String orderCode);
 }

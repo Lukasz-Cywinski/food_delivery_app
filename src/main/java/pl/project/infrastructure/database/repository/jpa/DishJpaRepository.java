@@ -29,7 +29,7 @@ public interface DishJpaRepository extends JpaRepository<DishEntity, Integer> {
                 WHERE d.dishCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeDishName(String newDishName, String dishCode);
+    Integer changeDishName(String newDishName, String dishCode);
 
     @Query("""
                 UPDATE DishEntity d
@@ -37,7 +37,7 @@ public interface DishJpaRepository extends JpaRepository<DishEntity, Integer> {
                 WHERE d.dishCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeDishDescription(String newDishDescription, String dishCode);
+    Integer changeDishDescription(String newDishDescription, String dishCode);
 
     @Query("""
                 UPDATE DishEntity d
@@ -45,7 +45,7 @@ public interface DishJpaRepository extends JpaRepository<DishEntity, Integer> {
                 WHERE d.dishCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeDishPrice(BigDecimal newDishPrice, String dishCode);
+    Integer changeDishPrice(BigDecimal newDishPrice, String dishCode);
 
     @Query("""
                 UPDATE DishEntity d
@@ -53,7 +53,7 @@ public interface DishJpaRepository extends JpaRepository<DishEntity, Integer> {
                 WHERE d.dishCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeDishPreparationTime(Integer minutes, String dishCode);
+    Integer changeDishPreparationTime(Integer minutes, String dishCode);
 
     @Query("""
                 UPDATE DishEntity d
@@ -61,7 +61,7 @@ public interface DishJpaRepository extends JpaRepository<DishEntity, Integer> {
                 WHERE d.dishCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeDishPhoto(DishPhotoEntity newDishPhoto, String dishCode);
+    Integer changeDishPhoto(DishPhotoEntity newDishPhoto, String dishCode);
 
     @Query("""
                 UPDATE DishEntity d
@@ -69,7 +69,7 @@ public interface DishJpaRepository extends JpaRepository<DishEntity, Integer> {
                 WHERE d.dishCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeDishCategory(DishCategoryEntity newDishCategory, String dishCode);
+    Integer changeDishCategory(DishCategoryEntity newDishCategory, String dishCode);
 
     @Query("""
                 UPDATE DishEntity d
@@ -77,5 +77,5 @@ public interface DishJpaRepository extends JpaRepository<DishEntity, Integer> {
                 WHERE d.dishCode = ?1
                 """)
     @Modifying(clearAutomatically = true)
-    void deactivate(String restaurantCode);
+    Integer deactivate(String dishCode);
 }

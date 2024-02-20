@@ -42,7 +42,7 @@ public interface RestaurantJpaRepository extends JpaRepository<RestaurantEntity,
                 WHERE r.restaurantCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeName(String newRestaurantName, String restaurantCode);
+    Integer changeName(String newRestaurantName, String restaurantCode);
 
     @Query("""
                 UPDATE RestaurantEntity r
@@ -50,7 +50,7 @@ public interface RestaurantJpaRepository extends JpaRepository<RestaurantEntity,
                 WHERE r.restaurantCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeOwner(RestaurantOwnerEntity newRestaurantOwner, String restaurantCode);
+    Integer changeOwner(RestaurantOwnerEntity newRestaurantOwner, String restaurantCode);
 
     @Query("""
                 UPDATE RestaurantEntity r
@@ -58,6 +58,6 @@ public interface RestaurantJpaRepository extends JpaRepository<RestaurantEntity,
                 WHERE r.restaurantCode = ?1
                 """)
     @Modifying(clearAutomatically = true)
-    void deactivate(String restaurantCode);
+    Integer deactivate(String restaurantCode);
 
 }

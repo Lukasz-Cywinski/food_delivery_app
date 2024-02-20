@@ -2,14 +2,12 @@ package pl.project.infrastructure.database.repository.mapper.imp;
 
 
 import org.springframework.stereotype.Component;
-import pl.project.domain.model.Customer;
 import pl.project.domain.model.DeliveryAddress;
-import pl.project.infrastructure.database.entity.CustomerEntity;
 import pl.project.infrastructure.database.entity.DeliveryAddressEntity;
-import pl.project.infrastructure.database.repository.mapper.DeliveryAddressMapper;
+import pl.project.infrastructure.database.repository.mapper.DeliveryAddressEntityMapper;
 
 @Component
-public class DeliveryAddressMapperImp implements DeliveryAddressMapper {
+public class DeliveryAddressEntityMapperImp implements DeliveryAddressEntityMapper {
 
     public DeliveryAddress mapFromEntity(DeliveryAddressEntity entity){
         return null;

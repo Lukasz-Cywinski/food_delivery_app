@@ -15,7 +15,7 @@ public interface DeliveryAddressJpaRepository extends JpaRepository<DeliveryAddr
                 WHERE d_ad.id = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeCity(String newCity, Integer deliveryAddressId);
+    Integer changeCity(String newCity, Integer deliveryAddressId);
 
     @Query("""
                 UPDATE DeliveryAddressEntity d_ad
@@ -23,7 +23,7 @@ public interface DeliveryAddressJpaRepository extends JpaRepository<DeliveryAddr
                 WHERE d_ad.id = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changePostalCode(String newPostalCode, Integer deliveryAddressId);
+    Integer changePostalCode(String newPostalCode, Integer deliveryAddressId);
 
     @Query("""
                 UPDATE DeliveryAddressEntity d_ad
@@ -31,5 +31,5 @@ public interface DeliveryAddressJpaRepository extends JpaRepository<DeliveryAddr
                 WHERE d_ad.id = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changeStreet(String newStreet, Integer deliveryAddressId);
+    Integer changeStreet(String newStreet, Integer deliveryAddressId);
 }

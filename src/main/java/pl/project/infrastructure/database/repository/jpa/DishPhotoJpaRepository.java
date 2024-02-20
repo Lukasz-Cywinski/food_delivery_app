@@ -15,6 +15,6 @@ public interface DishPhotoJpaRepository extends JpaRepository<DishPhotoEntity, I
                 WHERE d_ph.id = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    void changePhotoName(String newPhotoName, Integer dishPhotoId);
+    Integer changePhotoName(String newPhotoName, Integer dishPhotoId);
 
 }

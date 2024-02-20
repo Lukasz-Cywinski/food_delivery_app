@@ -4,14 +4,37 @@ package pl.project.infrastructure.database.repository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import pl.project.business.dao.ServedAddressDAO;
+import pl.project.domain.model.ServedAddress;
 import pl.project.infrastructure.database.repository.jpa.ServedAddressJpaRepository;
-import pl.project.infrastructure.database.repository.mapper.ServedAddressMapper;
+import pl.project.infrastructure.database.repository.mapper.ServedAddressEntityMapper;
+
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class ServedAddressRepository implements ServedAddressDAO {
 
     private final ServedAddressJpaRepository servedAddressJpaRepository;
-    private final ServedAddressMapper servedAddressMapper;
+    private final ServedAddressEntityMapper servedAddressEntityMapper;
 
+    @Override
+    public Optional<ServedAddress> createServedAddress(ServedAddress servedAddress) {
+        return Optional.ofNullable(
+                servedAddressEntityMapper.mapFromEntity(
+                        servedAddressJpaRepository.save(
+                                servedAddressEntityMapper.mapToEntity(servedAddress)
+                        )
+                )
+        );
+    }
+
+    @Override
+    public Integer changeCity(String newCity, Integer servedAddressId) {
+        return servedAddressJpaRepository.changeCity(newCity, servedAddressId);
+    }
+
+    @Override
+    public Integer changeStreet(String newStreet, Integer servedAddressId) {
+        return servedAddressJpaRepository.changeStreet(newStreet, servedAddressId);
+    }
 }
