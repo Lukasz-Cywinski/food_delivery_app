@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.CustomerEntity;
 import pl.project.infrastructure.database.entity.DeliveryAddressEntity;
-import pl.project.infrastructure.database.repository.configuration.MyJpaConfiguration;
+import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.CustomerJpaRepository;
 import pl.project.infrastructure.database.repository.jpa.DeliveryAddressJpaRepository;
 

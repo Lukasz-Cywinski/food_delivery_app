@@ -15,6 +15,7 @@ public class RestaurantOwnerEntityMapperImp implements RestaurantOwnerEntityMapp
                 .surname(entity.getSurname())
                 .phoneNumber(entity.getPhoneNumber())
                 .email(entity.getEmail())
+                .isActive(entity.isActive())
                 .build();
     }
 
@@ -24,6 +25,7 @@ public class RestaurantOwnerEntityMapperImp implements RestaurantOwnerEntityMapp
                 .surname(domainObj.getSurname())
                 .phoneNumber(domainObj.getPhoneNumber())
                 .email(domainObj.getEmail())
+                .isActive(domainObj.isActive())
                 .build();
     }
 }

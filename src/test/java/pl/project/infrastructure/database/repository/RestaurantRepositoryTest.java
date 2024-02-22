@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.*;
-import pl.project.infrastructure.database.repository.configuration.MyJpaConfiguration;
+import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.*;
 
 import java.time.format.DateTimeFormatter;

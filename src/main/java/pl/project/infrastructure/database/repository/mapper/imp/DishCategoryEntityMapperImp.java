@@ -10,10 +10,16 @@ import pl.project.infrastructure.database.repository.mapper.DishCategoryEntityMa
 public class DishCategoryEntityMapperImp implements DishCategoryEntityMapper {
 
     public DishCategory mapFromEntity(DishCategoryEntity entity){
-        return null;
+        return DishCategory.builder()
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .build();
     }
 
     public DishCategoryEntity mapToEntity(DishCategory domainObj){
-        return null;
+        return DishCategoryEntity.builder()
+                .name(domainObj.getName())
+                .description(domainObj.getDescription())
+                .build();
     }
 }

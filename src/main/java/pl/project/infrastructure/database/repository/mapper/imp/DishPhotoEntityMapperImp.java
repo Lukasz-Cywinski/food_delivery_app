@@ -10,10 +10,16 @@ import pl.project.infrastructure.database.repository.mapper.DishPhotoEntityMappe
 public class DishPhotoEntityMapperImp implements DishPhotoEntityMapper {
 
     public DishPhoto mapFromEntity(DishPhotoEntity entity){
-        return null;
+        return DishPhoto.builder()
+                .name(entity.getName())
+                .url(entity.getUrl())
+                .build();
     }
 
     public DishPhotoEntity mapToEntity(DishPhoto domainObj){
-        return null;
+        return DishPhotoEntity.builder()
+                .name(domainObj.getName())
+                .url(domainObj.getUrl())
+                .build();
     }
 }

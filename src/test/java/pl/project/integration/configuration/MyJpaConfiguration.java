@@ -1,4 +1,4 @@
-package pl.project.infrastructure.database.repository.configuration;
+package pl.project.integration.configuration;
 
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

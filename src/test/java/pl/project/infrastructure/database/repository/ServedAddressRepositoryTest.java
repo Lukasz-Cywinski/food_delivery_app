@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.RestaurantEntity;
 import pl.project.infrastructure.database.entity.ServedAddressEntity;
-import pl.project.infrastructure.database.repository.configuration.MyJpaConfiguration;
+import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.RestaurantJpaRepository;
 import pl.project.infrastructure.database.repository.jpa.ServedAddressJpaRepository;
 
