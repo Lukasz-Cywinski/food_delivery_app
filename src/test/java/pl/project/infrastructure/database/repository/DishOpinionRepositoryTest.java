@@ -3,9 +3,13 @@ package pl.project.infrastructure.database.repository;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import pl.project.infrastructure.database.entity.*;
-import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.*;
+import pl.project.integration.configuration.MyJpaConfiguration;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -61,7 +65,10 @@ class DishOpinionRepositoryTest extends MyJpaConfiguration {
         //when
         List<DishOpinionEntity> allOpinions = dishOpinionJpaRepository.findAll();
         DishEntity dish1 = allOpinions.getFirst().getDish();
-        List<DishOpinionEntity> opinionsByDish = dishOpinionJpaRepository.findByDish(dish1);
+        Sort sort = Sort.by("productEvaluation");
+        Pageable pageable = PageRequest.of(0, 3, sort);
+        Page<DishOpinionEntity> page = dishOpinionJpaRepository.findByDish(dish1, pageable);
+        List<DishOpinionEntity> opinionsByDish = page.getContent();
 
         //then
         assertThat(opinionsByDish)
@@ -101,10 +108,13 @@ class DishOpinionRepositoryTest extends MyJpaConfiguration {
         //when
         BigDecimal from = BigDecimal.ZERO;
         BigDecimal to = BigDecimal.TWO;
-        List<DishOpinionEntity> opinionsByCustomer = dishOpinionJpaRepository.findByEvaluationRange(from, to);
+        Sort sort = Sort.by("productEvaluation");
+        Pageable pageable = PageRequest.of(0, 3, sort);
+        Page<DishOpinionEntity> page = dishOpinionJpaRepository.findByEvaluationRange(from, to, pageable);
+        List<DishOpinionEntity> opinionsByEvaluationRange = page.getContent();
 
         //then
-        assertThat(opinionsByCustomer)
+        assertThat(opinionsByEvaluationRange)
                 .satisfiesExactly(opinion -> assertThat(opinion.getProductEvaluation()).isBetween(from, to));
     }
 

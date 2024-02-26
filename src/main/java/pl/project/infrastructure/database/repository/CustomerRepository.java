@@ -33,7 +33,7 @@ public class CustomerRepository implements CustomerDAO {
     }
 
     @Override
-    public Optional<Customer> getOwnerByEmail(String email) {
+    public Optional<Customer> getCustomerByEmail(String email) {
         return customerJpaRepository.findByEmail(email)
                 .map(customerEntityMapper::mapFromEntity);
     }

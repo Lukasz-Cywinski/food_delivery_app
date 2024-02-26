@@ -1,6 +1,6 @@
 CREATE TABLE "delivery_service" (
   "id"                      serial          not null,
-  "delivery_service_code"   varchar(32)     unique not null,
+  "delivery_service_code"   varchar(64)     unique not null,
   "received_date_time"      timestamptz     not null,
   "completed_date_time"     timestamptz     ,
   "delivery_man_id"         int             not null,

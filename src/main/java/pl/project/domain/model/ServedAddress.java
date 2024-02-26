@@ -10,9 +10,8 @@ import lombok.*;
 @ToString(of = {"city", "street"})
 public class ServedAddress {
 
+    Integer id;
     String city;
     String street;
     Restaurant restaurant;
-
-
 }

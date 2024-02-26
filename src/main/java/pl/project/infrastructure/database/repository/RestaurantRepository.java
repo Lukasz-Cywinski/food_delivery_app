@@ -2,6 +2,7 @@ package pl.project.infrastructure.database.repository;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import pl.project.business.dao.RestaurantDAO;
 import pl.project.domain.model.Dish;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class RestaurantRepository implements RestaurantDAO {
 
-    private final RestaurantJpaRepository restaurantOwnerJpaRepository;
+    private final RestaurantJpaRepository restaurantJpaRepository;
     private final RestaurantEntityMapper restaurantEntityMapper;
     private final RestaurantOwnerEntityMapper restaurantOwnerEntityMapper;
     private final DishEntityMapper dishEntityMapper;
@@ -31,7 +32,7 @@ public class RestaurantRepository implements RestaurantDAO {
     public Optional<Restaurant> createRestaurant(Restaurant restaurant) {
         return Optional.ofNullable(
                 restaurantEntityMapper.mapFromEntity(
-                        restaurantOwnerJpaRepository.save(
+                        restaurantJpaRepository.save(
                                 restaurantEntityMapper.mapToEntity(restaurant)
                         )
                 ));
@@ -39,28 +40,28 @@ public class RestaurantRepository implements RestaurantDAO {
 
     @Override
     public Optional<Restaurant> findRestaurantByRestaurantCode(String restaurantCode) {
-        return restaurantOwnerJpaRepository.findByRestaurantCode(restaurantCode)
+        return restaurantJpaRepository.findByRestaurantCode(restaurantCode)
                 .map(restaurantEntityMapper::mapFromEntity);
     }
 
     @Override
-    public List<Restaurant> findActiveRestaurants() {
-        return restaurantOwnerJpaRepository.findActive().stream()
+    public List<Restaurant> findActiveRestaurants(Pageable pageable) {
+        return restaurantJpaRepository.findActive(pageable).getContent().stream()
                 .map(restaurantEntityMapper::mapFromEntity)
                 .toList();
     }
 
     @Override
-    public List<Dish> findActiveDishesForRestaurant(Restaurant restaurant) {
-        return restaurantOwnerJpaRepository.findActiveDishes(
-                restaurantEntityMapper.mapToEntity(restaurant)).stream()
+    public List<Dish> findActiveDishesForRestaurant(Restaurant restaurant, Pageable pageable) {
+        return restaurantJpaRepository.findActiveDishes(
+                restaurantEntityMapper.mapToEntity(restaurant), pageable).getContent().stream()
                 .map(dishEntityMapper::mapFromEntity)
                 .toList();
     }
 
     @Override
     public List<ServedAddress> findServedAddressesForRestaurant(Restaurant restaurant) {
-        return restaurantOwnerJpaRepository.findServedAddresses(
+        return restaurantJpaRepository.findServedAddresses(
                         restaurantEntityMapper.mapToEntity(restaurant)).stream()
                 .map(servedAddressEntityMapper::mapFromEntity)
                 .toList();
@@ -68,18 +69,18 @@ public class RestaurantRepository implements RestaurantDAO {
 
     @Override
     public Integer changeRestaurantName(String newRestaurantName, String restaurantCode) {
-        return restaurantOwnerJpaRepository.changeName(newRestaurantName, restaurantCode);
+        return restaurantJpaRepository.changeName(newRestaurantName, restaurantCode);
     }
 
     @Override
     public Integer changeRestaurantOwner(RestaurantOwner newRestaurantOwner, String restaurantCode) {
-        return restaurantOwnerJpaRepository.changeOwner(
+        return restaurantJpaRepository.changeOwner(
                 restaurantOwnerEntityMapper.mapToEntity(newRestaurantOwner),
                 restaurantCode);
     }
 
     @Override
     public Integer deactivateRestaurant(String restaurantCode) {
-        return restaurantOwnerJpaRepository.deactivate(restaurantCode);
+        return restaurantJpaRepository.deactivate(restaurantCode);
     }
 }

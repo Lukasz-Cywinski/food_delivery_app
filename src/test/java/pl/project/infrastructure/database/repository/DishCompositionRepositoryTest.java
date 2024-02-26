@@ -9,6 +9,7 @@ import pl.project.infrastructure.database.repository.jpa.*;
 import pl.project.util.db.DishCompositionInstance;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,6 +67,22 @@ class DishCompositionRepositoryTest extends MyJpaConfiguration {
         //then
         assertThat(dishCompositionsByOrder)
                 .satisfiesExactly(dishComposition -> assertThat(dishComposition.getOrder().getOrderCode()).isEqualTo(order1.getOrderCode()));
+    }
+
+    @Test
+    void isUncompletedOrdersForRestaurantIsSelectedCorrectly(){
+        //given
+        initDataInDb();
+
+        //when
+        Set<OrderEntity> noCompletedOrders = dishCompositionJpaRepository.findActiveOrdersForRestaurant(
+                restaurantJpaRepository.findByRestaurantCode(someRestaurant1().getRestaurantCode()).orElseThrow());
+        Set<OrderEntity> completedOrders = dishCompositionJpaRepository.findActiveOrdersForRestaurant(
+                restaurantJpaRepository.findByRestaurantCode(someRestaurant2().getRestaurantCode()).orElseThrow());
+
+        //then
+        assertEquals(1, noCompletedOrders.size());
+        assertEquals(0, completedOrders.size());
     }
 
     void initDataInDb(){

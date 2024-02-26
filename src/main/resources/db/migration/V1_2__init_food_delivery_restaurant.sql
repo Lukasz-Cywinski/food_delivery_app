@@ -1,6 +1,6 @@
 CREATE TABLE "restaurant" (
   "id"                      serial          not null,
-  "restaurant_code"         varchar(32)     unique not null,
+  "restaurant_code"         varchar(64)     unique not null,
   "name"                    varchar(32)     not null,
   "added"                   timestamptz     not null,
   "restaurant_owner_id"     int             not null,

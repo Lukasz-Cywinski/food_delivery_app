@@ -1,5 +1,7 @@
 package pl.project.infrastructure.database.repository.jpa;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,7 +20,7 @@ public interface DishOpinionJpaRepository extends JpaRepository<DishOpinionEntit
                 SELECT d_op FROM DishOpinionEntity d_op
                 WHERE d_op.dish = ?1
                 """)
-    List<DishOpinionEntity> findByDish(DishEntity dish);
+    Page<DishOpinionEntity> findByDish(DishEntity dish, Pageable pageable);
 
     @Query("""
                 SELECT d_op FROM DishOpinionEntity d_op
@@ -30,7 +32,7 @@ public interface DishOpinionJpaRepository extends JpaRepository<DishOpinionEntit
                 SELECT d_op FROM DishOpinionEntity d_op
                 WHERE d_op.productEvaluation BETWEEN ?1 AND ?2
                 """)
-    List<DishOpinionEntity> findByEvaluationRange(BigDecimal from, BigDecimal to);
+    Page<DishOpinionEntity> findByEvaluationRange(BigDecimal from, BigDecimal to, Pageable pageable);
 
     @Query(value = """
                 SELECT AVG(productEvaluation)

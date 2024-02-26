@@ -1,5 +1,7 @@
 package pl.project.infrastructure.database.repository.jpa;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,14 +23,14 @@ public interface RestaurantJpaRepository extends JpaRepository<RestaurantEntity,
                 SELECT r FROM RestaurantEntity r
                 WHERE r.isActive = true
                 """)
-    List<RestaurantEntity> findActive();
+    Page<RestaurantEntity> findActive(Pageable pageable);
 
     @Query("""
                 SELECT d FROM DishEntity d
                 WHERE d.isActive = true
                 AND d.restaurant = ?1
                 """)
-    List<DishEntity> findActiveDishes(RestaurantEntity restaurant);
+    Page<DishEntity> findActiveDishes(RestaurantEntity restaurant, Pageable pageable);
 
     @Query("""
                 SELECT s_add FROM ServedAddressEntity s_add

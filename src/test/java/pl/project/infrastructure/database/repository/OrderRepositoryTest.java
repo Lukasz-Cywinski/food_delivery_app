@@ -115,5 +115,4 @@ class OrderRepositoryTest extends MyJpaConfiguration {
         //then
         assertEquals(completedDateTime.format(FORMATTER), orderFromDb1.getCompletedDateTime().format(FORMATTER));
     }
-
 }

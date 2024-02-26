@@ -1,6 +1,6 @@
 CREATE TABLE "orders" (
   "id"                      serial          not null,
-  "order_code"              varchar(32)     unique not null,
+  "order_code"              varchar(64)     unique not null,
   "received_date_time"      timestamptz     not null,
   "completed_date_time"     timestamptz     ,
   "customer_id"             int             not null,

@@ -10,6 +10,7 @@ import lombok.*;
 @ToString(of = {"quantity", "dish"})
 public class DishComposition {
 
+    Integer id;
     Integer quantity;
     Dish dish;
     Order order;

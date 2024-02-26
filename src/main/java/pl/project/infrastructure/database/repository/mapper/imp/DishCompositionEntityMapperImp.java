@@ -18,6 +18,7 @@ public class DishCompositionEntityMapperImp implements DishCompositionEntityMapp
 
     public DishComposition mapFromEntity(DishCompositionEntity entity){
         return DishComposition.builder()
+                .id(entity.getId())
                 .quantity(entity.getQuantity())
                 .dish(dishEntityMapper.mapFromEntity(entity.getDish()))
                 .order(orderEntityMapper.mapFromEntity(entity.getOrder()))
@@ -26,6 +27,7 @@ public class DishCompositionEntityMapperImp implements DishCompositionEntityMapp
 
     public DishCompositionEntity mapToEntity(DishComposition domainObj){
         return DishCompositionEntity.builder()
+                .id(domainObj.getId())
                 .quantity(domainObj.getQuantity())
                 .dish(dishEntityMapper.mapToEntity(domainObj.getDish()))
                 .order(orderEntityMapper.mapToEntity(domainObj.getOrder()))

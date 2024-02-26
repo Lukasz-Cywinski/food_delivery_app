@@ -1,8 +1,6 @@
 package pl.project.business.dao;
 
-import pl.project.domain.model.Restaurant;
 import pl.project.domain.model.RestaurantOwner;
-import pl.project.infrastructure.database.entity.RestaurantOwnerEntity;
 
 import java.util.List;
 import java.util.Optional;

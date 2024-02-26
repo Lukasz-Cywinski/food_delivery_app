@@ -20,7 +20,7 @@ public class OrderInstance {
         return OrderEntity.builder()
                 .orderCode("111")
                 .receivedDateTime(RECEIVED_DATE_TIME)
-                .completedDateTime(COMPLETED_DATE_TIME)
+//                .completedDateTime(COMPLETED_DATE_TIME)
                 .customer(someCustomer1())
                 .deliveryService(someDeliveryService1())
                 .build();

@@ -1,6 +1,5 @@
 package pl.project.business.dao;
 
-import pl.project.domain.model.DeliveryService;
 import pl.project.domain.model.DishCategory;
 
 import java.util.List;

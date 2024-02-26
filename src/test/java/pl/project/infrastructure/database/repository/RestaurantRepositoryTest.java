@@ -3,6 +3,10 @@ package pl.project.infrastructure.database.repository;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import pl.project.infrastructure.database.entity.*;
 import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.*;
@@ -48,7 +52,11 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
         RestaurantEntity restaurantFromDb2 = restaurantJpaRepository.findByRestaurantCode(restaurant2.getRestaurantCode()).orElseThrow();
         RestaurantEntity restaurantFromDb3 = restaurantJpaRepository.findByRestaurantCode(restaurant3.getRestaurantCode()).orElseThrow();
 
-        List<RestaurantEntity> activeRestaurants = restaurantJpaRepository.findActive();
+        Sort sort = Sort.by("added").descending();
+        Pageable pageable = PageRequest.of(0, 3, sort);
+
+        Page<RestaurantEntity> page = restaurantJpaRepository.findActive(pageable);
+        List<RestaurantEntity> activeRestaurants = page.getContent();
 
         //then
                 // first
@@ -145,11 +153,16 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
         restaurantJpaRepository.save(restaurant2);
         restaurantJpaRepository.save(restaurant3);
 
-        restaurantJpaRepository.deactivate(someRestaurant3().getRestaurantCode());
-        List<RestaurantEntity> activeOwners = restaurantJpaRepository.findActive();
+        restaurantJpaRepository.deactivate(restaurant1.getRestaurantCode());
+
+        Sort sort = Sort.by("added").descending();
+        Pageable pageable = PageRequest.of(0, 3, sort);
+
+        Page<RestaurantEntity> page = restaurantJpaRepository.findActive(pageable);
+        List<RestaurantEntity> activeRestaurants = page.getContent();
 
         // then
-        assertEquals(2, activeOwners.size());
+        assertEquals(2, activeRestaurants.size());
     }
 
     @Test
@@ -223,7 +236,11 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
         dishJpaRepository.save(dish2);
         dishJpaRepository.save(dish3);
 
-        List<DishEntity> activeDishes = restaurantJpaRepository.findActiveDishes(restaurant1);
+        Sort sort = Sort.by("price").descending();
+        Pageable pageable = PageRequest.of(0, 3, sort);
+
+        Page<DishEntity> page = restaurantJpaRepository.findActiveDishes(restaurant1, pageable);
+        List<DishEntity> activeDishes = page.getContent();
 
         //then
         assertEquals(3, activeDishes.size());

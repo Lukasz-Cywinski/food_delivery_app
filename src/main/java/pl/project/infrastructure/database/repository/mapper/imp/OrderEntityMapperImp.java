@@ -17,6 +17,7 @@ public class OrderEntityMapperImp implements OrderEntityMapper {
 
     public Order mapFromEntity(OrderEntity entity){
         return Order.builder()
+                .id(entity.getId())
                 .orderCode(entity.getOrderCode())
                 .receivedDateTime(entity.getReceivedDateTime())
                 .completedDateTime(entity.getCompletedDateTime())
@@ -27,6 +28,7 @@ public class OrderEntityMapperImp implements OrderEntityMapper {
 
     public OrderEntity mapToEntity(Order domainObj){
         return OrderEntity.builder()
+                .id(domainObj.getId())
                 .orderCode(domainObj.getOrderCode())
                 .receivedDateTime(domainObj.getReceivedDateTime())
                 .completedDateTime(domainObj.getCompletedDateTime())

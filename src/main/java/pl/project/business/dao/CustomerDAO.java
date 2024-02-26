@@ -10,7 +10,7 @@ public interface CustomerDAO {
 
     Optional<Customer> addCustomer(Customer customer);
 
-    Optional<Customer> getOwnerByEmail(String email);
+    Optional<Customer> getCustomerByEmail(String email);
 
     List<Customer> getActiveCustomers();
 
@@ -24,6 +24,6 @@ public interface CustomerDAO {
 
     Integer changeCustomerDeliveryAddress(DeliveryAddress newDeliveryAddress, String oldEmail);
 
-    Integer deactivateCustomer(String personalCode);
+    Integer deactivateCustomer(String email);
 
 }

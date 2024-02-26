@@ -12,6 +12,7 @@ import java.util.Set;
 @ToString(of = {"city", "street", "postalCode"})
 public class DeliveryAddress {
 
+    Integer id;
     String city;
     String postalCode;
     String street;

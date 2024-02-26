@@ -1,5 +1,6 @@
 package pl.project.business.dao;
 
+import org.springframework.data.domain.Pageable;
 import pl.project.domain.model.Dish;
 import pl.project.domain.model.Restaurant;
 import pl.project.domain.model.RestaurantOwner;
@@ -14,9 +15,9 @@ public interface RestaurantDAO {
 
     Optional<Restaurant> findRestaurantByRestaurantCode(String restaurantCode);
 
-    List<Restaurant> findActiveRestaurants();
+    List<Restaurant> findActiveRestaurants(Pageable pageable);
 
-    List<Dish> findActiveDishesForRestaurant(Restaurant restaurant);
+    List<Dish> findActiveDishesForRestaurant(Restaurant restaurant, Pageable pageable);
 
     List<ServedAddress> findServedAddressesForRestaurant(Restaurant restaurant);
 

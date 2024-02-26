@@ -1,6 +1,6 @@
 CREATE TABLE "dish" (
   "id"                              serial          not null,
-  "dish_code"                       varchar(32)     unique not null,
+  "dish_code"                       varchar(64)     unique not null,
   "name"                            varchar(32)     not null,
   "description"                     varchar(64)     not null,
   "price"                           numeric(6,2)    not null,

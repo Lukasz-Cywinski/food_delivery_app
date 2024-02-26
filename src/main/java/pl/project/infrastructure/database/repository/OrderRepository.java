@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import pl.project.business.dao.OrderDAO;
 import pl.project.domain.model.Order;
-import pl.project.infrastructure.database.entity.OrderEntity;
 import pl.project.infrastructure.database.repository.jpa.OrderJpaRepository;
 import pl.project.infrastructure.database.repository.mapper.OrderEntityMapper;
 
@@ -37,5 +36,11 @@ public class OrderRepository implements OrderDAO {
     @Override
     public Integer reportCompletedDateTime(OffsetDateTime deliveryDateTime, String orderCode) {
         return orderJpaRepository.reportCompletedDateTime(deliveryDateTime, orderCode);
+    }
+
+    @Override
+    public void deleteOrder(Order order) {
+        orderJpaRepository.delete(
+                orderEntityMapper.mapToEntity(order));
     }
 }

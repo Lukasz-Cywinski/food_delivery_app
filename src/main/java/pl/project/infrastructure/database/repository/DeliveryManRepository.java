@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import pl.project.business.dao.DeliveryManDAO;
 import pl.project.domain.model.DeliveryMan;
-import pl.project.infrastructure.database.entity.DeliveryManEntity;
-import pl.project.infrastructure.database.repository.jpa.DeliveryAddressJpaRepository;
 import pl.project.infrastructure.database.repository.jpa.DeliveryManJpaRepository;
-import pl.project.infrastructure.database.repository.mapper.DeliveryAddressEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.DeliveryManEntityMapper;
 
 import java.util.List;

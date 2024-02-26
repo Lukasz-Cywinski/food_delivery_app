@@ -13,6 +13,7 @@ import java.util.Set;
 @ToString(of = {"orderCode","receivedDateTime" ,"completedDateTime"})
 public class Order {
 
+    Integer id;
     String orderCode;
     OffsetDateTime receivedDateTime;
     OffsetDateTime completedDateTime;

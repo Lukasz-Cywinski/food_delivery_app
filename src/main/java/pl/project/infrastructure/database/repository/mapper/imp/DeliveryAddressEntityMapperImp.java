@@ -13,6 +13,7 @@ public class DeliveryAddressEntityMapperImp implements DeliveryAddressEntityMapp
 
     public DeliveryAddress mapFromEntity(DeliveryAddressEntity entity){
         return DeliveryAddress.builder()
+                .id(entity.getId())
                 .city(entity.getCity())
                 .postalCode(entity.getPostalCode())
                 .street(entity.getStreet())
@@ -21,6 +22,7 @@ public class DeliveryAddressEntityMapperImp implements DeliveryAddressEntityMapp
 
     public DeliveryAddressEntity mapToEntity(DeliveryAddress domainObj){
         return DeliveryAddressEntity.builder()
+                .id(domainObj.getId())
                 .city(domainObj.getCity())
                 .postalCode(domainObj.getPostalCode())
                 .street(domainObj.getStreet())

@@ -1,11 +1,9 @@
 package pl.project.business.dao;
 
+import org.springframework.data.domain.Pageable;
 import pl.project.domain.model.Customer;
 import pl.project.domain.model.Dish;
 import pl.project.domain.model.DishOpinion;
-import pl.project.infrastructure.database.entity.CustomerEntity;
-import pl.project.infrastructure.database.entity.DishEntity;
-import pl.project.infrastructure.database.entity.DishOpinionEntity;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,11 +13,11 @@ public interface DishOpinionDAO {
 
     Optional<DishOpinion> createDishOpinion(DishOpinion dishOpinion);
 
-    List<DishOpinion> findDishOpinionsByDish(Dish dish);
+    List<DishOpinion> findDishOpinionsByDish(Dish dish, Pageable pageable);
 
     List<DishOpinion> findDishOpinionsByCustomer(Customer customer);
 
-    List<DishOpinion> findDishOpinionsByEvaluationRange(BigDecimal from, BigDecimal to);
+    List<DishOpinion> findDishOpinionsByEvaluationRange(BigDecimal from, BigDecimal to, Pageable pageable);
 
     Optional<BigDecimal> getAverageDishEvaluation(Dish dish);
 }

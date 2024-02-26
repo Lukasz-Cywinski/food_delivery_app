@@ -16,6 +16,7 @@ public class ServedAddressEntityMapperImp implements ServedAddressEntityMapper {
 
     public ServedAddress mapFromEntity(ServedAddressEntity entity){
         return ServedAddress.builder()
+                .id(entity.getId())
                 .city(entity.getCity())
                 .street(entity.getStreet())
                 .restaurant(restaurantEntityMapper.mapFromEntity(entity.getRestaurant()))
@@ -24,6 +25,7 @@ public class ServedAddressEntityMapperImp implements ServedAddressEntityMapper {
 
     public ServedAddressEntity mapToEntity(ServedAddress domainObj){
         return ServedAddressEntity.builder()
+                .id(domainObj.getId())
                 .city(domainObj.getCity())
                 .street(domainObj.getStreet())
                 .restaurant(restaurantEntityMapper.mapToEntity(domainObj.getRestaurant()))
