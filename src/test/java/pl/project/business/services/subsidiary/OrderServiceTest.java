@@ -32,6 +32,9 @@ class OrderServiceTest {
     @Mock
     private OrderDAO orderDAO;
 
+    @Mock
+    private DishCompositionService dishCompositionService;
+
     @InjectMocks
     private OrderService orderService;
 

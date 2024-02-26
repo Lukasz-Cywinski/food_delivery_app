@@ -47,6 +47,8 @@ class CustomerServiceTest {
     private DeliveryAddressService deliveryAddressService;
     @Mock
     private DeliveryServiceService deliveryServiceService;
+    @Mock
+    private DishCompositionService dishCompositionService;
 
     private final InstanceMapper instanceMapper = new InstanceMapper();
 
