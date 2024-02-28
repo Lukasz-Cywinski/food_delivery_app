@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.*;
+import pl.project.infrastructure.security.UserRepository;
 import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.*;
 import pl.project.util.db.DishCompositionInstance;
@@ -32,6 +33,7 @@ class DishCompositionRepositoryTest extends MyJpaConfiguration {
     private CustomerJpaRepository customerJpaRepository;
     private OrderJpaRepository orderJpaRepository;
     private DishJpaRepository dishJpaRepository;
+    private UserRepository userRepository;
 
     private final DishCompositionEntity dishComposition1 = DishCompositionInstance.someDishComposition1();
     private final DishCompositionEntity dishComposition2 = DishCompositionInstance.someDishComposition2();
@@ -133,6 +135,20 @@ class DishCompositionRepositoryTest extends MyJpaConfiguration {
         order1.setDeliveryService(deliveryService1);
         order2.setDeliveryService(deliveryService2);
         order3.setDeliveryService(deliveryService3);
+
+        //simplified
+        userRepository.save(customer1.getUser());
+        userRepository.save(customer2.getUser());
+        userRepository.save(customer3.getUser());
+
+        userRepository.save(deliveryService1.getDeliveryMan().getUser());
+        userRepository.save(deliveryService2.getDeliveryMan().getUser());
+        userRepository.save(deliveryService3.getDeliveryMan().getUser());
+
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+        userRepository.save(restaurant2.getRestaurantOwner().getUser());
+        userRepository.save(restaurant3.getRestaurantOwner().getUser());
+        //simplified
 
         dishComposition1.setDish(dish1);
         dishComposition2.setDish(dish2);

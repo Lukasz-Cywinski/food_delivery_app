@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.DeliveryServiceEntity;
+import pl.project.infrastructure.database.repository.jpa.DeliveryManJpaRepository;
+import pl.project.infrastructure.security.UserRepository;
 import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.DeliveryServiceJpaRepository;
 
@@ -22,6 +24,8 @@ class DeliveryServiceRepositoryTest extends MyJpaConfiguration {
 
     private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private DeliveryServiceJpaRepository deliveryServiceJpaRepository;
+    private DeliveryManJpaRepository deliveryManJpaRepository;
+    private UserRepository userRepository;
 
     @Test
     void thatDeliveryServiceCanBeSavedCorrectly() {
@@ -32,6 +36,14 @@ class DeliveryServiceRepositoryTest extends MyJpaConfiguration {
         DeliveryServiceEntity deliveryService3 = someDeliveryService3();
 
         //when
+        userRepository.save(deliveryService1.getDeliveryMan().getUser());
+        userRepository.save(deliveryService2.getDeliveryMan().getUser());
+        userRepository.save(deliveryService3.getDeliveryMan().getUser());
+
+        deliveryManJpaRepository.save(deliveryService1.getDeliveryMan());
+        deliveryManJpaRepository.save(deliveryService2.getDeliveryMan());
+        deliveryManJpaRepository.save(deliveryService3.getDeliveryMan());
+
         deliveryServiceJpaRepository.save(deliveryService1);
         deliveryServiceJpaRepository.save(deliveryService2);
         deliveryServiceJpaRepository.save(deliveryService3);
@@ -68,6 +80,9 @@ class DeliveryServiceRepositoryTest extends MyJpaConfiguration {
         OffsetDateTime completedDateTime = OffsetDateTime.of(2024, 2, 15, 17, 30, 10, 10, ZoneOffset.of("Z"));
 
         //when
+        userRepository.save(deliveryService1.getDeliveryMan().getUser());
+        deliveryManJpaRepository.save(deliveryService1.getDeliveryMan());
+
         deliveryServiceJpaRepository.save(deliveryService1);
         deliveryServiceJpaRepository.reportCompletedDateTime(completedDateTime, deliveryService1.getDeliveryServiceCode());
         DeliveryServiceEntity deliveryServiceFromDb1 = deliveryServiceJpaRepository.findByDeliveryServiceCode(deliveryService1.getDeliveryServiceCode()).orElseThrow();

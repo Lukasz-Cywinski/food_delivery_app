@@ -8,6 +8,7 @@ import pl.project.infrastructure.database.entity.DishCategoryEntity;
 import pl.project.infrastructure.database.entity.DishEntity;
 import pl.project.infrastructure.database.entity.DishPhotoEntity;
 import pl.project.infrastructure.database.entity.RestaurantEntity;
+import pl.project.infrastructure.security.UserRepository;
 import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.DishCategoryJpaRepository;
 import pl.project.infrastructure.database.repository.jpa.DishJpaRepository;
@@ -32,6 +33,7 @@ class DishRepositoryTest extends MyJpaConfiguration {
     private DishPhotoJpaRepository dishPhotoJpaRepository;
     private DishCategoryJpaRepository dishCategoryJpaRepository;
     private RestaurantJpaRepository restaurantJpaRepository;
+    private UserRepository userRepository;
 
     @Test
     void thatDishCanBeSavedCorrectly(){
@@ -65,6 +67,10 @@ class DishRepositoryTest extends MyJpaConfiguration {
         dish3.setDishCategory(dishCategory3);
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+        userRepository.save(restaurant2.getRestaurantOwner().getUser());
+        userRepository.save(restaurant3.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         restaurantJpaRepository.save(restaurant2);
         restaurantJpaRepository.save(restaurant3);
@@ -140,6 +146,8 @@ class DishRepositoryTest extends MyJpaConfiguration {
         String newName = "new name";
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         dishPhotoJpaRepository.save(dishPhoto1);
         dishCategoryJpaRepository.save(dishCategory1);
@@ -168,6 +176,8 @@ class DishRepositoryTest extends MyJpaConfiguration {
         String newDescription = "new description";
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         dishPhotoJpaRepository.save(dishPhoto1);
         dishCategoryJpaRepository.save(dishCategory1);
@@ -196,6 +206,8 @@ class DishRepositoryTest extends MyJpaConfiguration {
         BigDecimal newPrice = BigDecimal.TEN.setScale(2, RoundingMode.HALF_UP);
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         dishPhotoJpaRepository.save(dishPhoto1);
         dishCategoryJpaRepository.save(dishCategory1);
@@ -224,6 +236,8 @@ class DishRepositoryTest extends MyJpaConfiguration {
         Integer newPreparationTime = 100;
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         dishPhotoJpaRepository.save(dishPhoto1);
         dishCategoryJpaRepository.save(dishCategory1);
@@ -252,6 +266,8 @@ class DishRepositoryTest extends MyJpaConfiguration {
         DishPhotoEntity newDishPhoto = someDishPhoto2();
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         dishPhotoJpaRepository.save(dishPhoto1);
         dishCategoryJpaRepository.save(dishCategory1);
@@ -281,6 +297,8 @@ class DishRepositoryTest extends MyJpaConfiguration {
         DishCategoryEntity newDishCategory = someDishCategory2();
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         dishPhotoJpaRepository.save(dishPhoto1);
         dishCategoryJpaRepository.save(dishCategory1);
@@ -331,6 +349,10 @@ class DishRepositoryTest extends MyJpaConfiguration {
         dish3.setDishCategory(dishCategory3);
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+        userRepository.save(restaurant2.getRestaurantOwner().getUser());
+        userRepository.save(restaurant3.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         restaurantJpaRepository.save(restaurant2);
         restaurantJpaRepository.save(restaurant3);

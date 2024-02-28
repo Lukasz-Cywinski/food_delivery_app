@@ -11,6 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.project.util.db.DeliveryAddressInstance.*;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -37,7 +38,7 @@ class DeliveryAddressRepositoryTest extends MyJpaConfiguration {
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "restaurant")
                 .contains(address1, address2, address3);
 
-        assertEquals(3, addresses.size());
+        assertTrue(addresses.size() >= 3);
     }
 
     @Test

@@ -3,6 +3,8 @@ package pl.project.util.db;
 
 import pl.project.infrastructure.database.entity.DeliveryManEntity;
 
+import static pl.project.util.db.UserInstance.*;
+
 public class DeliveryManInstance{
 
     public static DeliveryManEntity someDeliveryMan1(){
@@ -13,6 +15,7 @@ public class DeliveryManInstance{
                 .phoneNumber("111")
                 .isActive(true)
                 .isAvailable(true)
+                .user(someUserDeliveryMan1())
                 .build();
     }
 
@@ -24,6 +27,7 @@ public class DeliveryManInstance{
                 .phoneNumber("222")
                 .isActive(true)
                 .isAvailable(true)
+                .user(someUserDeliveryMan2())
                 .build();
     }
 
@@ -35,6 +39,7 @@ public class DeliveryManInstance{
                 .phoneNumber("333")
                 .isActive(true)
                 .isAvailable(true)
+                .user(someUserDeliveryMan3())
                 .build();
     }
 

@@ -4,6 +4,7 @@ package pl.project.util.db;
 import pl.project.infrastructure.database.entity.CustomerEntity;
 
 import static pl.project.util.db.DeliveryAddressInstance.*;
+import static pl.project.util.db.UserInstance.*;
 
 public class CustomerInstance {
     public static CustomerEntity someCustomer1(){
@@ -14,6 +15,7 @@ public class CustomerInstance {
                 .email("email1@mail.com")
                 .deliveryAddress(someDeliveryAddress1())
                 .isActive(true)
+                .user(someUserCustomer1())
                 .build();
     }
 
@@ -25,6 +27,7 @@ public class CustomerInstance {
                 .email("email2@mail.com")
                 .deliveryAddress(someDeliveryAddress2())
                 .isActive(true)
+                .user(someUserCustomer2())
                 .build();
     }
 
@@ -36,6 +39,7 @@ public class CustomerInstance {
                 .email("email3@mail.com")
                 .deliveryAddress(someDeliveryAddress3())
                 .isActive(true)
+                .user(someUserCustomer3())
                 .build();
     }
 }

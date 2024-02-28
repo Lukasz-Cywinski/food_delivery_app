@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import pl.project.infrastructure.database.entity.*;
+import pl.project.infrastructure.security.UserRepository;
 import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.*;
 
@@ -34,6 +35,7 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
     private DishPhotoJpaRepository dishPhotoJpaRepository;
     private DishCategoryJpaRepository dishCategoryJpaRepository;
     private DishJpaRepository dishJpaRepository;
+    private UserRepository userRepository;
 
     @Test
     void thatRestaurantCanBeSavedCorrectly() {
@@ -44,6 +46,10 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
         RestaurantEntity restaurant3 = someRestaurant3();
 
         // when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+        userRepository.save(restaurant2.getRestaurantOwner().getUser());
+        userRepository.save(restaurant3.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         restaurantJpaRepository.save(restaurant2);
         restaurantJpaRepository.save(restaurant3);
@@ -113,6 +119,8 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
         String newRestaurantName = "New Name";
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         restaurantJpaRepository.changeName(newRestaurantName, restaurant1.getRestaurantCode());
         RestaurantEntity restaurantFromDb1 = restaurantJpaRepository.findByRestaurantCode(restaurant1.getRestaurantCode()).orElseThrow();
@@ -129,6 +137,9 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
         RestaurantOwnerEntity newOwner = someRestaurantOwner2();
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+        userRepository.save(newOwner.getUser());
+
         restaurantOwnerJpaRepository.save(newOwner);
         restaurantJpaRepository.save(restaurant1);
 
@@ -149,6 +160,10 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
         RestaurantEntity restaurant3 = someRestaurant3();
 
         // when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+        userRepository.save(restaurant2.getRestaurantOwner().getUser());
+        userRepository.save(restaurant3.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         restaurantJpaRepository.save(restaurant2);
         restaurantJpaRepository.save(restaurant3);
@@ -177,6 +192,8 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
         address2.setRestaurant(restaurant1);
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         servedAddressJpaRepository.save(address1);
         servedAddressJpaRepository.save(address2);
@@ -222,6 +239,8 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
         dish3.setRestaurant(restaurant1);
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
 
         dishPhotoJpaRepository.save(dishPhoto1);

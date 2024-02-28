@@ -2,6 +2,7 @@ package pl.project.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.project.infrastructure.security.UserEntity;
 
 import java.util.Set;
 
@@ -45,4 +46,8 @@ public class CustomerEntity {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 }

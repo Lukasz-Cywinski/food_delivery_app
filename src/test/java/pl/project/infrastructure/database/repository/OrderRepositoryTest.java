@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.CustomerEntity;
 import pl.project.infrastructure.database.entity.DeliveryServiceEntity;
 import pl.project.infrastructure.database.entity.OrderEntity;
+import pl.project.infrastructure.security.UserRepository;
 import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.CustomerJpaRepository;
 import pl.project.infrastructure.database.repository.jpa.DeliveryServiceJpaRepository;
@@ -30,6 +31,7 @@ class OrderRepositoryTest extends MyJpaConfiguration {
     private OrderJpaRepository orderJpaRepository;
     private DeliveryServiceJpaRepository deliveryServiceJpaRepository;
     private CustomerJpaRepository customerJpaRepository;
+    private UserRepository userRepository;
 
     @Test
     void thatOrderCanBeSavedCorrectly() {
@@ -56,6 +58,14 @@ class OrderRepositoryTest extends MyJpaConfiguration {
         order3.setCustomer(customer3);
 
         //when
+        userRepository.save(deliveryService1.getDeliveryMan().getUser());
+        userRepository.save(deliveryService2.getDeliveryMan().getUser());
+        userRepository.save(deliveryService3.getDeliveryMan().getUser());
+
+        userRepository.save(customer1.getUser());
+        userRepository.save(customer2.getUser());
+        userRepository.save(customer3.getUser());
+
         deliveryServiceJpaRepository.save(deliveryService1);
         deliveryServiceJpaRepository.save(deliveryService2);
         deliveryServiceJpaRepository.save(deliveryService3);
@@ -105,6 +115,9 @@ class OrderRepositoryTest extends MyJpaConfiguration {
         OffsetDateTime completedDateTime = OffsetDateTime.of(2024, 2, 15, 17, 30, 10, 10, ZoneOffset.of("Z"));
 
         //when
+        userRepository.save(deliveryService1.getDeliveryMan().getUser());
+        userRepository.save(customer1.getUser());
+
         deliveryServiceJpaRepository.save(deliveryService1);
         customerJpaRepository.save(customer1);
 

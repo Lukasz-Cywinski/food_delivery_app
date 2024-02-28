@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import pl.project.infrastructure.database.entity.*;
 import pl.project.infrastructure.database.repository.jpa.*;
+import pl.project.infrastructure.security.UserRepository;
 import pl.project.integration.configuration.MyJpaConfiguration;
 
 import java.math.BigDecimal;
@@ -33,6 +34,7 @@ class DishOpinionRepositoryTest extends MyJpaConfiguration {
     private DishPhotoJpaRepository dishPhotoJpaRepository;
     private CustomerJpaRepository customerJpaRepository;
     private DishJpaRepository dishJpaRepository;
+    private UserRepository userRepository;
 
     private final static DishOpinionEntity dishOpinion1 = someDishOpinion1();
     private final static DishOpinionEntity dishOpinion2 = someDishOpinion2();
@@ -180,6 +182,16 @@ class DishOpinionRepositoryTest extends MyJpaConfiguration {
         dish1.setDishCategory(dishCategory1);
         dish2.setDishCategory(dishCategory2);
         dish3.setDishCategory(dishCategory3);
+
+        //simplified
+        userRepository.save(customer1.getUser());
+        userRepository.save(customer2.getUser());
+        userRepository.save(customer3.getUser());
+
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+        userRepository.save(restaurant2.getRestaurantOwner().getUser());
+        userRepository.save(restaurant3.getRestaurantOwner().getUser());
+        //simplified
 
         dishOpinion1.setDish(dish1);
         dishOpinion2.setDish(dish2);

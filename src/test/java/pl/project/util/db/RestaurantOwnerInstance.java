@@ -3,6 +3,8 @@ package pl.project.util.db;
 
 import pl.project.infrastructure.database.entity.RestaurantOwnerEntity;
 
+import static pl.project.util.db.UserInstance.*;
+
 public class RestaurantOwnerInstance {
     public static RestaurantOwnerEntity someRestaurantOwner1(){
         return RestaurantOwnerEntity.builder()
@@ -11,6 +13,7 @@ public class RestaurantOwnerInstance {
                 .phoneNumber("111")
                 .email("email1@mail.com")
                 .isActive(true)
+                .user(someUserRestaurantOwner1())
                 .build();
     }
 
@@ -21,6 +24,7 @@ public class RestaurantOwnerInstance {
                 .phoneNumber("222")
                 .email("email2@mail.com")
                 .isActive(true)
+                .user(someUserRestaurantOwner2())
                 .build();
     }
 
@@ -31,6 +35,7 @@ public class RestaurantOwnerInstance {
                 .phoneNumber("333")
                 .email("email3@mail.com")
                 .isActive(true)
+                .user(someUserRestaurantOwner3())
                 .build();
     }
 

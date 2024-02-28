@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.RestaurantEntity;
 import pl.project.infrastructure.database.entity.ServedAddressEntity;
+import pl.project.infrastructure.security.UserRepository;
 import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.RestaurantJpaRepository;
 import pl.project.infrastructure.database.repository.jpa.ServedAddressJpaRepository;
@@ -21,6 +22,7 @@ class ServedAddressRepositoryTest extends MyJpaConfiguration {
 
     ServedAddressJpaRepository servedAddressJpaRepository;
     RestaurantJpaRepository restaurantJpaRepository;
+    private UserRepository userRepository;
 
     @Test
     void thatServedAddressCanBeSavedCorrectly(){
@@ -37,6 +39,8 @@ class ServedAddressRepositoryTest extends MyJpaConfiguration {
         address3.setRestaurant(restaurant1);
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
 
         servedAddressJpaRepository.save(address1);
@@ -63,6 +67,8 @@ class ServedAddressRepositoryTest extends MyJpaConfiguration {
         String newCityName = "new City";
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         servedAddressJpaRepository.save(address1);
         Integer addressId = servedAddressJpaRepository.findAll().getFirst().getId();
@@ -84,6 +90,8 @@ class ServedAddressRepositoryTest extends MyJpaConfiguration {
         String newStreetName = "new Street";
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         servedAddressJpaRepository.save(address1);
         Integer addressId = servedAddressJpaRepository.findAll().getFirst().getId();
@@ -106,6 +114,8 @@ class ServedAddressRepositoryTest extends MyJpaConfiguration {
         address2.setRestaurant(restaurant1);
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
         servedAddressJpaRepository.save(address1);
         servedAddressJpaRepository.save(address2);
@@ -132,6 +142,8 @@ class ServedAddressRepositoryTest extends MyJpaConfiguration {
         address3.setRestaurant(restaurant1);
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
 
         servedAddressJpaRepository.save(address1);
@@ -158,6 +170,8 @@ class ServedAddressRepositoryTest extends MyJpaConfiguration {
         address3.setRestaurant(restaurant1);
 
         //when
+        userRepository.save(restaurant1.getRestaurantOwner().getUser());
+
         restaurantJpaRepository.save(restaurant1);
 
         servedAddressJpaRepository.save(address1);

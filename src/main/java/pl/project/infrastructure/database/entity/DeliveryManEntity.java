@@ -2,6 +2,9 @@ package pl.project.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import pl.project.infrastructure.security.UserEntity;
 
 import java.util.Set;
 
@@ -41,4 +44,9 @@ public class DeliveryManEntity {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
 }
