@@ -8,7 +8,7 @@ import pl.project.infrastructure.database.entity.DishCategoryEntity;
 import pl.project.infrastructure.database.entity.DishEntity;
 import pl.project.infrastructure.database.entity.DishPhotoEntity;
 import pl.project.infrastructure.database.entity.RestaurantEntity;
-import pl.project.infrastructure.security.UserRepository;
+import pl.project.infrastructure.security.db.UserRepository;
 import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.DishCategoryJpaRepository;
 import pl.project.infrastructure.database.repository.jpa.DishJpaRepository;

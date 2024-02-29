@@ -2,7 +2,7 @@ package pl.project.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import pl.project.infrastructure.security.UserEntity;
+import pl.project.infrastructure.security.db.UserEntity;
 
 import java.util.Set;
 

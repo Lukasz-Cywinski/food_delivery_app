@@ -2,6 +2,7 @@ package pl.project.domain.model;
 
 import jakarta.persistence.Column;
 import lombok.*;
+import pl.project.infrastructure.security.User;
 
 import java.util.Set;
 
@@ -20,4 +21,5 @@ public class Customer {
     Set<DishOpinion> dishOpinions;
     Set<Order> orders;
     boolean isActive;
+    User user;
 }

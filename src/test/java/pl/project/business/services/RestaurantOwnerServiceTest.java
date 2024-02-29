@@ -10,6 +10,7 @@ import pl.project.business.services.subsidiary.*;
 import pl.project.domain.exception.EntityCreationException;
 import pl.project.domain.exception.EntityReadException;
 import pl.project.domain.model.*;
+import pl.project.infrastructure.security.ProjectUserDetailsService;
 import pl.project.util.domain.InstanceMapper;
 
 import java.util.List;
@@ -44,6 +45,8 @@ class RestaurantOwnerServiceTest {
     private DishCompositionService dishCompositionService;
     @Mock
     private DeliveryServiceService deliveryServiceService;
+    @Mock
+    private ProjectUserDetailsService projectUserDetailsService;
 
     private final InstanceMapper instanceMapper = new InstanceMapper();
 

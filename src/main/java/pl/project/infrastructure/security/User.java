@@ -1,8 +1,7 @@
 package pl.project.infrastructure.security;
 
-import jakarta.persistence.*;
 import lombok.*;
-import pl.project.infrastructure.security.RoleEntity;
+import pl.project.infrastructure.security.db.RoleEntity;
 
 import java.util.Set;
 
@@ -13,15 +12,17 @@ import java.util.Set;
 public class User {
 
     String userName;
+    String email;
     String password;
     Boolean active;
-    Set<RoleEntity> roles;
+    Set<Role> roles;
 
     @Override
     public String toString() {
-        return "User{" +
-                "userName='" + userName + '\'' +
-                ", active=" + active +
-                '}';
+        String active = getActive() ? "active" : "not active";
+        String roles = getRoles().stream()
+                .map(Enum::name)
+                .reduce("", (l, r) -> "%s %n %s".formatted(l, r).trim());
+        return "%s user with roles: %n %s".formatted(active, roles);
     }
 }

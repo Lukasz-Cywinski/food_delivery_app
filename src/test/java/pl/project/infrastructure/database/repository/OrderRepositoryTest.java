@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.CustomerEntity;
 import pl.project.infrastructure.database.entity.DeliveryServiceEntity;
 import pl.project.infrastructure.database.entity.OrderEntity;
-import pl.project.infrastructure.security.UserRepository;
+import pl.project.infrastructure.security.db.UserRepository;
 import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.CustomerJpaRepository;
 import pl.project.infrastructure.database.repository.jpa.DeliveryServiceJpaRepository;

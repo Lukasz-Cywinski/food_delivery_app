@@ -1,4 +1,4 @@
-package pl.project.infrastructure.security;
+package pl.project.infrastructure.security.db;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

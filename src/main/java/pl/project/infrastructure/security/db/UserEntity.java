@@ -1,10 +1,11 @@
-package pl.project.infrastructure.security;
+package pl.project.infrastructure.security.db;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.project.infrastructure.security.db.RoleEntity;
 
 import java.util.Set;
 
@@ -23,6 +24,9 @@ public class UserEntity {
 
     @Column(name = "user_name")
     private String userName;
+
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "password")
     private String password;

@@ -1,10 +1,11 @@
 CREATE TABLE food_delivery_user
 (
-    id          serial        not null,
-    user_name   varchar(32)   unique not null,
-    password    varchar(128)  not null,
-    active      boolean       not null,
-    PRIMARY KEY (id)
+    id              serial        not null,
+    user_name       varchar(32)   unique not null,
+    email           varchar(32)   unique not null,
+    password        varchar(128)  not null,
+    active          boolean       not null,
+    PRIMARY KEY     (id)
 );
 
 CREATE TABLE food_delivery_role

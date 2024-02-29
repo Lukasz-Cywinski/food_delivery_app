@@ -8,6 +8,8 @@ import pl.project.business.services.subsidiary.*;
 import pl.project.domain.exception.EntityCreationException;
 import pl.project.domain.exception.EntityReadException;
 import pl.project.domain.model.*;
+import pl.project.infrastructure.security.ProjectUserDetailsService;
+import pl.project.infrastructure.security.User;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,10 +30,12 @@ public class CustomerService {
     private final DishCompositionService dishCompositionService;
     private final DeliveryServiceService deliveryServiceService;
 
+    private final ProjectUserDetailsService projectUserDetailsService;
 
     // Customer Services
     @Transactional
     public Customer createCustomer(Customer customer) {
+        projectUserDetailsService.saveUserAndAssignRoles(customer.getUser());
         return customerDAO.addCustomer(customer)
                 .orElseThrow(() -> new EntityCreationException(CUSTOMER_CREATION_EXCEPTION.formatted(customer)));
     }
@@ -52,8 +56,10 @@ public class CustomerService {
     }
 
     private Customer getCustomer(String customerEmail) {
+        User user = projectUserDetailsService.getUserAndRoleByEmail(customerEmail);
         return customerDAO.getCustomerByEmail(customerEmail)
-                .orElseThrow(() -> new EntityReadException(CUSTOMER_READ_EXCEPTION.formatted(customerEmail)));
+                .orElseThrow(() -> new EntityReadException(CUSTOMER_READ_EXCEPTION.formatted(customerEmail)))
+                .withUser(user);
     }
 
     // Customer Delivery Services

@@ -8,6 +8,8 @@ import pl.project.business.services.subsidiary.*;
 import pl.project.domain.exception.EntityCreationException;
 import pl.project.domain.exception.EntityReadException;
 import pl.project.domain.model.*;
+import pl.project.infrastructure.security.ProjectUserDetailsService;
+import pl.project.infrastructure.security.User;
 
 import java.util.List;
 import java.util.Objects;
@@ -27,17 +29,22 @@ public class RestaurantOwnerService {
     private final DishCompositionService dishCompositionService;
     private final DeliveryServiceService deliveryServiceService;
 
+    private final ProjectUserDetailsService projectUserDetailsService;
+
 
     // Owner Services
     @Transactional
     public RestaurantOwner createRestaurantOwner(RestaurantOwner restaurantOwner){
+        projectUserDetailsService.saveUserAndAssignRoles(restaurantOwner.getUser());
         return restaurantOwnerDAO.createRestaurantOwner(restaurantOwner)
                 .orElseThrow(() -> new EntityCreationException(RESTAURANT_OWNER_CREATION_EXCEPTION.formatted(restaurantOwner.getEmail())));
     }
 
     private RestaurantOwner getRestaurantOwner(String restaurantOwnerEmail) {
+        User user = projectUserDetailsService.getUserAndRoleByEmail(restaurantOwnerEmail);
         return restaurantOwnerDAO.findRestaurantOwnerByEmail(restaurantOwnerEmail)
-                .orElseThrow(() -> new EntityReadException(RESTAURANT_OWNER_READ_EXCEPTION.formatted(restaurantOwnerEmail)));
+                .orElseThrow(() -> new EntityReadException(RESTAURANT_OWNER_READ_EXCEPTION.formatted(restaurantOwnerEmail)))
+                .withUser(user);
     }
 
     @Transactional

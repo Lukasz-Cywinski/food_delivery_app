@@ -2,6 +2,7 @@ package pl.project.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.project.infrastructure.security.User;
 
 import java.util.Set;
 
@@ -18,5 +19,5 @@ public class RestaurantOwner {
     String email;
     Set<Restaurant> restaurants;
     boolean isActive;
-
+    User user;
 }

@@ -10,6 +10,7 @@ import pl.project.business.services.subsidiary.*;
 import pl.project.domain.exception.EntityCreationException;
 import pl.project.domain.exception.EntityReadException;
 import pl.project.domain.model.*;
+import pl.project.infrastructure.security.ProjectUserDetailsService;
 import pl.project.util.db.DeliveryServiceInstance;
 import pl.project.util.domain.InstanceMapper;
 
@@ -49,6 +50,8 @@ class CustomerServiceTest {
     private DeliveryServiceService deliveryServiceService;
     @Mock
     private DishCompositionService dishCompositionService;
+    @Mock
+    private ProjectUserDetailsService projectUserDetailsService;
 
     private final InstanceMapper instanceMapper = new InstanceMapper();
 
@@ -66,8 +69,8 @@ class CustomerServiceTest {
         //then
         assertEquals(customer, result);
         assertInstanceOf(EntityCreationException.class, exception);
-        assertEquals("Fail to crete customer: Customer(name=name2, surname=surname2, phoneNumber=222, email=email2@mail.com)"
-                , exception.getMessage());
+        assertEquals("Fail to crete customer: Customer(name=name2, surname=surname2, phoneNumber=222, email=email2@mail.com)",
+                exception.getMessage());
     }
 
     @Test

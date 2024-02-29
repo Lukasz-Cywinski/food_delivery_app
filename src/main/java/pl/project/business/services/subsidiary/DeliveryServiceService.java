@@ -25,6 +25,7 @@ public class DeliveryServiceService {
     private final OrderService orderService;
 
     // without transactional -> methods all called from another Transactional methods
+    // for now simplified - e.g. delivery man is chosen automatically, delivery man cannot log in and other...
     public DeliveryService createDeliveryService(){
 
         String identifier = UUID.randomUUID().toString();

@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import pl.project.infrastructure.database.entity.*;
-import pl.project.infrastructure.security.UserRepository;
+import pl.project.infrastructure.security.db.UserRepository;
 import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.*;
 

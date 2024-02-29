@@ -2,6 +2,7 @@ package pl.project.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.project.infrastructure.security.User;
 
 import java.util.Set;
 
@@ -19,4 +20,5 @@ public class DeliveryMan {
     Set<DeliveryService> deliveryServices;
     boolean isActive;
     boolean isAvailable;
+    User user;
 }
