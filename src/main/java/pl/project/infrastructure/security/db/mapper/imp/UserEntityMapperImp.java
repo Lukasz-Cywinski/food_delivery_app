@@ -24,6 +24,7 @@ public class UserEntityMapperImp implements UserEntityMapper {
     public User mapFromEntity(UserEntity entity){
         if(Objects.isNull(entity.getRoles())) entity.setRoles(Set.of());
         return User.builder()
+                .id(entity.getId())
                 .userName(entity.getUserName())
                 .email(entity.getEmail())
                 .password(entity.getPassword())
@@ -37,6 +38,7 @@ public class UserEntityMapperImp implements UserEntityMapper {
     public UserEntity mapToEntity(User domainObj){
         if(Objects.isNull(domainObj.getRoles())) domainObj = domainObj.withRoles(Set.of());
         return UserEntity.builder()
+                .id(domainObj.getId())
                 .userName(domainObj.getUserName())
                 .email(domainObj.getEmail())
                 .password(domainObj.getPassword())

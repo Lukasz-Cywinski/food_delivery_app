@@ -7,7 +7,7 @@
           rel="stylesheet"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
           crossorigin="anonymous">
-    <title>Food delivery main page</title>
+    <title>Registration main page</title>
 </head>
 
 <body>
@@ -15,16 +15,18 @@
     <h1>Food delivery app!</h1>
     <div class="row mt-3">
         <div class="col-md-4">
-            <a th:href="@{/customer}" class="btn btn-info" role="button">Customer</a>
+            <a th:href="@{/registration/create_new_restaurant_owner}" class="btn btn-info" role="button">Create new Restaurant Owner</a>
         </div>
         <div class="col-md-4">
-            <a th:href="@{/registration}" class="btn btn-info" role="button">Create new user</a>
+            <a th:href="@{/registration/create_new_customer}" class="btn btn-info" role="button">Create new Customer</a>
         </div>
         <div class="col-md-4">
-            <a th:href="@{/restaurant_owner}" class="btn btn-info" role="button">Restaurant owner</a>
+            <a th:href="@{/registration/create_new_delivery_man}" class="btn btn-info" role="button">Create new Delivery Man</a>
+        </div>
+        <div class="col-md-4">
+            <a th:href="@{/registration/create_new_rest_api_user}" class="btn btn-info" role="button">Create new rest api User</a>
         </div>
     </div>
 </div>
 </body>
-
 </html>

@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+          crossorigin="anonymous">
+    <title>Create new restaurant owner</title>
+</head>
+
+<body>
+<div class="container">
+    <div class="page-header" id="banner">
+        <h2>Create new Restaurant Owner</h2>
+        <form action="#" th:action="@{/registration/create_new_restaurant_owner/add}" method="POST">
+            <h3>User login</h3>
+            <div th:object="${userDTO}" class="form-group">
+                User Name: <input type="text" th:name="userName"/>
+                Email: <input type="text" th:name="email"/>
+                Password: <input type="text" th:name="password"/>
+            </div>
+            <h3>Personal data</h3>
+            <div th:object="${restaurantOwnerDTO}" class="form-group">
+                Name: <input type="text" th:name="name"/>
+                Surname: <input type="text" th:name="surname"/>
+                Phone number: <input type="text" th:name="phoneNumber"/>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create restaurant owner" name="button"/>
+            </div>
+        </form>
+        <hr/>
+    </div>
+</div>
+</body>
+</html>

@@ -4,16 +4,21 @@ import pl.project.domain.model.*;
 import pl.project.infrastructure.database.entity.*;
 import pl.project.infrastructure.database.repository.mapper.*;
 import pl.project.infrastructure.database.repository.mapper.imp.*;
+import pl.project.infrastructure.security.db.mapper.RoleEntityMapper;
+import pl.project.infrastructure.security.db.mapper.UserEntityMapper;
+import pl.project.infrastructure.security.db.mapper.imp.RoleEntityMapperImp;
+import pl.project.infrastructure.security.db.mapper.imp.UserEntityMapperImp;
 
 
 public class InstanceMapper {
-
-    private final RestaurantOwnerEntityMapper restaurantOwnerEntityMapper = new RestaurantOwnerEntityMapperImp();
+    private final RoleEntityMapper roleEntityMapper = new RoleEntityMapperImp();
+    private final UserEntityMapper userEntityMapper = new UserEntityMapperImp(roleEntityMapper);
+    private final RestaurantOwnerEntityMapper restaurantOwnerEntityMapper = new RestaurantOwnerEntityMapperImp(userEntityMapper);
     private final RestaurantEntityMapper restaurantEntityMapper = new RestaurantEntityMapperImp(restaurantOwnerEntityMapper);
     private final ServedAddressEntityMapper servedAddressEntityMapper = new ServedAddressEntityMapperImp(restaurantEntityMapper);
     private final DeliveryAddressEntityMapper deliveryAddressEntityMapper = new DeliveryAddressEntityMapperImp();
-    private final CustomerEntityMapper customerEntityMapper = new CustomerEntityMapperImp(deliveryAddressEntityMapper);
-    private final DeliveryManEntityMapper deliveryManEntityMapper = new DeliveryManEntityMapperImp();
+    private final CustomerEntityMapper customerEntityMapper = new CustomerEntityMapperImp(deliveryAddressEntityMapper, userEntityMapper);
+    private final DeliveryManEntityMapper deliveryManEntityMapper = new DeliveryManEntityMapperImp(userEntityMapper);
     private final DeliveryServiceEntityMapper deliveryServiceEntityMapper = new DeliveryServiceEntityMapperImp(deliveryManEntityMapper);
     private final OrderEntityMapper orderEntityMapper = new OrderEntityMapperImp(customerEntityMapper, deliveryServiceEntityMapper);
     private final DishPhotoEntityMapper dishPhotoEntityMapper = new DishPhotoEntityMapperImp();

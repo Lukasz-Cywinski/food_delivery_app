@@ -22,13 +22,13 @@ public class SecurityConfiguration {
 
     private  final String AUTHORITY_ALL = "ALL";
     private  final String AUTHORITY_CUSTOMER = "CUSTOMER";
-    private  final String AUTHORITY_RESTAURANT_OWNER = "RESTAURANT OWNER";
-    private  final String AUTHORITY_DELIVERY_MAN = "DELIVERY MAN";
-    private  final String AUTHORITY_REST_API = "REST API";
+    private  final String AUTHORITY_RESTAURANT_OWNER = "RESTAURANT_OWNER";
+    private  final String AUTHORITY_DELIVERY_MAN = "DELIVERY_MAN";
+    private  final String AUTHORITY_REST_API = "REST_API";
     private  final String AUTHORITY_ADMIN = "ADMIN";
 
     private final Map<String, String[]> requestMatcherPatterns = Map.of(
-            AUTHORITY_ALL, new String[] {"/", "/login", "/error", "/create_customer", "/create_restaurant_owner", "/create_delivery_man"},
+            AUTHORITY_ALL, new String[] {"/", "/login", "/error", "/registration/**"},
             AUTHORITY_CUSTOMER, new String[] {"/customer/**"},
             AUTHORITY_RESTAURANT_OWNER, new String[] {"/restaurant_owner/**"},
             AUTHORITY_DELIVERY_MAN, new String[] {"/delivery_man/**"},

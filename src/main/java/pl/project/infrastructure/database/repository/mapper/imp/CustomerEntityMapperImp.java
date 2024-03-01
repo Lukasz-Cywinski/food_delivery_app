@@ -8,12 +8,14 @@ import pl.project.domain.model.Customer;
 import pl.project.infrastructure.database.entity.CustomerEntity;
 import pl.project.infrastructure.database.repository.mapper.CustomerEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.DeliveryAddressEntityMapper;
+import pl.project.infrastructure.security.db.mapper.UserEntityMapper;
 
 @Component
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class CustomerEntityMapperImp implements CustomerEntityMapper {
 
     private final DeliveryAddressEntityMapper deliveryAddressEntityMapper;
+    private final UserEntityMapper userEntityMapper;
 
     public Customer mapFromEntity(CustomerEntity entity){
         return Customer.builder()
@@ -23,6 +25,7 @@ public class CustomerEntityMapperImp implements CustomerEntityMapper {
                 .email(entity.getEmail())
                 .deliveryAddress(deliveryAddressEntityMapper.mapFromEntity(entity.getDeliveryAddress()))
                 .isActive(entity.isActive())
+                .user(userEntityMapper.mapFromEntity(entity.getUser()))
                 .build();
     }
 
@@ -34,6 +37,7 @@ public class CustomerEntityMapperImp implements CustomerEntityMapper {
                 .email(domainObj.getEmail())
                 .deliveryAddress(deliveryAddressEntityMapper.mapToEntity(domainObj.getDeliveryAddress()))
                 .isActive(domainObj.isActive())
+                .user(userEntityMapper.mapToEntity(domainObj.getUser()))
                 .build();
     }
 

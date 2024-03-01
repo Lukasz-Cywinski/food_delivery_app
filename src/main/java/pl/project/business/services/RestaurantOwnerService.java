@@ -35,8 +35,8 @@ public class RestaurantOwnerService {
     // Owner Services
     @Transactional
     public RestaurantOwner createRestaurantOwner(RestaurantOwner restaurantOwner){
-        projectUserDetailsService.saveUserAndAssignRoles(restaurantOwner.getUser());
-        return restaurantOwnerDAO.createRestaurantOwner(restaurantOwner)
+        User user = projectUserDetailsService.saveUserAndAssignRoles(restaurantOwner.getUser());
+        return restaurantOwnerDAO.createRestaurantOwner(restaurantOwner.withUser(user))
                 .orElseThrow(() -> new EntityCreationException(RESTAURANT_OWNER_CREATION_EXCEPTION.formatted(restaurantOwner.getEmail())));
     }
 

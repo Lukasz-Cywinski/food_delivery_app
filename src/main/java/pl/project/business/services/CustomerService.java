@@ -35,8 +35,8 @@ public class CustomerService {
     // Customer Services
     @Transactional
     public Customer createCustomer(Customer customer) {
-        projectUserDetailsService.saveUserAndAssignRoles(customer.getUser());
-        return customerDAO.addCustomer(customer)
+        User user = projectUserDetailsService.saveUserAndAssignRoles(customer.getUser());
+        return customerDAO.addCustomer(customer.withUser(user))
                 .orElseThrow(() -> new EntityCreationException(CUSTOMER_CREATION_EXCEPTION.formatted(customer)));
     }
 

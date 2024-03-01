@@ -19,6 +19,7 @@ import pl.project.infrastructure.security.exception.UserCreationException;
 import pl.project.infrastructure.security.exception.UserNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class ProjectUserDetailsService implements UserDetailsService {
     }
 
     @Transactional
-    public void saveUserAndAssignRoles(pl.project.infrastructure.security.User user){
+    public pl.project.infrastructure.security.User saveUserAndAssignRoles(pl.project.infrastructure.security.User user){
         Set<RoleEntity> roles = user.getRoles().stream()
                 .map(role -> roleRepository.findByRole(role.name())
                         .orElseThrow(() -> new RoleNotFoundException(ROLE_NOT_FOUND_EXCEPTION.formatted(role.name()))))
@@ -55,12 +56,13 @@ public class ProjectUserDetailsService implements UserDetailsService {
         userEntity.setRoles(roles);
 
         try {
-            userRepository.save(userEntityMapper.mapToEntity(user));
+            return userEntityMapper.mapFromEntity(
+                    userRepository.save(userEntity)
+            );
         }
         catch (Exception e){
             throw new UserCreationException(USER_CREATION_EXCEPTION.formatted(user.getUserName()));
         }
-
     }
 
     @Transactional

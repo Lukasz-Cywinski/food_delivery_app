@@ -7,9 +7,13 @@ import org.springframework.stereotype.Component;
 import pl.project.domain.model.DeliveryMan;
 import pl.project.infrastructure.database.entity.DeliveryManEntity;
 import pl.project.infrastructure.database.repository.mapper.DeliveryManEntityMapper;
+import pl.project.infrastructure.security.db.mapper.UserEntityMapper;
 
 @Component
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class DeliveryManEntityMapperImp implements DeliveryManEntityMapper {
+
+    private final UserEntityMapper userEntityMapper;
 
     public DeliveryMan mapFromEntity(DeliveryManEntity entity){
         return DeliveryMan.builder()
@@ -19,6 +23,7 @@ public class DeliveryManEntityMapperImp implements DeliveryManEntityMapper {
                 .phoneNumber(entity.getPhoneNumber())
                 .isAvailable(entity.isAvailable())
                 .isActive(entity.isActive())
+                .user(userEntityMapper.mapFromEntity(entity.getUser()))
                 .build();
     }
 
@@ -30,6 +35,7 @@ public class DeliveryManEntityMapperImp implements DeliveryManEntityMapper {
                 .phoneNumber(domainObj.getPhoneNumber())
                 .isAvailable(domainObj.isAvailable())
                 .isActive(domainObj.isActive())
+                .user(userEntityMapper.mapToEntity(domainObj.getUser()))
                 .build();
     }
 }

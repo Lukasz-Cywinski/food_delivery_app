@@ -11,6 +11,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = {"userName"})
 public class User {
 
+    Integer id;
     String userName;
     String email;
     String password;
