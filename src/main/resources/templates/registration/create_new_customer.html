@@ -10,35 +10,85 @@
     <title>Create new customer</title>
 </head>
 
-<body>
-<div class="container">
-    <div class="page-header" id="banner">
-        <h2>Create new Customer</h2>
-        <form action="#" th:action="@{/registration/create_new_customer/add}" method="POST">
-            <h3>User login</h3>
-            <div th:object="${userDTO}" class="form-group">
-                User Name: <input type="text" th:name="userName"/>
-                Password: <input type="text" th:name="password"/>
-            </div>
-            <h3>Personal data</h3>
-            <div th:object="${customerDTO}" class="form-group">
-                Name: <input type="text" th:name="name"/>
-                Surname: <input type="text" th:name="surname"/>
-                Phone number: <input type="text" th:name="phoneNumber"/>
-                Email: <input type="text" th:name="email"/>
-            </div>
-            <h3>Delivery address</h3>
-            <div th:object="${deliveryAddressDTO}" class="form-group">
-                City: <input type="text" th:name="city"/>
-                Street: <input type="text" th:name="street"/>
-                Postal code: <input type="text" th:name="postalCode"/>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create customer" name="button"/>
-            </div>
-        </form>
-        <hr/>
+<body style="background-color:rgb(230, 255, 242);">
+<div class="container bg-success">
+
+    <div class="row mt-3 bg-success text-light">
+        <h2 style="text-align:center">Create New Customer</h2>
     </div>
+    <form action="#" th:action="@{/registration/create_new_customer/add}" method="POST">
+        <div class="row">
+            <div class="col">
+                <table>
+                    <div th:object="${userDTO}" class="form-group">
+                        <tr>
+                            <td><h3>User login</h3></td>
+                        </tr>
+                        <tr>
+                            <td>User Name: </p></td>
+                            <td><input type="text" th:name="userName"/></td>
+                        </tr>
+                        <tr>
+                            <td><p>Email: </p></td>
+                            <td><input type="text" th:name="email"/></td>
+                        </tr>
+                        <tr>
+                            <td><p>Password: </p></td>
+                            <td><input type="text" th:name="password"/></td>
+                        </tr>
+                    </div>
+                </table>
+            </div>
+            <div class="col">
+                <table>
+                    <div th:object="${customerDTO}" class="form-group">
+                        <tr>
+                            <td><h3>Personal data</h3></td>
+                        </tr>
+                        <tr>
+                            <td>Name: </p></td>
+                            <td><input type="text" th:name="name"/></td>
+                        </tr>
+                        <tr>
+                            <td><p>Surname: </p></td>
+                            <td><input type="text" th:name="surname"/></td>
+                        </tr>
+                        <tr>
+                            <td><p>Phone number: </p></td>
+                            <td><input type="text" th:name="phoneNumber"/></td>
+                        </tr>
+                    </div>
+                </table>
+            </div>
+            <div class="col">
+                <table>
+                    <div th:object="${deliveryAddressDTO}" class="form-group">
+                        <tr>
+                            <td><h3>Delivery address</h3></td>
+                        </tr>
+                        <tr>
+                            <td>City: </p></td>
+                            <td><input type="text" th:name="city"/></td>
+                        </tr>
+                        <tr>
+                            <td><p>Street: </p></td>
+                            <td><input type="text" th:name="street"/></td>
+                        </tr>
+                        <tr>
+                            <td><p>Postal code: </p></td>
+                            <td><input type="text" th:name="postalCode"/></td>
+                        </tr>
+                    </div>
+                </table>
+            </div>
+        </div>
+        <div class="col align-self-center">
+            <div class="col-md-4 offset-md-4 form-group">
+                <input class="btn btn-dark" type="submit" value="Create customer" name="button"/>
+            </div>
+            <p><br></p>
+        </div>
+    </form>
 </div>
 </body>
 </html>

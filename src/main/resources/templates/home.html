@@ -10,19 +10,130 @@
     <title>Food delivery main page</title>
 </head>
 
-<body>
-<div class="container">
-    <h1>Food delivery app!</h1>
+<body style="background-color:rgb(230, 255, 242);">
+<div class="container bg-success">
+    <div class="row mt-3 bg-success text-light">
+        <h1 style="text-align:center">Food delivery app</h1>
+        <h2 style="text-align:center">Home page</h2>
+    </div>
     <div class="row mt-3">
-        <div class="col-md-4">
-            <a th:href="@{/customer}" class="btn btn-info" role="button">Customer</a>
-        </div>
-        <div class="col-md-4">
-            <a th:href="@{/registration}" class="btn btn-info" role="button">Create new user</a>
-        </div>
-        <div class="col-md-4">
-            <a th:href="@{/restaurant_owner}" class="btn btn-info" role="button">Restaurant owner</a>
-        </div>
+        <table class="table table-hover">
+            <tr class="table-primary">
+                <th>Action button</th>
+                <th>Description</th>
+            </tr>
+            <tr class="table-secondary">
+                <td class="align-middle">
+                    <div class="col-md-4">
+                        <a th:href="@{/registration}" class="btn btn-success btn-lg btn-block" role="button">Create new user</a>
+                    </div>
+                </td>
+                <td class="align-middle">
+                    <p>
+                        You can create new user with specific role. You can create:
+                    </p>
+                    <ol>
+                        <li>Customer</li>
+                        <li>Restaurant owner</li>
+                        <li>Delivery man</li>
+                        <li>Rest api user</li>
+                    </ol>
+                </td>
+            </tr>
+            <tr class="table-primary">
+                <td colspan="2" style="text-align:center">
+                    <h3><b>Services by role</b></h3>
+                </td>
+            </tr>
+            <tr class="table-secondary">
+                <td class="align-middle">
+                    <div class="col-md-4">
+                        <a th:href="@{/customer}" class="btn btn-success btn-lg btn-block" role="button">Customer</a>
+                    </div>
+                </td>
+                <td class="align-middle">
+                    <p>
+                        <b>Restaurant Customer</b> panel. To gain access you have to log in. <br>
+                        You can log in as:
+                    </p>
+                    <ul>
+                        <li>Previous created user</li>
+                        <li>Default user with:
+                            <ul>
+                                <li>Username: <b>default_customer</b></li>
+                                <li>Password: <b>top_secret123</b></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr class="table-secondary">
+                <td class="align-middle">
+                    <div class="col-md-4">
+                        <a th:href="@{/restaurant_owner}" class="btn btn-success btn-lg btn-block" role="button">Restaurant owner</a>
+                    </div>
+                </td>
+                <td class="align-middle">
+                    <p>
+                        <b>Restaurant Owner</b> panel. To gain access you have to log in. <br>
+                        You can log in as:
+                    </p>
+                    <ul>
+                        <li>Previous created user</li>
+                        <li>Default user with:
+                            <ul>
+                                <li>Username: <b>default_restaurant_owner</b></li>
+                                <li>Password: <b>top_secret123</b></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr class="table-secondary">
+                <td class="align-middle">
+                    <div class="col-md-4">
+                        <a th:href="@{/delivery_man}" class="btn btn-success btn-lg btn-block" role="button">Delivery man</a>
+                    </div>
+                </td>
+                <td class="align-middle">
+                    <p>
+                        <b>Delivery Man</b> panel. To gain access you have to log in. <br>
+                        You can log in as:
+                    </p>
+                    <ul>
+                        <li>Previous created user</li>
+                        <li>Default user with:
+                            <ul>
+                                <li>Username: <b>default_delivery_man</b></li>
+                                <li>Password: <b>top_secret123</b></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr class="table-secondary">
+                <td class="align-middle">
+                    <div class="col-md-4">
+                        <a th:href="@{/rest_api}" class="btn btn-success btn-lg btn-block" role="button">Rest api user</a>
+                    </div>
+                </td>
+                <td class="align-middle">
+                    <p>
+                        <b>Rest Api User</b> panel. To gain access you have to log in. <br>
+                        You can log in as:
+                    </p>
+                    <ul>
+                        <li>Previous created user</li>
+                        <li>Default user with:
+                            <ul>
+                                <li>Username: <b>default_rest_api_user</b></li>
+                                <li>Password: <b>top_secret123</b></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 </body>
