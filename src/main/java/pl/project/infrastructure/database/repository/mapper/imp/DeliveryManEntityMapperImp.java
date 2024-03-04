@@ -17,6 +17,7 @@ public class DeliveryManEntityMapperImp implements DeliveryManEntityMapper {
 
     public DeliveryMan mapFromEntity(DeliveryManEntity entity){
         return DeliveryMan.builder()
+                .id(entity.getId())
                 .personalCode(entity.getPersonalCode())
                 .name(entity.getName())
                 .surname(entity.getSurname())
@@ -29,6 +30,7 @@ public class DeliveryManEntityMapperImp implements DeliveryManEntityMapper {
 
     public DeliveryManEntity mapToEntity(DeliveryMan domainObj){
         return DeliveryManEntity.builder()
+                .id(domainObj.getId())
                 .personalCode(domainObj.getPersonalCode())
                 .name(domainObj.getName())
                 .surname(domainObj.getSurname())

@@ -12,7 +12,8 @@ import java.util.Set;
 @ToString(of = {"name", "description"})
 public class DishCategory {
 
+    Integer id;
     String name;
     String description;
-    Set<Dish> dishes;
+//    Set<Dish> dishes;
 }

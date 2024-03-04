@@ -40,7 +40,8 @@ public class RestaurantOwnerService {
                 .orElseThrow(() -> new EntityCreationException(RESTAURANT_OWNER_CREATION_EXCEPTION.formatted(restaurantOwner.getEmail())));
     }
 
-    private RestaurantOwner getRestaurantOwner(String restaurantOwnerEmail) {
+    @Transactional
+    public RestaurantOwner getRestaurantOwner(String restaurantOwnerEmail) {
         User user = projectUserDetailsService.getUserAndRoleByEmail(restaurantOwnerEmail);
         return restaurantOwnerDAO.findRestaurantOwnerByEmail(restaurantOwnerEmail)
                 .orElseThrow(() -> new EntityReadException(RESTAURANT_OWNER_READ_EXCEPTION.formatted(restaurantOwnerEmail)))
@@ -56,9 +57,15 @@ public class RestaurantOwnerService {
     }
 
     // Restaurant Services
+//    @Transactional
+//    public Restaurant createRestaurant(Restaurant restaurant){
+//        return restaurantService.createRestaurant(restaurant);
+//    }
     @Transactional
-    public Restaurant createRestaurant(Restaurant restaurant){
-        return restaurantService.createRestaurant(restaurant);
+    public Restaurant createRestaurant(String restaurantName, String restaurantOwnerEmail){
+        return restaurantService.createRestaurant(restaurantName,
+                restaurantOwnerDAO.findRestaurantOwnerByEmail(restaurantOwnerEmail)
+                        .orElseThrow(() -> new EntityReadException(RESTAURANT_OWNER_READ_EXCEPTION.formatted(restaurantOwnerEmail))));
     }
 
     @Transactional
@@ -72,8 +79,13 @@ public class RestaurantOwnerService {
     }
 
     @Transactional
-    public boolean deactivateRestaurant(Restaurant restaurant){
-        return  restaurantService.deactivateRestaurant(restaurant);
+    public boolean deactivateRestaurant(String restaurantCode){
+        return  restaurantService.deactivateRestaurant(restaurantCode);
+    }
+
+    @Transactional
+    public List<Restaurant> getRestaurantsByRestaurantOwner(RestaurantOwner restaurantOwner){
+        return restaurantService.getRestaurantsByRestaurantOwner(restaurantOwner);
     }
 
     // Served Address Services
@@ -82,8 +94,14 @@ public class RestaurantOwnerService {
         return servedAddressService.createServedAddress(servedAddress);
     }
 
+//    @Transactional
+//    public List<ServedAddress> getServedAddresses(Restaurant restaurant){
+//        return servedAddressService.getServedAddresses(restaurant);
+//    }
+
     @Transactional
-    public List<ServedAddress> getServedAddresses(Restaurant restaurant){
+    public List<ServedAddress> getServedAddresses(String restaurantCode){
+        Restaurant restaurant = restaurantService.getRestaurantByRestaurantCode(restaurantCode);
         return servedAddressService.getServedAddresses(restaurant);
     }
 
@@ -126,5 +144,11 @@ public class RestaurantOwnerService {
     @Transactional
     public boolean notifyFinishedOrderTimeForDeliveryService(Order order){
         return deliveryServiceService.deliverOrder(order);
+    }
+
+    // TODO - tests
+    @Transactional
+    public Restaurant getRestaurantByRestaurantCode(String restaurantCode){
+        return restaurantService.getRestaurantByRestaurantCode(restaurantCode);
     }
 }

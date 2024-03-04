@@ -20,6 +20,7 @@ public class DishEntityMapperImp implements DishEntityMapper {
 
     public Dish mapFromEntity(DishEntity entity){
         return Dish.builder()
+                .id(entity.getId())
                 .dishCode(entity.getDishCode())
                 .name(entity.getName())
                 .description(entity.getDescription())
@@ -34,6 +35,7 @@ public class DishEntityMapperImp implements DishEntityMapper {
 
     public DishEntity mapToEntity(Dish domainObj){
         return DishEntity.builder()
+                .id(domainObj.getId())
                 .dishCode(domainObj.getDishCode())
                 .name(domainObj.getName())
                 .description(domainObj.getDescription())

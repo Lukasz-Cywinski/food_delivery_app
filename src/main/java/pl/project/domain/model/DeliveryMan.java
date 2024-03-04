@@ -13,11 +13,12 @@ import java.util.Set;
 @ToString(of = {"personalCode", "name", "surname", "phoneNumber"})
 public class DeliveryMan {
 
+    Integer id;
     String personalCode;
     String name;
     String surname;
     String phoneNumber;
-    Set<DeliveryService> deliveryServices;
+//    Set<DeliveryService> deliveryServices;
     boolean isActive;
     boolean isAvailable;
     User user;

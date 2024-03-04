@@ -13,6 +13,7 @@ import java.util.Set;
 @ToString(of = {"name", "description", "price", "averagePreparationTimeMin"})
 public class Dish {
 
+    Integer id;
     String dishCode;
     String name;
     String description;
@@ -21,8 +22,8 @@ public class Dish {
     Restaurant restaurant;
     DishPhoto dishPhoto;
     DishCategory dishCategory;
-    Set<DishComposition> dishCompositions;
-    Set<DishOpinion> dishOpinions;
+//    Set<DishComposition> dishCompositions;
+//    Set<DishOpinion> dishOpinions;
     boolean isActive;
 
 }

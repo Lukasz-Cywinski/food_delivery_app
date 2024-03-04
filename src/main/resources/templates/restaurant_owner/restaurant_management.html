@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>Restaurant Owner Home</title>
+    <title>Restaurant management</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/navbar-static/">
     <link href="../bootstrap-templates/assets/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -33,7 +33,7 @@
 
 
     <!-- Custom styles for this template -->
-    <link href="navbar-top.css" rel="stylesheet">
+<!--    <link href="navbar-top.css" rel="stylesheet">-->
 </head>
 <body style="background-color:rgb(190,190,190);">
 
@@ -42,19 +42,10 @@
         <h5 class="navbar-brand">Actions:</h5>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item">
-                    <a th:href="@{/restaurant_owner/restaurant_management}" class="nav-link">Restaurant management</a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/restaurant_owner/menu_management}" class="nav-link">Menu management</a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/restaurant_owner/user_management}" class="nav-link">User management</a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/restaurant_owner/orders_summary}" class="nav-link">Orders summary</a>
-                </li>
             </ul>
+            <form class="d-flex">
+                <a th:href="@{/restaurant_owner}" class="btn btn-outline-info" role="button">Owner Home</a>
+            </form>
             <form class="d-flex">
                 <a th:href="@{/logout}" class="btn btn-outline-danger" role="button">Logout</a>
             </form>
@@ -62,35 +53,43 @@
     </div>
 </nav>
 
-
 <main class="container">
     <div style="background-color:rgb(190,190,190);" class=" p-5 rounded">
-        <h1>Active orders</h1>
-        <table class="table table-striped table-dark">
+        <h1>Add restaurant</h1>
+        <form action="#" th:action="@{/restaurant_owner/restaurant_management/add_restaurant}" method="POST">
+            <div class="form-group">
+                <label for="restaurantName">New Restaurant Name</label>
+                <input type="text" th:name="restaurantName" class="form-control" id="restaurantName" aria-describedby="nameHelp" placeholder="Enter name">
+                <small id="nameHelp" class="form-text text-muted">Some constraints</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+
+        <h1>Managed restaurants list</h1>
+
+        <table class="table table-striped table-dark table table-hover">
             <thead>
             <tr>
-<!--                <th scope="col">#</th>-->
-                <th scope="col">Restaurant</th>
-                <th scope="col">Order Number</th>
-                <th scope="col">Received Time</th>
-                <th scope="col">Order Details</th>
-                <th scope="col">Notify Delivery Man</th>
+                <th scope="col">Restaurant unique code</th>
+                <th scope="col">Name</th>
+                <th scope="col">Added</th>
+                <th scope="col">Manage</th>
+                <th scope="col">Delete</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="order : ${orderDTOs}">
-<!--                <th scope="row">1</th>-->
-                <td th:text="${order.restaurantName}"></td>
-                <td th:text="${order.orderNumber}"></td>
-                <td th:text="${order.receivedTime}"></td>
+            <tr th:each="restaurant : ${restaurantDTOs}">
+                <td th:text="${restaurant.restaurantCode}"></td>
+                <td th:text="${restaurant.name}"></td>
+                <td th:text="${restaurant.added}"></td>
                 <td>
-                    <form action="#" th:action="@{/restaurant_owner/order_details/{order.orderNumber}" method="GET">
-                        <button type="submit" class="btn btn-info btn-block">Show</button>
+                    <form action="#" th:action="@{/restaurant_owner/restaurant_management/{restaurantCode}(restaurantCode=${restaurant.restaurantCode})}" method="GET">
+                        <button type="submit" class="btn btn-info btn-block">Manage</button>
                     </form>
                 </td>
                 <td>
-                    <form action="#" th:action="@{/restaurant_owner/notify_delivery_man/{order.orderNumber}" method="POST">
-                        <button type="submit" class="btn btn-info btn-block">Notify</button>
+                    <form action="#" th:action="@{/restaurant_owner/restaurant_management/deactivate_restaurant}" method="POST">
+                        <button th:name="restaurantCode" th:value="${restaurant.restaurantCode}" type="submit" class="btn btn-danger btn-block">Delete</button>
                     </form>
                 </td>
             </tr>
@@ -98,10 +97,6 @@
         </table>
     </div>
 </main>
-
-
 <script src="../bootstrap-templates/assets/dist/js/bootstrap.bundle.min.js"></script>
-
-
 </body>
 </html>

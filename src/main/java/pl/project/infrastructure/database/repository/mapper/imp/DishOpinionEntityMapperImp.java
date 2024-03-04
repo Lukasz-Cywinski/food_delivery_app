@@ -18,6 +18,7 @@ public class DishOpinionEntityMapperImp implements DishOpinionEntityMapper {
 
     public DishOpinion mapFromEntity(DishOpinionEntity entity){
         return DishOpinion.builder()
+                .id(entity.getId())
                 .opinion(entity.getOpinion())
                 .productEvaluation(entity.getProductEvaluation())
                 .dish(dishEntityMapper.mapFromEntity(entity.getDish()))
@@ -27,6 +28,7 @@ public class DishOpinionEntityMapperImp implements DishOpinionEntityMapper {
 
     public DishOpinionEntity mapToEntity(DishOpinion domainObj){
         return DishOpinionEntity.builder()
+                .id(domainObj.getId())
                 .opinion(domainObj.getOpinion())
                 .productEvaluation(domainObj.getProductEvaluation())
                 .dish(dishEntityMapper.mapToEntity(domainObj.getDish()))

@@ -13,12 +13,13 @@ import java.util.Set;
 @ToString(of = {"name", "added"})
 public class Restaurant {
 
+    Integer id;
     String restaurantCode;
     String name;
     OffsetDateTime added;
     RestaurantOwner restaurantOwner;
-    Set<ServedAddress> servedAddresses;
-    Set<Dish> dishes;
+//    Set<ServedAddress> servedAddresses;
+//    Set<Dish> dishes;
     boolean isActive;
 
 }

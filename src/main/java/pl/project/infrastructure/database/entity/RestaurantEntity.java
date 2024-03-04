@@ -2,6 +2,8 @@ package pl.project.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.TimeZoneStorage;
+import org.hibernate.annotations.TimeZoneStorageType;
 
 import java.time.OffsetDateTime;
 import java.util.Set;
@@ -29,9 +31,10 @@ public class RestaurantEntity {
     private String name;
 
     @Column(name = "added", nullable = false)
+    @TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
     private OffsetDateTime added;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "restaurant_owner_id", nullable = false)
     private RestaurantOwnerEntity restaurantOwner;
 

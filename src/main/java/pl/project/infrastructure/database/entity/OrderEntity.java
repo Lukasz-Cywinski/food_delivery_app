@@ -2,6 +2,8 @@ package pl.project.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.TimeZoneStorage;
+import org.hibernate.annotations.TimeZoneStorageType;
 
 import java.time.OffsetDateTime;
 import java.util.Set;
@@ -26,9 +28,11 @@ public class OrderEntity {
     private String orderCode;
 
     @Column(name = "received_date_time", nullable = false)
+    @TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
     private OffsetDateTime receivedDateTime;
 
     @Column(name = "completed_date_time", nullable = true)
+    @TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
     private OffsetDateTime completedDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)

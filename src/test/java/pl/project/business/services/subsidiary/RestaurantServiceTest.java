@@ -22,11 +22,14 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 import static pl.project.util.db.DishInstance.someDish1;
 import static pl.project.util.db.DishInstance.someDish2;
 import static pl.project.util.db.RestaurantInstance.someRestaurant1;
 import static pl.project.util.db.RestaurantInstance.someRestaurant2;
+import static pl.project.util.db.RestaurantOwnerInstance.someRestaurantOwner1;
 import static pl.project.util.db.RestaurantOwnerInstance.someRestaurantOwner2;
 
 @ExtendWith(MockitoExtension.class)
@@ -95,28 +98,49 @@ class RestaurantServiceTest {
     void createRestaurantTest() {
         //given
         Restaurant restaurant = instanceMapper.mapFromEntity(someRestaurant1());
+        String restaurantName = restaurant.getName();
+        RestaurantOwner restaurantOwner = restaurant.getRestaurantOwner();
+
         Restaurant anotherRestaurant = instanceMapper.mapFromEntity(someRestaurant2());
-        when(restaurantDAO.createRestaurant(restaurant)).thenReturn(Optional.of(restaurant));
+        when(restaurantDAO.createRestaurant(any())).thenReturn(Optional.of(restaurant));
 
         //when
-        Restaurant result = restaurantService.createRestaurant(restaurant);
-        Exception exception = assertThrows(EntityCreationException.class, () -> restaurantService.createRestaurant(anotherRestaurant));
+        Restaurant result = restaurantService.createRestaurant(restaurantName, restaurantOwner);
 
         //then
         assertEquals(restaurant, result);
+    }
+
+    @Test
+    void entityCreationExceptionTest(){
+        //given
+        Restaurant restaurant = instanceMapper.mapFromEntity(someRestaurant1());
+        String restaurantName = restaurant.getName();
+        RestaurantOwner restaurantOwner = restaurant.getRestaurantOwner();
+
+        Restaurant anotherRestaurant = instanceMapper.mapFromEntity(someRestaurant2());
+        String anotherRestaurantName = anotherRestaurant.getName();
+        RestaurantOwner anotherRestaurantOwner = anotherRestaurant.getRestaurantOwner();
+        lenient().when(restaurantDAO.createRestaurant(restaurant)).thenReturn(Optional.of(restaurant));
+
+        //when
+        Exception exception = assertThrows(EntityCreationException.class,
+                () -> restaurantService.createRestaurant(anotherRestaurantName, anotherRestaurantOwner));
+
+        //then
         assertInstanceOf(EntityCreationException.class, exception);
-        assertEquals("Fail to crete restaurant: Restaurant(name=name2, added=2024-02-10T16:30:10.000000010Z)",
+        assertEquals("Fail to crete restaurant: name2",
                 exception.getMessage());
     }
 
     @Test
     void deactivateRestaurantTest() {
         //given
-        Restaurant restaurant = instanceMapper.mapFromEntity(someRestaurant1());
-        when(restaurantDAO.deactivateRestaurant(restaurant.getRestaurantCode())).thenReturn(1);
+        String restaurantCode = instanceMapper.mapFromEntity(someRestaurant1()).getRestaurantCode();
+        when(restaurantDAO.deactivateRestaurant(restaurantCode)).thenReturn(1);
 
         //when
-        boolean result = restaurantService.deactivateRestaurant(restaurant);
+        boolean result = restaurantService.deactivateRestaurant(restaurantCode);
 
         //then
         assertTrue(result);
@@ -148,5 +172,21 @@ class RestaurantServiceTest {
 
         //then
         assertTrue(result);
+    }
+
+    @Test
+    void getRestaurantsByRestaurantOwnerTest(){
+        //given
+        RestaurantOwner restaurantOwner = instanceMapper.mapFromEntity(someRestaurantOwner1());
+        Restaurant restaurant1 = instanceMapper.mapFromEntity(someRestaurant1()).withRestaurantOwner(restaurantOwner);
+        Restaurant restaurant2 = instanceMapper.mapFromEntity(someRestaurant1()).withRestaurantOwner(restaurantOwner);
+        List<Restaurant> restaurants = List.of(restaurant1, restaurant2);
+        when(restaurantDAO.findByRestaurantOwner(restaurantOwner)).thenReturn(restaurants);
+
+        //when
+        List<Restaurant> result = restaurantService.getRestaurantsByRestaurantOwner(restaurantOwner);
+
+        //then
+        assertEquals(2, result.size());
     }
 }

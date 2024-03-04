@@ -17,6 +17,7 @@ public class RestaurantOwnerEntityMapperImp implements RestaurantOwnerEntityMapp
 
     public RestaurantOwner mapFromEntity(RestaurantOwnerEntity entity){
         return RestaurantOwner.builder()
+                .id(entity.getId())
                 .name(entity.getName())
                 .surname(entity.getSurname())
                 .phoneNumber(entity.getPhoneNumber())
@@ -28,6 +29,7 @@ public class RestaurantOwnerEntityMapperImp implements RestaurantOwnerEntityMapp
 
     public RestaurantOwnerEntity mapToEntity(RestaurantOwner domainObj){
         return RestaurantOwnerEntity.builder()
+                .id(domainObj.getId())
                 .name(domainObj.getName())
                 .surname(domainObj.getSurname())
                 .phoneNumber(domainObj.getPhoneNumber())

@@ -19,5 +19,5 @@ public class Order {
     OffsetDateTime completedDateTime;
     Customer customer;
     DeliveryService deliveryService;
-    Set<DishComposition> dishCompositions;
+//    Set<DishComposition> dishCompositions;
 }

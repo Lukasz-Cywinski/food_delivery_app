@@ -19,6 +19,7 @@ public class CustomerEntityMapperImp implements CustomerEntityMapper {
 
     public Customer mapFromEntity(CustomerEntity entity){
         return Customer.builder()
+                .id(entity.getId())
                 .name(entity.getName())
                 .surname(entity.getSurname())
                 .phoneNumber(entity.getPhoneNumber())
@@ -31,6 +32,7 @@ public class CustomerEntityMapperImp implements CustomerEntityMapper {
 
     public CustomerEntity mapToEntity(Customer domainObj){
         return CustomerEntity.builder()
+                .id(domainObj.getId())
                 .name(domainObj.getName())
                 .surname(domainObj.getSurname())
                 .phoneNumber(domainObj.getPhoneNumber())

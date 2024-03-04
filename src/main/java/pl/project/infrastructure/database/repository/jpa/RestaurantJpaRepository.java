@@ -39,6 +39,13 @@ public interface RestaurantJpaRepository extends JpaRepository<RestaurantEntity,
     List<ServedAddressEntity> findServedAddresses(RestaurantEntity restaurant);
 
     @Query("""
+                SELECT r FROM RestaurantEntity r
+                WHERE r.restaurantOwner = ?1
+                AND r.isActive = TRUE
+                """)
+    List<RestaurantEntity> findByRestaurantOwner(RestaurantOwnerEntity restaurantOwner);
+
+    @Query("""
                 UPDATE RestaurantEntity r
                 SET r.name = ?1
                 WHERE r.restaurantCode = ?2

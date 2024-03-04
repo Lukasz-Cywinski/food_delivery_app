@@ -19,7 +19,6 @@ import pl.project.infrastructure.security.exception.UserCreationException;
 import pl.project.infrastructure.security.exception.UserNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,7 +45,7 @@ public class ProjectUserDetailsService implements UserDetailsService {
     }
 
     @Transactional
-    public pl.project.infrastructure.security.User saveUserAndAssignRoles(pl.project.infrastructure.security.User user){
+    public pl.project.infrastructure.security.User saveUserAndAssignRoles(pl.project.infrastructure.security.User user) {
         Set<RoleEntity> roles = user.getRoles().stream()
                 .map(role -> roleRepository.findByRole(role.name())
                         .orElseThrow(() -> new RoleNotFoundException(ROLE_NOT_FOUND_EXCEPTION.formatted(role.name()))))
@@ -59,24 +58,29 @@ public class ProjectUserDetailsService implements UserDetailsService {
             return userEntityMapper.mapFromEntity(
                     userRepository.save(userEntity)
             );
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new UserCreationException(USER_CREATION_EXCEPTION.formatted(user.getUserName()));
         }
     }
 
     @Transactional
-    public pl.project.infrastructure.security.User getUserAndRoleByUserName(String username){
+    public pl.project.infrastructure.security.User getUserAndRoleByUserName(String username) {
         return userEntityMapper.mapFromEntity(userRepository.findByUserName(username)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_EXCEPTION.formatted(username))))
+                        .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_EXCEPTION.formatted(username))))
                 .withPassword("");
     }
 
     @Transactional
-    public pl.project.infrastructure.security.User getUserAndRoleByEmail(String email){
+    public pl.project.infrastructure.security.User getUserAndRoleByEmail(String email) {
         return userEntityMapper.mapFromEntity(userRepository.findByEmail(email)
                         .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_EXCEPTION.formatted(email))))
-                .withPassword("");
+                .withPassword(null);
+    }
+
+    @Transactional
+    public String getUserEmail(String userName) {
+        return userRepository.findEmailByUserName(userName)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_EXCEPTION.formatted(userName)));
     }
 
     private List<GrantedAuthority> getUserAuthority(Set<RoleEntity> userRoles) {

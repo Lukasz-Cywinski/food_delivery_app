@@ -2,6 +2,7 @@ package pl.project.business.services;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,6 +19,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static pl.project.util.db.DishInstance.someDish1;
 import static pl.project.util.db.OrderInstance.someOrder1;
@@ -37,6 +40,8 @@ class RestaurantOwnerServiceTest {
     private RestaurantOwnerDAO restaurantOwnerDAO;
     @Mock
     private DishService dishService;
+    @Mock
+    private DishPhotoService dishPhotoService;
     @Mock
     private RestaurantService restaurantService;
     @Mock
@@ -95,10 +100,15 @@ class RestaurantOwnerServiceTest {
     void createRestaurantTest() {
         //given
         Restaurant restaurant = instanceMapper.mapFromEntity(someRestaurant1());
-        when(restaurantService.createRestaurant(restaurant)).thenReturn(restaurant);
+        String restaurantName = restaurant.getName();
+        RestaurantOwner restaurantOwner = restaurant.getRestaurantOwner();
+        String restaurantOwnerEmail = restaurantOwner.getEmail();
+
+        when(restaurantService.createRestaurant(restaurantName, restaurantOwner)).thenReturn(restaurant);
+        when(restaurantOwnerDAO.findRestaurantOwnerByEmail(restaurantOwnerEmail)).thenReturn(Optional.of(restaurantOwner));
 
         //when
-        Restaurant result = restaurantService.createRestaurant(restaurant);
+        Restaurant result = restaurantOwnerService.createRestaurant(restaurantName, restaurantOwnerEmail);
 
         //then
         assertEquals(restaurant, result);
@@ -112,7 +122,7 @@ class RestaurantOwnerServiceTest {
         when(restaurantService.changeRestaurantName(newRestaurantName, restaurant.getRestaurantCode())).thenReturn(true);
 
         //when
-        boolean result = restaurantService.changeRestaurantName(newRestaurantName, restaurant.getRestaurantCode());
+        boolean result = restaurantOwnerService.modifyRestaurantName(newRestaurantName, restaurant.getRestaurantCode());
 
         //then
         assertTrue(result);
@@ -126,7 +136,7 @@ class RestaurantOwnerServiceTest {
         when(restaurantService.changeRestaurantOwner(newOwner, restaurant.getRestaurantCode())).thenReturn(true);
 
         //when
-        boolean result = restaurantService.changeRestaurantOwner(newOwner, restaurant.getRestaurantCode());
+        boolean result = restaurantOwnerService.changeRestaurantOwner(newOwner, restaurant.getRestaurantCode());
 
         //then
         assertTrue(result);
@@ -135,11 +145,11 @@ class RestaurantOwnerServiceTest {
     @Test
     void deactivateRestaurantTest() {
         //given
-        Restaurant restaurant = instanceMapper.mapFromEntity(someRestaurant1());
-        when(restaurantService.deactivateRestaurant(restaurant)).thenReturn(true);
+        String restaurantCode = instanceMapper.mapFromEntity(someRestaurant1()).getRestaurantCode();
+        when(restaurantService.deactivateRestaurant(restaurantCode)).thenReturn(true);
 
         //when
-        boolean result = restaurantService.deactivateRestaurant(restaurant);
+        boolean result = restaurantOwnerService.deactivateRestaurant(restaurantCode);
 
         //then
         assertTrue(result);
@@ -152,7 +162,7 @@ class RestaurantOwnerServiceTest {
         when(servedAddressService.createServedAddress(servedAddress)).thenReturn(servedAddress);
 
         //when
-        ServedAddress result = servedAddressService.createServedAddress(servedAddress);
+        ServedAddress result = restaurantOwnerService.createServedAddress(servedAddress);
 
         //then
         assertEquals(servedAddress, result);
@@ -163,12 +173,15 @@ class RestaurantOwnerServiceTest {
     void getServedAddressesTest() {
         //given
         Restaurant restaurant = instanceMapper.mapFromEntity(someRestaurant1());
+        String restaurantCode = restaurant.getRestaurantCode();
+
         ServedAddress servedAddress1 = instanceMapper.mapFromEntity(someServedAddress1()).withRestaurant(restaurant);
         ServedAddress servedAddress2 = instanceMapper.mapFromEntity(someServedAddress2()).withRestaurant(restaurant);
         when(servedAddressService.getServedAddresses(restaurant)).thenReturn(List.of(servedAddress1, servedAddress2));
+        when(restaurantService.getRestaurantByRestaurantCode(restaurantCode)).thenReturn(restaurant);
 
         //when
-        List<ServedAddress> servedAddresses = servedAddressService.getServedAddresses(restaurant);
+        List<ServedAddress> servedAddresses = restaurantOwnerService.getServedAddresses(restaurantCode);
 
         //then
         assertEquals(2, servedAddresses.size());
@@ -183,7 +196,7 @@ class RestaurantOwnerServiceTest {
         when(servedAddressService.deleteServedAddress(servedAddress)).thenReturn(true);
 
         //when
-        boolean result = servedAddressService.deleteServedAddress(servedAddress);
+        boolean result = restaurantOwnerService.deleteServedAddress(servedAddress);
 
         //then
         assertTrue(result);
@@ -200,7 +213,7 @@ class RestaurantOwnerServiceTest {
                 .thenReturn(List.of(order1, order2));
 
         //when
-        List<Order> activeOrders = dishCompositionService.getActiveOrdersForRestaurant(restaurant);
+        List<Order> activeOrders = restaurantOwnerService.getActiveOrdersForRestaurant(restaurant);
 
         //then
         assertEquals(2, activeOrders.size());
@@ -217,7 +230,7 @@ class RestaurantOwnerServiceTest {
                 .thenReturn(List.of(order1, order2));
 
         //when
-        List<Order> completedOrders = dishCompositionService.getActiveOrdersForRestaurant(restaurant);
+        List<Order> completedOrders = restaurantOwnerService.getActiveOrdersForRestaurant(restaurant);
 
         //then
         assertEquals(2, completedOrders.size());
@@ -229,9 +242,10 @@ class RestaurantOwnerServiceTest {
         //given
         Dish dish = instanceMapper.mapFromEntity(someDish1());
         when(dishService.createDish(dish)).thenReturn(dish);
+        when(dishPhotoService.createDishPhoto(dish.getDishPhoto())).thenReturn(dish.getDishPhoto());
 
         //when
-        Dish result = dishService.createDish(dish);
+        Dish result = restaurantOwnerService.createDish(dish);
 
         //then
         assertEquals(dish, result);
@@ -246,7 +260,7 @@ class RestaurantOwnerServiceTest {
         when(dishService.modifyDishData(updatedDish, dish.getDishCode())).thenReturn(true);
 
         //when
-        boolean result = dishService.modifyDishData(updatedDish, dish.getDishCode());
+        boolean result = restaurantOwnerService.modifyDishData(updatedDish, dish.getDishCode());
 
         //then
         assertTrue(result);
@@ -260,7 +274,7 @@ class RestaurantOwnerServiceTest {
         when(dishService.deactivateDish(dish.getDishCode())).thenReturn(true);
 
         //when
-        boolean result = dishService.deactivateDish(dish.getDishCode());
+        boolean result = restaurantOwnerService.deactivateDish(dish.getDishCode());
 
         //then
         assertTrue(result);
@@ -274,7 +288,7 @@ class RestaurantOwnerServiceTest {
         when(deliveryServiceService.deliverOrder(order)).thenReturn(true);
 
         //when
-        boolean result = deliveryServiceService.deliverOrder(order);
+        boolean result = restaurantOwnerService.notifyFinishedOrderTimeForDeliveryService(order);
 
         //then
         assertTrue(result);

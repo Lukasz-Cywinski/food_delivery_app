@@ -11,6 +11,7 @@ public class DishPhotoEntityMapperImp implements DishPhotoEntityMapper {
 
     public DishPhoto mapFromEntity(DishPhotoEntity entity){
         return DishPhoto.builder()
+                .id(entity.getId())
                 .name(entity.getName())
                 .url(entity.getUrl())
                 .build();
@@ -18,6 +19,7 @@ public class DishPhotoEntityMapperImp implements DishPhotoEntityMapper {
 
     public DishPhotoEntity mapToEntity(DishPhoto domainObj){
         return DishPhotoEntity.builder()
+                .id(domainObj.getId())
                 .name(domainObj.getName())
                 .url(domainObj.getUrl())
                 .build();

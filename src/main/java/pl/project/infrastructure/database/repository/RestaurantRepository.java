@@ -52,6 +52,14 @@ public class RestaurantRepository implements RestaurantDAO {
     }
 
     @Override
+    public List<Restaurant> findByRestaurantOwner(RestaurantOwner restaurantOwner) {
+        return restaurantJpaRepository.findByRestaurantOwner(
+                restaurantOwnerEntityMapper.mapToEntity(restaurantOwner)).stream()
+                .map(restaurantEntityMapper::mapFromEntity)
+                .toList();
+    }
+
+    @Override
     public List<Dish> findActiveDishesForRestaurant(Restaurant restaurant, Pageable pageable) {
         return restaurantJpaRepository.findActiveDishes(
                 restaurantEntityMapper.mapToEntity(restaurant), pageable).getContent().stream()

@@ -13,9 +13,10 @@ import java.util.Set;
 @ToString(of = {"deliveryServiceCode", "receivedDateTime", "completedDateTime"})
 public class DeliveryService {
 
+    Integer id;
     String deliveryServiceCode;
     OffsetDateTime receivedDateTime;
     OffsetDateTime completedDateTime;
     DeliveryMan deliveryMan;
-    Set<Order> orders;
+//    Set<Order> orders;
 }

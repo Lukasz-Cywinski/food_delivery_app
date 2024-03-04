@@ -10,6 +10,7 @@ import lombok.*;
 @ToString(of = {"name", "url"})
 public class DishPhoto {
 
+    Integer id;
     String name;
     String url;
     Dish dish;

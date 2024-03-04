@@ -17,6 +17,8 @@ public interface RestaurantDAO {
 
     List<Restaurant> findActiveRestaurants(Pageable pageable);
 
+    List<Restaurant> findByRestaurantOwner(RestaurantOwner restaurantOwner);
+
     List<Dish> findActiveDishesForRestaurant(Restaurant restaurant, Pageable pageable);
 
     List<ServedAddress> findServedAddressesForRestaurant(Restaurant restaurant);

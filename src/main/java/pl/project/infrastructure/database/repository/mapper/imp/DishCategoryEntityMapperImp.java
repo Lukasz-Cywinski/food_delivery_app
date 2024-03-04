@@ -11,6 +11,7 @@ public class DishCategoryEntityMapperImp implements DishCategoryEntityMapper {
 
     public DishCategory mapFromEntity(DishCategoryEntity entity){
         return DishCategory.builder()
+                .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .build();
@@ -18,6 +19,7 @@ public class DishCategoryEntityMapperImp implements DishCategoryEntityMapper {
 
     public DishCategoryEntity mapToEntity(DishCategory domainObj){
         return DishCategoryEntity.builder()
+                .id(domainObj.getId())
                 .name(domainObj.getName())
                 .description(domainObj.getDescription())
                 .build();

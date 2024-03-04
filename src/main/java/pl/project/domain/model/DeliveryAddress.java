@@ -16,6 +16,6 @@ public class DeliveryAddress {
     String city;
     String postalCode;
     String street;
-    Set<Customer> customers;
+//    Set<Customer> customers;
 
 }

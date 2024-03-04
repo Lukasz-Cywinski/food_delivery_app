@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @ToString(of = {"opinion", "productEvaluation"})
 public class DishOpinion {
 
+    Integer id;
     String opinion;
     BigDecimal productEvaluation;
     Dish dish;

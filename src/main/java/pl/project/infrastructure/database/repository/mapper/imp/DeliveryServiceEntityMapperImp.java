@@ -16,6 +16,7 @@ public class DeliveryServiceEntityMapperImp implements DeliveryServiceEntityMapp
 
     public DeliveryService mapFromEntity(DeliveryServiceEntity entity){
         return DeliveryService.builder()
+                .id(entity.getId())
                 .deliveryServiceCode(entity.getDeliveryServiceCode())
                 .receivedDateTime(entity.getReceivedDateTime())
                 .completedDateTime(entity.getCompletedDateTime())
@@ -25,6 +26,7 @@ public class DeliveryServiceEntityMapperImp implements DeliveryServiceEntityMapp
 
     public DeliveryServiceEntity mapToEntity(DeliveryService domainObj){
         return DeliveryServiceEntity.builder()
+                .id(domainObj.getId())
                 .deliveryServiceCode(domainObj.getDeliveryServiceCode())
                 .receivedDateTime(domainObj.getReceivedDateTime())
                 .completedDateTime(domainObj.getCompletedDateTime())

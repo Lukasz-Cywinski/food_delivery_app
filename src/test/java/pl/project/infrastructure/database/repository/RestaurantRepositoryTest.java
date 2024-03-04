@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.project.util.db.DishCategoryInstance.*;
 import static pl.project.util.db.DishInstance.*;
 import static pl.project.util.db.DishPhotoInstance.*;
@@ -65,7 +66,7 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
         List<RestaurantEntity> activeRestaurants = page.getContent();
 
         //then
-                // first
+        // first
         assertThat(restaurant1)
                 .usingRecursiveComparison()
                 .comparingOnlyFields("restaurantCode", "name", "isActive")
@@ -79,7 +80,7 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
                 .comparingOnlyFields("email")
                 .isEqualTo(restaurantFromDb1.getRestaurantOwner());
 
-                //second
+        //second
         assertThat(restaurant2)
                 .usingRecursiveComparison()
                 .comparingOnlyFields("restaurantCode", "name", "isActive")
@@ -93,7 +94,7 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
                 .comparingOnlyFields("email")
                 .isEqualTo(restaurantFromDb2.getRestaurantOwner());
 
-                //third
+        //third
         assertThat(restaurant3)
                 .usingRecursiveComparison()
                 .comparingOnlyFields("restaurantCode", "name", "isActive")
@@ -107,12 +108,12 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
                 .comparingOnlyFields("email")
                 .isEqualTo(restaurantFromDb3.getRestaurantOwner());
 
-                //all
+        //all
         assertEquals(3, activeRestaurants.size());
     }
 
     @Test
-    void thatRestaurantNameCanBeModifiedCorrectly(){
+    void thatRestaurantNameCanBeModifiedCorrectly() {
 
         //given
         RestaurantEntity restaurant1 = someRestaurant1();
@@ -130,7 +131,7 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
     }
 
     @Test
-    void thatRestaurantOwnerCanBeModifiedCorrectly(){
+    void thatRestaurantOwnerCanBeModifiedCorrectly() {
 
         //given
         RestaurantEntity restaurant1 = someRestaurant1();
@@ -152,7 +153,7 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
     }
 
     @Test
-    void isRestaurantDeactivatedCorrectly(){
+    void isRestaurantDeactivatedCorrectly() {
 
         // given
         RestaurantEntity restaurant1 = someRestaurant1();
@@ -181,7 +182,7 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
     }
 
     @Test
-    void isServedAddressesSelectedCorrectly(){
+    void isServedAddressesSelectedCorrectly() {
 
         //given
         RestaurantEntity restaurant1 = someRestaurant1();
@@ -210,9 +211,9 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
     }
 
     @Test
-    void isDishesSelectedCorrectly(){
+    void isDishesSelectedCorrectly() {
         //given
-            //dishes
+        //dishes
         RestaurantEntity restaurant1 = someRestaurant1();
 
         DishPhotoEntity dishPhoto1 = someDishPhoto1();
@@ -268,5 +269,31 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
                 .usingRecursiveFieldByFieldElementComparatorOnFields("dishCode")
                 .contains(dish1, dish2, dish3);
     }
+
+    @Test
+    void isRestaurantsByRestaurantOwnerSelectedCorrectly() {
+        // given
+        RestaurantEntity restaurant1 = someRestaurant1();
+        RestaurantEntity restaurant2 = someRestaurant2();
+        RestaurantEntity restaurant3 = someRestaurant3();
+
+        RestaurantOwnerEntity restaurantOwner = restaurant1.getRestaurantOwner();
+        restaurant2.setRestaurantOwner(restaurantOwner);
+        restaurant3.setRestaurantOwner(restaurantOwner);
+
+        // when
+        userRepository.save(restaurantOwner.getUser());
+        restaurantOwnerJpaRepository.save(restaurantOwner);
+
+        restaurantJpaRepository.save(restaurant1);
+        restaurantJpaRepository.save(restaurant2);
+        restaurantJpaRepository.save(restaurant3);
+
+        List<RestaurantEntity> restaurants = restaurantJpaRepository.findByRestaurantOwner(restaurantOwner);
+
+        //then
+        assertTrue(restaurants.size() >= 3);
+    }
+
 
 }

@@ -16,6 +16,7 @@ public class RestaurantEntityMapperImp implements RestaurantEntityMapper {
 
     public Restaurant mapFromEntity(RestaurantEntity entity){
         return Restaurant.builder()
+                .id(entity.getId())
                 .restaurantCode(entity.getRestaurantCode())
                 .name(entity.getName())
                 .added(entity.getAdded())
@@ -26,6 +27,7 @@ public class RestaurantEntityMapperImp implements RestaurantEntityMapper {
 
     public RestaurantEntity mapToEntity(Restaurant domainObj){
         return RestaurantEntity.builder()
+                .id(domainObj.getId())
                 .restaurantCode(domainObj.getRestaurantCode())
                 .name(domainObj.getName())
                 .added(domainObj.getAdded())

@@ -10,17 +10,17 @@ ALTER TABLE delivery_man
 ADD COLUMN user_id int,
 ADD FOREIGN KEY (user_id) REFERENCES food_delivery_user (id);
 
-insert into food_delivery_user (id, user_name, email, password, active) values (-1, 'default_customer', 'customer email', '$2a$12$uNrvMadWwrpZqVJeMO/JvOaEl3cuUto0qO0rQgQFpziW3EXqmUkRS', true);
-insert into food_delivery_user (id, user_name, email,  password, active) values (-2, 'default_restaurant_owner', 'restaurant owner email', '$2a$12$uNrvMadWwrpZqVJeMO/JvOaEl3cuUto0qO0rQgQFpziW3EXqmUkRS', true);
-insert into food_delivery_user (id, user_name, email,  password, active) values (-3, 'default_delivery_man', 'delivery man email', '$2a$12$uNrvMadWwrpZqVJeMO/JvOaEl3cuUto0qO0rQgQFpziW3EXqmUkRS', true);
-insert into food_delivery_user (id, user_name, email,  password, active) values (-4, 'default_rest_api_user', 'api user email', '$2a$12$uNrvMadWwrpZqVJeMO/JvOaEl3cuUto0qO0rQgQFpziW3EXqmUkRS', true);
-insert into food_delivery_user (id, user_name, email,  password, active) values (-5, 'default_admin', 'admin email', '$2a$12$uNrvMadWwrpZqVJeMO/JvOaEl3cuUto0qO0rQgQFpziW3EXqmUkRS', true);
+insert into food_delivery_user (id, user_name, email, password, active) values (-1, 'default_customer', 'customerEmail@mail.com', '$2a$12$uNrvMadWwrpZqVJeMO/JvOaEl3cuUto0qO0rQgQFpziW3EXqmUkRS', true);
+insert into food_delivery_user (id, user_name, email,  password, active) values (-2, 'default_restaurant_owner', 'restaurantOwnerEmail@mail.com', '$2a$12$uNrvMadWwrpZqVJeMO/JvOaEl3cuUto0qO0rQgQFpziW3EXqmUkRS', true);
+insert into food_delivery_user (id, user_name, email,  password, active) values (-3, 'default_delivery_man', 'deliveryManEmail@mail.com', '$2a$12$uNrvMadWwrpZqVJeMO/JvOaEl3cuUto0qO0rQgQFpziW3EXqmUkRS', true);
+insert into food_delivery_user (id, user_name, email,  password, active) values (-4, 'default_rest_api_user', 'apiUserEmail@mail.com', '$2a$12$uNrvMadWwrpZqVJeMO/JvOaEl3cuUto0qO0rQgQFpziW3EXqmUkRS', true);
+insert into food_delivery_user (id, user_name, email,  password, active) values (-5, 'default_admin', 'adminEmail@gmail.com', '$2a$12$uNrvMadWwrpZqVJeMO/JvOaEl3cuUto0qO0rQgQFpziW3EXqmUkRS', true);
 
 
 insert into delivery_address (id, city, postal_code, street) values (-1, 'default city', 'default postal code', 'default street');
-insert into customer (id, name, surname, phone_number, email, delivery_address_id, is_active, user_id) values (-1, 'default name', 'default surname', 'default phone number', 'customer email', -1, true, -1);
+insert into customer (id, name, surname, phone_number, email, delivery_address_id, is_active, user_id) values (-1, 'default name', 'default surname', 'default phone number', 'customerEmail@mail.com', -1, true, -1);
 
-insert into restaurant_owner (id, name, surname, phone_number, email, is_active, user_id) values (-1, 'default name', 'default surname', 'default phone number', 'restaurant owner email', true, -2);
+insert into restaurant_owner (id, name, surname, phone_number, email, is_active, user_id) values (-1, 'default name', 'default surname', 'default phone number', 'restaurantOwnerEmail@mail.com', true, -2);
 
 insert into delivery_man (id, personal_code, name, surname, phone_number, is_available, is_active, user_id) values (-1, 'default name', 'default code', 'default surname', 'default phone number', true, true, -3);
 
