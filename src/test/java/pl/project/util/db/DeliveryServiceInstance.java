@@ -11,9 +11,9 @@ import static pl.project.util.db.DeliveryManInstance.*;
 public class DeliveryServiceInstance {
 
     private final static OffsetDateTime RECEIVED_DATE_TIME =
-            OffsetDateTime.of(2024, 2, 15, 16, 30, 10, 10, ZoneOffset.of("Z"));
+            OffsetDateTime.of(2024, 2, 15, 16, 30, 10, 10, ZoneOffset.of("+1"));
     private final static OffsetDateTime COMPLETED_DATE_TIME =
-            OffsetDateTime.of(2024, 2, 15, 17, 30, 10, 10, ZoneOffset.of("Z"));
+            OffsetDateTime.of(2024, 2, 15, 17, 30, 10, 10, ZoneOffset.of("+1"));
 
     public static DeliveryServiceEntity someDeliveryService1(){
         return DeliveryServiceEntity.builder()

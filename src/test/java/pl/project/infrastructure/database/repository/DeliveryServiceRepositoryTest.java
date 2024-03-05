@@ -1,13 +1,14 @@
 package pl.project.infrastructure.database.repository;
 
 import lombok.AllArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.DeliveryServiceEntity;
-import pl.project.infrastructure.database.repository.jpa.DeliveryManJpaRepository;
+import pl.project.infrastructure.database.repository.jpa.*;
 import pl.project.infrastructure.security.db.UserRepository;
+import pl.project.integration.configuration.Initializer;
 import pl.project.integration.configuration.MyJpaConfiguration;
-import pl.project.infrastructure.database.repository.jpa.DeliveryServiceJpaRepository;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -22,10 +23,43 @@ import static pl.project.util.db.DeliveryServiceInstance.*;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 class DeliveryServiceRepositoryTest extends MyJpaConfiguration {
 
-    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private ServedAddressJpaRepository servedAddressJpaRepository;
+    private RestaurantOwnerJpaRepository restaurantOwnerJpaRepository;
+    private RestaurantJpaRepository restaurantJpaRepository;
+    private DishPhotoJpaRepository dishPhotoJpaRepository;
+    private DishCategoryJpaRepository dishCategoryJpaRepository;
+    private DishJpaRepository dishJpaRepository;
+    private DishOpinionJpaRepository dishOpinionJpaRepository;
+    private DishCompositionJpaRepository dishCompositionJpaRepository;
+    private OrderJpaRepository orderJpaRepository;
+    private CustomerJpaRepository customerJpaRepository;
     private DeliveryServiceJpaRepository deliveryServiceJpaRepository;
+    private DeliveryAddressJpaRepository deliveryAddressJpaRepository;
     private DeliveryManJpaRepository deliveryManJpaRepository;
     private UserRepository userRepository;
+
+    private final Initializer initializer = new Initializer();
+    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    @BeforeEach
+    void initializeDbData(){
+        initializer.setServedAddressJpaRepository(servedAddressJpaRepository);
+        initializer.setRestaurantOwnerJpaRepository(restaurantOwnerJpaRepository);
+        initializer.setRestaurantJpaRepository(restaurantJpaRepository);
+        initializer.setDishPhotoJpaRepository(dishPhotoJpaRepository);
+        initializer.setDishCategoryJpaRepository(dishCategoryJpaRepository);
+        initializer.setDishJpaRepository(dishJpaRepository);
+        initializer.setDishOpinionJpaRepository(dishOpinionJpaRepository);
+        initializer.setDishCompositionJpaRepository(dishCompositionJpaRepository);
+        initializer.setOrderJpaRepository(orderJpaRepository);
+        initializer.setCustomerJpaRepository(customerJpaRepository);
+        initializer.setDeliveryServiceJpaRepository(deliveryServiceJpaRepository);
+        initializer.setDeliveryAddressJpaRepository(deliveryAddressJpaRepository);
+        initializer.setDeliveryManJpaRepository(deliveryManJpaRepository);
+        initializer.setUserRepository(userRepository);
+
+        initializer.initializedBData();
+    }
 
     @Test
     void thatDeliveryServiceCanBeSavedCorrectly() {
@@ -35,22 +69,14 @@ class DeliveryServiceRepositoryTest extends MyJpaConfiguration {
         DeliveryServiceEntity deliveryService2 = someDeliveryService2();
         DeliveryServiceEntity deliveryService3 = someDeliveryService3();
 
+        String deliveryServiceCode1 = deliveryService1.getDeliveryServiceCode();
+        String deliveryServiceCode2 = deliveryService2.getDeliveryServiceCode();
+        String deliveryServiceCode3 = deliveryService3.getDeliveryServiceCode();
+
         //when
-        userRepository.save(deliveryService1.getDeliveryMan().getUser());
-        userRepository.save(deliveryService2.getDeliveryMan().getUser());
-        userRepository.save(deliveryService3.getDeliveryMan().getUser());
-
-        deliveryManJpaRepository.save(deliveryService1.getDeliveryMan());
-        deliveryManJpaRepository.save(deliveryService2.getDeliveryMan());
-        deliveryManJpaRepository.save(deliveryService3.getDeliveryMan());
-
-        deliveryServiceJpaRepository.save(deliveryService1);
-        deliveryServiceJpaRepository.save(deliveryService2);
-        deliveryServiceJpaRepository.save(deliveryService3);
-
-        DeliveryServiceEntity deliveryServiceFromDb1 = deliveryServiceJpaRepository.findByDeliveryServiceCode(deliveryService1.getDeliveryServiceCode()).orElseThrow();
-        DeliveryServiceEntity deliveryServiceFromDb2 = deliveryServiceJpaRepository.findByDeliveryServiceCode(deliveryService2.getDeliveryServiceCode()).orElseThrow();
-        DeliveryServiceEntity deliveryServiceFromDb3 = deliveryServiceJpaRepository.findByDeliveryServiceCode(deliveryService3.getDeliveryServiceCode()).orElseThrow();
+        DeliveryServiceEntity deliveryServiceFromDb1 = deliveryServiceJpaRepository.findByDeliveryServiceCode(deliveryServiceCode1).orElseThrow();
+        DeliveryServiceEntity deliveryServiceFromDb2 = deliveryServiceJpaRepository.findByDeliveryServiceCode(deliveryServiceCode2).orElseThrow();
+        DeliveryServiceEntity deliveryServiceFromDb3 = deliveryServiceJpaRepository.findByDeliveryServiceCode(deliveryServiceCode3).orElseThrow();
 
         List<DeliveryServiceEntity> deliveryServices = deliveryServiceJpaRepository.findAll();
 
@@ -77,15 +103,12 @@ class DeliveryServiceRepositoryTest extends MyJpaConfiguration {
     void thatDeliveryServiceCompletedTimeIsSavedCorrectly() {
         //given
         DeliveryServiceEntity deliveryService1 = someDeliveryService1();
-        OffsetDateTime completedDateTime = OffsetDateTime.of(2024, 2, 15, 17, 30, 10, 10, ZoneOffset.of("Z"));
+        String deliveryServiceCode1 = deliveryService1.getDeliveryServiceCode();
+        OffsetDateTime completedDateTime = OffsetDateTime.of(2024, 2, 15, 17, 30, 10, 10, ZoneOffset.of("+1"));
 
         //when
-        userRepository.save(deliveryService1.getDeliveryMan().getUser());
-        deliveryManJpaRepository.save(deliveryService1.getDeliveryMan());
-
-        deliveryServiceJpaRepository.save(deliveryService1);
-        deliveryServiceJpaRepository.reportCompletedDateTime(completedDateTime, deliveryService1.getDeliveryServiceCode());
-        DeliveryServiceEntity deliveryServiceFromDb1 = deliveryServiceJpaRepository.findByDeliveryServiceCode(deliveryService1.getDeliveryServiceCode()).orElseThrow();
+        deliveryServiceJpaRepository.reportCompletedDateTime(completedDateTime, deliveryServiceCode1);
+        DeliveryServiceEntity deliveryServiceFromDb1 = deliveryServiceJpaRepository.findByDeliveryServiceCode(deliveryServiceCode1).orElseThrow();
 
         //then
         assertEquals(completedDateTime.format(FORMATTER), deliveryServiceFromDb1.getCompletedDateTime().format(FORMATTER));

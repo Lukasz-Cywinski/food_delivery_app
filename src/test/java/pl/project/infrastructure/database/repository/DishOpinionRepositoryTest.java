@@ -27,8 +27,6 @@ import static pl.project.util.db.DishOpinionInstance.*;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 class DishOpinionRepositoryTest extends MyJpaConfiguration {
 
-    //TODO
-
     private ServedAddressJpaRepository servedAddressJpaRepository;
     private RestaurantOwnerJpaRepository restaurantOwnerJpaRepository;
     private RestaurantJpaRepository restaurantJpaRepository;

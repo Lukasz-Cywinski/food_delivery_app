@@ -1,11 +1,14 @@
 package pl.project.infrastructure.database.repository;
 
 import lombok.AllArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.DeliveryAddressEntity;
+import pl.project.infrastructure.database.repository.jpa.*;
+import pl.project.infrastructure.security.db.UserRepository;
+import pl.project.integration.configuration.Initializer;
 import pl.project.integration.configuration.MyJpaConfiguration;
-import pl.project.infrastructure.database.repository.jpa.DeliveryAddressJpaRepository;
 
 import java.util.List;
 
@@ -17,7 +20,42 @@ import static pl.project.util.db.DeliveryAddressInstance.*;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 class DeliveryAddressRepositoryTest extends MyJpaConfiguration {
 
+    private ServedAddressJpaRepository servedAddressJpaRepository;
+    private RestaurantOwnerJpaRepository restaurantOwnerJpaRepository;
+    private RestaurantJpaRepository restaurantJpaRepository;
+    private DishPhotoJpaRepository dishPhotoJpaRepository;
+    private DishCategoryJpaRepository dishCategoryJpaRepository;
+    private DishJpaRepository dishJpaRepository;
+    private DishOpinionJpaRepository dishOpinionJpaRepository;
+    private DishCompositionJpaRepository dishCompositionJpaRepository;
+    private OrderJpaRepository orderJpaRepository;
+    private CustomerJpaRepository customerJpaRepository;
+    private DeliveryServiceJpaRepository deliveryServiceJpaRepository;
     private DeliveryAddressJpaRepository deliveryAddressJpaRepository;
+    private DeliveryManJpaRepository deliveryManJpaRepository;
+    private UserRepository userRepository;
+
+    private final Initializer initializer = new Initializer();
+
+    @BeforeEach
+    void initializeDbData() {
+        initializer.setServedAddressJpaRepository(servedAddressJpaRepository);
+        initializer.setRestaurantOwnerJpaRepository(restaurantOwnerJpaRepository);
+        initializer.setRestaurantJpaRepository(restaurantJpaRepository);
+        initializer.setDishPhotoJpaRepository(dishPhotoJpaRepository);
+        initializer.setDishCategoryJpaRepository(dishCategoryJpaRepository);
+        initializer.setDishJpaRepository(dishJpaRepository);
+        initializer.setDishOpinionJpaRepository(dishOpinionJpaRepository);
+        initializer.setDishCompositionJpaRepository(dishCompositionJpaRepository);
+        initializer.setOrderJpaRepository(orderJpaRepository);
+        initializer.setCustomerJpaRepository(customerJpaRepository);
+        initializer.setDeliveryServiceJpaRepository(deliveryServiceJpaRepository);
+        initializer.setDeliveryAddressJpaRepository(deliveryAddressJpaRepository);
+        initializer.setDeliveryManJpaRepository(deliveryManJpaRepository);
+        initializer.setUserRepository(userRepository);
+
+        initializer.initializedBData();
+    }
 
     @Test
     void thatDeliveryAddressCanBeSavedCorrectly(){
@@ -27,10 +65,6 @@ class DeliveryAddressRepositoryTest extends MyJpaConfiguration {
         DeliveryAddressEntity address3 = someDeliveryAddress3();
 
         //when
-        deliveryAddressJpaRepository.save(address1);
-        deliveryAddressJpaRepository.save(address2);
-        deliveryAddressJpaRepository.save(address3);
-
         List<DeliveryAddressEntity> addresses = deliveryAddressJpaRepository.findAll();
 
         //then
@@ -44,14 +78,11 @@ class DeliveryAddressRepositoryTest extends MyJpaConfiguration {
     @Test
     void thatCityCanBeUpdatedCorrectly(){
         //given
-        DeliveryAddressEntity address1 = someDeliveryAddress1();
         String newCityName = "new City";
+        Integer addressId = initializer.SAVED_DELIVERY_ADDRESSES.getFirst().getId();
 
         //when
-        deliveryAddressJpaRepository.save(address1);
-        Integer addressId = deliveryAddressJpaRepository.findAll().getFirst().getId();
         deliveryAddressJpaRepository.changeCity(newCityName, addressId);
-
         DeliveryAddressEntity addressFromDb = deliveryAddressJpaRepository.findById(addressId).orElseThrow();
 
         //then
@@ -59,16 +90,13 @@ class DeliveryAddressRepositoryTest extends MyJpaConfiguration {
     }
 
     @Test
-    void thatPostalCOdeCanBeUpdatedCorrectly(){
+    void thatPostalCodeCanBeUpdatedCorrectly(){
         //given
-        DeliveryAddressEntity address1 = someDeliveryAddress1();
         String newPostalCode = "new postal code";
+        Integer addressId = initializer.SAVED_DELIVERY_ADDRESSES.getFirst().getId();
 
         //when
-        deliveryAddressJpaRepository.save(address1);
-        Integer addressId = deliveryAddressJpaRepository.findAll().getFirst().getId();
         deliveryAddressJpaRepository.changePostalCode(newPostalCode, addressId);
-
         DeliveryAddressEntity addressFromDb = deliveryAddressJpaRepository.findById(addressId).orElseThrow();
 
         //then
@@ -78,14 +106,11 @@ class DeliveryAddressRepositoryTest extends MyJpaConfiguration {
     @Test
     void thatStreetCanBeUpdatedCorrectly(){
         //given
-        DeliveryAddressEntity address1 = someDeliveryAddress1();
         String newStreetName = "new Street";
+        Integer addressId = initializer.SAVED_DELIVERY_ADDRESSES.getFirst().getId();
 
         //when
-        deliveryAddressJpaRepository.save(address1);
-        Integer addressId = deliveryAddressJpaRepository.findAll().getFirst().getId();
         deliveryAddressJpaRepository.changeStreet(newStreetName, addressId);
-
         DeliveryAddressEntity addressFromDb = deliveryAddressJpaRepository.findById(addressId).orElseThrow();
 
         //then

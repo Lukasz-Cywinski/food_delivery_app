@@ -2,14 +2,15 @@ package pl.project.infrastructure.database.repository;
 
 import lombok.AllArgsConstructor;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.CustomerEntity;
 import pl.project.infrastructure.database.entity.DeliveryAddressEntity;
+import pl.project.infrastructure.database.repository.jpa.*;
 import pl.project.infrastructure.security.db.UserRepository;
+import pl.project.integration.configuration.Initializer;
 import pl.project.integration.configuration.MyJpaConfiguration;
-import pl.project.infrastructure.database.repository.jpa.CustomerJpaRepository;
-import pl.project.infrastructure.database.repository.jpa.DeliveryAddressJpaRepository;
 
 import java.util.List;
 
@@ -17,14 +18,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.project.util.db.CustomerInstance.*;
-import static pl.project.util.db.DeliveryAddressInstance.someDeliveryAddress2;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 class CustomerRepositoryTest extends MyJpaConfiguration {
 
+    private ServedAddressJpaRepository servedAddressJpaRepository;
+    private RestaurantOwnerJpaRepository restaurantOwnerJpaRepository;
+    private RestaurantJpaRepository restaurantJpaRepository;
+    private DishPhotoJpaRepository dishPhotoJpaRepository;
+    private DishCategoryJpaRepository dishCategoryJpaRepository;
+    private DishJpaRepository dishJpaRepository;
+    private DishOpinionJpaRepository dishOpinionJpaRepository;
+    private DishCompositionJpaRepository dishCompositionJpaRepository;
+    private OrderJpaRepository orderJpaRepository;
     private CustomerJpaRepository customerJpaRepository;
+    private DeliveryServiceJpaRepository deliveryServiceJpaRepository;
     private DeliveryAddressJpaRepository deliveryAddressJpaRepository;
+    private DeliveryManJpaRepository deliveryManJpaRepository;
     private UserRepository userRepository;
+
+    private final Initializer initializer = new Initializer();
+
+    @BeforeEach
+    void initializeDbData() {
+        initializer.setServedAddressJpaRepository(servedAddressJpaRepository);
+        initializer.setRestaurantOwnerJpaRepository(restaurantOwnerJpaRepository);
+        initializer.setRestaurantJpaRepository(restaurantJpaRepository);
+        initializer.setDishPhotoJpaRepository(dishPhotoJpaRepository);
+        initializer.setDishCategoryJpaRepository(dishCategoryJpaRepository);
+        initializer.setDishJpaRepository(dishJpaRepository);
+        initializer.setDishOpinionJpaRepository(dishOpinionJpaRepository);
+        initializer.setDishCompositionJpaRepository(dishCompositionJpaRepository);
+        initializer.setOrderJpaRepository(orderJpaRepository);
+        initializer.setCustomerJpaRepository(customerJpaRepository);
+        initializer.setDeliveryServiceJpaRepository(deliveryServiceJpaRepository);
+        initializer.setDeliveryAddressJpaRepository(deliveryAddressJpaRepository);
+        initializer.setDeliveryManJpaRepository(deliveryManJpaRepository);
+        initializer.setUserRepository(userRepository);
+
+        initializer.initializedBData();
+    }
 
     @Test
     void thatCustomerCanBeSavedCorrectly() {
@@ -35,21 +68,12 @@ class CustomerRepositoryTest extends MyJpaConfiguration {
         CustomerEntity customer3 = someCustomer3();
 
         //when
-        userRepository.save(customer1.getUser());
-        userRepository.save(customer2.getUser());
-        userRepository.save(customer3.getUser());
-
-        customerJpaRepository.save(customer1);
-        customerJpaRepository.save(customer2);
-        customerJpaRepository.save(customer3);
-
         List<CustomerEntity> activeCustomers = customerJpaRepository.findActive();
 
         //then
         assertThat(activeCustomers)
-                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "deliveryAddress")
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "deliveryAddress", "user")
                 .contains(customer1, customer2, customer3);
-
         assertTrue(activeCustomers.size() >= 3);
     }
 
@@ -57,15 +81,12 @@ class CustomerRepositoryTest extends MyJpaConfiguration {
     void thatNameCanBeModifiedCorrectly() {
 
         //given
-        CustomerEntity customer1 = someCustomer1();
+        String customerEmail = someCustomer1().getEmail();
         String newName = "new Name";
 
         //when
-        userRepository.save(customer1.getUser());
-
-        customerJpaRepository.save(customer1);
-        customerJpaRepository.changeName(newName, customer1.getEmail());
-        CustomerEntity customerFromDb1 = customerJpaRepository.findByEmail(customer1.getEmail()).orElseThrow();
+        customerJpaRepository.changeName(newName, customerEmail);
+        CustomerEntity customerFromDb1 = customerJpaRepository.findByEmail(customerEmail).orElseThrow();
 
         //then
         assertEquals(newName, customerFromDb1.getName());
@@ -75,15 +96,12 @@ class CustomerRepositoryTest extends MyJpaConfiguration {
     void thatSurnameCanBeModifiedCorrectly() {
 
         //given
-        CustomerEntity customer1 = someCustomer1();
+        String customerEmail = someCustomer1().getEmail();
         String newSurname = "new Surname";
 
         //when
-        userRepository.save(customer1.getUser());
-
-        customerJpaRepository.save(customer1);
-        customerJpaRepository.changeSurname(newSurname, customer1.getEmail());
-        CustomerEntity customerFromDb1 = customerJpaRepository.findByEmail(customer1.getEmail()).orElseThrow();
+        customerJpaRepository.changeSurname(newSurname, customerEmail);
+        CustomerEntity customerFromDb1 = customerJpaRepository.findByEmail(customerEmail).orElseThrow();
 
         //then
         assertEquals(newSurname, customerFromDb1.getSurname());
@@ -93,15 +111,12 @@ class CustomerRepositoryTest extends MyJpaConfiguration {
     void thatPhoneNumberCanBeModifiedCorrectly() {
 
         //given
-        CustomerEntity customer1 = someCustomer1();
+        String customerEmail = someCustomer1().getEmail();
         String newPhoneNumber = "0988765";
 
         //when
-        userRepository.save(customer1.getUser());
-
-        customerJpaRepository.save(customer1);
-        customerJpaRepository.changePhoneNumber(newPhoneNumber, customer1.getEmail());
-        CustomerEntity customerFromDb1 = customerJpaRepository.findByEmail(customer1.getEmail()).orElseThrow();
+        customerJpaRepository.changePhoneNumber(newPhoneNumber, customerEmail);
+        CustomerEntity customerFromDb1 = customerJpaRepository.findByEmail(customerEmail).orElseThrow();
 
         //then
         assertEquals(newPhoneNumber, customerFromDb1.getPhoneNumber());
@@ -111,14 +126,11 @@ class CustomerRepositoryTest extends MyJpaConfiguration {
     void thatEmailCanBeModifiedCorrectly() {
 
         //given
-        CustomerEntity customer1 = someCustomer1();
+        String customerEmail = someCustomer1().getEmail();
         String newEmail = "newMail@mail.com";
 
         //when
-        userRepository.save(customer1.getUser());
-
-        customerJpaRepository.save(customer1);
-        customerJpaRepository.changeEmail(newEmail, customer1.getEmail());
+        customerJpaRepository.changeEmail(newEmail, customerEmail);
         CustomerEntity customerFromDb1 = customerJpaRepository.findByEmail(newEmail).orElseThrow();
 
         //then
@@ -129,16 +141,12 @@ class CustomerRepositoryTest extends MyJpaConfiguration {
     void thatDeliveryAddressCanBeModifiedCorrectly() {
 
         //given
-        CustomerEntity customer1 = someCustomer1();
-        DeliveryAddressEntity newDeliveryAddress = someDeliveryAddress2();
+        String customerEmail = someCustomer1().getEmail();
+        DeliveryAddressEntity newDeliveryAddress = initializer.SAVED_DELIVERY_ADDRESSES.get(1);
 
         //when
-        userRepository.save(customer1.getUser());
-
-        customerJpaRepository.save(customer1);
-        deliveryAddressJpaRepository.save(newDeliveryAddress);
-        customerJpaRepository.changeDeliveryAddress(newDeliveryAddress, customer1.getEmail());
-        CustomerEntity customerFromDb1 = customerJpaRepository.findByEmail(customer1.getEmail()).orElseThrow();
+        customerJpaRepository.changeDeliveryAddress(newDeliveryAddress, customerEmail);
+        CustomerEntity customerFromDb1 = customerJpaRepository.findByEmail(customerEmail).orElseThrow();
 
         //then
         Assertions.assertThat(newDeliveryAddress)
@@ -151,20 +159,10 @@ class CustomerRepositoryTest extends MyJpaConfiguration {
     void isCustomerDeactivatedCorrectly() {
 
         // given
-        CustomerEntity customer1 = someCustomer1();
-        CustomerEntity customer2 = someCustomer2();
-        CustomerEntity customer3 = someCustomer3();
+        String customerEmail = someCustomer1().getEmail();
 
         // when
-        userRepository.save(customer1.getUser());
-        userRepository.save(customer2.getUser());
-        userRepository.save(customer3.getUser());
-
-        customerJpaRepository.save(customer1);
-        customerJpaRepository.save(customer2);
-        customerJpaRepository.save(customer3);
-
-        customerJpaRepository.deactivate(someCustomer3().getEmail());
+        customerJpaRepository.deactivate(customerEmail);
         List<CustomerEntity> activeCustomers = customerJpaRepository.findActive();
 
         // then
