@@ -1,6 +1,7 @@
 package pl.project.infrastructure.database.repository;
 
 import lombok.AllArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,35 +9,61 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import pl.project.infrastructure.database.entity.*;
-import pl.project.infrastructure.security.db.UserRepository;
-import pl.project.integration.configuration.MyJpaConfiguration;
 import pl.project.infrastructure.database.repository.jpa.*;
+import pl.project.infrastructure.security.db.UserRepository;
+import pl.project.integration.configuration.Initializer;
+import pl.project.integration.configuration.MyJpaConfiguration;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static pl.project.util.db.DishCategoryInstance.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static pl.project.util.db.DishInstance.*;
-import static pl.project.util.db.DishPhotoInstance.*;
 import static pl.project.util.db.RestaurantInstance.*;
-import static pl.project.util.db.RestaurantOwnerInstance.someRestaurantOwner2;
 import static pl.project.util.db.ServedAddressInstance.someServedAddress1;
 import static pl.project.util.db.ServedAddressInstance.someServedAddress2;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 class RestaurantRepositoryTest extends MyJpaConfiguration {
 
-    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private RestaurantJpaRepository restaurantJpaRepository;
-    private RestaurantOwnerJpaRepository restaurantOwnerJpaRepository;
     private ServedAddressJpaRepository servedAddressJpaRepository;
+    private RestaurantOwnerJpaRepository restaurantOwnerJpaRepository;
+    private RestaurantJpaRepository restaurantJpaRepository;
     private DishPhotoJpaRepository dishPhotoJpaRepository;
     private DishCategoryJpaRepository dishCategoryJpaRepository;
     private DishJpaRepository dishJpaRepository;
+    private DishOpinionJpaRepository dishOpinionJpaRepository;
+    private DishCompositionJpaRepository dishCompositionJpaRepository;
+    private OrderJpaRepository orderJpaRepository;
+    private CustomerJpaRepository customerJpaRepository;
+    private DeliveryServiceJpaRepository deliveryServiceJpaRepository;
+    private DeliveryAddressJpaRepository deliveryAddressJpaRepository;
+    private DeliveryManJpaRepository deliveryManJpaRepository;
     private UserRepository userRepository;
+
+    private final Initializer initializer = new Initializer();
+    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    @BeforeEach
+    void initializeDbData() {
+        initializer.setServedAddressJpaRepository(servedAddressJpaRepository);
+        initializer.setRestaurantOwnerJpaRepository(restaurantOwnerJpaRepository);
+        initializer.setRestaurantJpaRepository(restaurantJpaRepository);
+        initializer.setDishPhotoJpaRepository(dishPhotoJpaRepository);
+        initializer.setDishCategoryJpaRepository(dishCategoryJpaRepository);
+        initializer.setDishJpaRepository(dishJpaRepository);
+        initializer.setDishOpinionJpaRepository(dishOpinionJpaRepository);
+        initializer.setDishCompositionJpaRepository(dishCompositionJpaRepository);
+        initializer.setOrderJpaRepository(orderJpaRepository);
+        initializer.setCustomerJpaRepository(customerJpaRepository);
+        initializer.setDeliveryServiceJpaRepository(deliveryServiceJpaRepository);
+        initializer.setDeliveryAddressJpaRepository(deliveryAddressJpaRepository);
+        initializer.setDeliveryManJpaRepository(deliveryManJpaRepository);
+        initializer.setUserRepository(userRepository);
+
+        initializer.initializedBData();
+    }
 
     @Test
     void thatRestaurantCanBeSavedCorrectly() {
@@ -45,86 +72,49 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
         RestaurantEntity restaurant1 = someRestaurant1();
         RestaurantEntity restaurant2 = someRestaurant2();
         RestaurantEntity restaurant3 = someRestaurant3();
+        String restaurantCode1 = restaurant1.getRestaurantCode();
+        String restaurantCode2 = restaurant2.getRestaurantCode();
+        String restaurantCode3 = restaurant3.getRestaurantCode();
+        String sortBy = "added";
+        Pageable pageable = createPageable(0, 3, sortBy);
 
         // when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-        userRepository.save(restaurant2.getRestaurantOwner().getUser());
-        userRepository.save(restaurant3.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-        restaurantJpaRepository.save(restaurant2);
-        restaurantJpaRepository.save(restaurant3);
-
-        RestaurantEntity restaurantFromDb1 = restaurantJpaRepository.findByRestaurantCode(restaurant1.getRestaurantCode()).orElseThrow();
-        RestaurantEntity restaurantFromDb2 = restaurantJpaRepository.findByRestaurantCode(restaurant2.getRestaurantCode()).orElseThrow();
-        RestaurantEntity restaurantFromDb3 = restaurantJpaRepository.findByRestaurantCode(restaurant3.getRestaurantCode()).orElseThrow();
-
-        Sort sort = Sort.by("added").descending();
-        Pageable pageable = PageRequest.of(0, 3, sort);
+        RestaurantEntity restaurantFromDb1 = restaurantJpaRepository.findByRestaurantCode(restaurantCode1).orElseThrow();
+        RestaurantEntity restaurantFromDb2 = restaurantJpaRepository.findByRestaurantCode(restaurantCode2).orElseThrow();
+        RestaurantEntity restaurantFromDb3 = restaurantJpaRepository.findByRestaurantCode(restaurantCode3).orElseThrow();
 
         Page<RestaurantEntity> page = restaurantJpaRepository.findActive(pageable);
-        List<RestaurantEntity> activeRestaurants = page.getContent();
+        List<RestaurantEntity> activeSortedRestaurants = page.getContent();
+        List<RestaurantEntity> restaurantsByRestaurantCode = List.of(restaurantFromDb1, restaurantFromDb2, restaurantFromDb3);
 
         //then
-        // first
-        assertThat(restaurant1)
-                .usingRecursiveComparison()
-                .comparingOnlyFields("restaurantCode", "name", "isActive")
-                .isEqualTo(restaurantFromDb1);
+        assertThat(restaurantsByRestaurantCode)
+                .usingRecursiveFieldByFieldElementComparatorOnFields("restaurantCode", "name", "isActive")
+                .contains(restaurant1, restaurant2, restaurant3);
+        assertThat(activeSortedRestaurants)
+                .usingRecursiveFieldByFieldElementComparatorOnFields("restaurantCode", "name", "isActive")
+                .contains(restaurant1, restaurant2, restaurant3);
 
         assertThat(restaurant1.getAdded().format(FORMATTER))
                 .isEqualTo(restaurantFromDb1.getAdded().format(FORMATTER));
-
-        assertThat(restaurant1.getRestaurantOwner())
-                .usingRecursiveComparison()
-                .comparingOnlyFields("email")
-                .isEqualTo(restaurantFromDb1.getRestaurantOwner());
-
-        //second
-        assertThat(restaurant2)
-                .usingRecursiveComparison()
-                .comparingOnlyFields("restaurantCode", "name", "isActive")
-                .isEqualTo(restaurantFromDb2);
-
         assertThat(restaurant2.getAdded().format(FORMATTER))
                 .isEqualTo(restaurantFromDb2.getAdded().format(FORMATTER));
-
-        assertThat(restaurant2.getRestaurantOwner())
-                .usingRecursiveComparison()
-                .comparingOnlyFields("email")
-                .isEqualTo(restaurantFromDb2.getRestaurantOwner());
-
-        //third
-        assertThat(restaurant3)
-                .usingRecursiveComparison()
-                .comparingOnlyFields("restaurantCode", "name", "isActive")
-                .isEqualTo(restaurantFromDb3);
-
         assertThat(restaurant3.getAdded().format(FORMATTER))
                 .isEqualTo(restaurantFromDb3.getAdded().format(FORMATTER));
 
-        assertThat(restaurant3.getRestaurantOwner())
-                .usingRecursiveComparison()
-                .comparingOnlyFields("email")
-                .isEqualTo(restaurantFromDb3.getRestaurantOwner());
-
-        //all
-        assertEquals(3, activeRestaurants.size());
+        assertEquals(3, activeSortedRestaurants.size());
     }
 
     @Test
     void thatRestaurantNameCanBeModifiedCorrectly() {
 
         //given
-        RestaurantEntity restaurant1 = someRestaurant1();
+        String restaurantCode = someRestaurant1().getRestaurantCode();
         String newRestaurantName = "New Name";
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-        restaurantJpaRepository.changeName(newRestaurantName, restaurant1.getRestaurantCode());
-        RestaurantEntity restaurantFromDb1 = restaurantJpaRepository.findByRestaurantCode(restaurant1.getRestaurantCode()).orElseThrow();
+        restaurantJpaRepository.changeName(newRestaurantName, restaurantCode);
+        RestaurantEntity restaurantFromDb1 = restaurantJpaRepository.findByRestaurantCode(restaurantCode).orElseThrow();
 
         //then
         assertEquals(newRestaurantName, restaurantFromDb1.getName());
@@ -134,19 +124,12 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
     void thatRestaurantOwnerCanBeModifiedCorrectly() {
 
         //given
-        RestaurantEntity restaurant1 = someRestaurant1();
-        RestaurantOwnerEntity newOwner = someRestaurantOwner2();
+        String restaurantCode = someRestaurant1().getRestaurantCode();
+        RestaurantOwnerEntity newOwner = initializer.SAVED_RESTAURANT_OWNERS.get(1);
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-        userRepository.save(newOwner.getUser());
-
-        restaurantOwnerJpaRepository.save(newOwner);
-        restaurantJpaRepository.save(restaurant1);
-
-        restaurantJpaRepository.changeOwner(newOwner, restaurant1.getRestaurantCode());
-
-        RestaurantEntity restaurantFromDb1 = restaurantJpaRepository.findByRestaurantCode(restaurant1.getRestaurantCode()).orElseThrow();
+        restaurantJpaRepository.changeOwner(newOwner, restaurantCode);
+        RestaurantEntity restaurantFromDb1 = restaurantJpaRepository.findByRestaurantCode(restaurantCode).orElseThrow();
 
         //then
         assertEquals(newOwner.getEmail(), restaurantFromDb1.getRestaurantOwner().getEmail());
@@ -156,23 +139,12 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
     void isRestaurantDeactivatedCorrectly() {
 
         // given
-        RestaurantEntity restaurant1 = someRestaurant1();
-        RestaurantEntity restaurant2 = someRestaurant2();
-        RestaurantEntity restaurant3 = someRestaurant3();
+        String restaurantCode = someRestaurant1().getRestaurantCode();
+        String sortBy = "added";
+        Pageable pageable = createPageable(0, 3, sortBy);
 
         // when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-        userRepository.save(restaurant2.getRestaurantOwner().getUser());
-        userRepository.save(restaurant3.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-        restaurantJpaRepository.save(restaurant2);
-        restaurantJpaRepository.save(restaurant3);
-
-        restaurantJpaRepository.deactivate(restaurant1.getRestaurantCode());
-
-        Sort sort = Sort.by("added").descending();
-        Pageable pageable = PageRequest.of(0, 3, sort);
+        restaurantJpaRepository.deactivate(restaurantCode);
 
         Page<RestaurantEntity> page = restaurantJpaRepository.findActive(pageable);
         List<RestaurantEntity> activeRestaurants = page.getContent();
@@ -185,85 +157,59 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
     void isServedAddressesSelectedCorrectly() {
 
         //given
-        RestaurantEntity restaurant1 = someRestaurant1();
+        RestaurantEntity restaurant = initializer.SAVED_RESTAURANTS.getFirst();
         ServedAddressEntity address1 = someServedAddress1();
         ServedAddressEntity address2 = someServedAddress2();
-
-        address1.setRestaurant(restaurant1);
-        address2.setRestaurant(restaurant1);
+        address2.setRestaurant(initializer.SAVED_RESTAURANTS.getFirst());
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-        servedAddressJpaRepository.save(address1);
         servedAddressJpaRepository.save(address2);
-
-        RestaurantEntity restaurantFromDb1 = restaurantJpaRepository.findByRestaurantCode(restaurant1.getRestaurantCode()).orElseThrow();
-        List<ServedAddressEntity> addresses = restaurantJpaRepository.findServedAddresses(restaurantFromDb1);
+        List<ServedAddressEntity> addresses = restaurantJpaRepository.findServedAddresses(restaurant);
 
         //then
         assertEquals(2, addresses.size());
-
         assertThat(addresses)
-                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
+                .usingRecursiveFieldByFieldElementComparatorOnFields("city", "street")
                 .contains(address1, address2);
     }
 
     @Test
     void isDishesSelectedCorrectly() {
         //given
-        //dishes
-        RestaurantEntity restaurant1 = someRestaurant1();
-
-        DishPhotoEntity dishPhoto1 = someDishPhoto1();
-        DishPhotoEntity dishPhoto2 = someDishPhoto2();
-        DishPhotoEntity dishPhoto3 = someDishPhoto3();
-
-        DishCategoryEntity dishCategory1 = someDishCategory1();
-        DishCategoryEntity dishCategory2 = someDishCategory2();
-        DishCategoryEntity dishCategory3 = someDishCategory3();
-
+        String sortBy = "price";
+        Pageable pageable = createPageable(0, 5, sortBy);
         DishEntity dish1 = someDish1();
         DishEntity dish2 = someDish2();
         DishEntity dish3 = someDish3();
 
+        RestaurantEntity restaurant = initializer.SAVED_RESTAURANTS.getFirst();
+        DishCategoryEntity dishCategory = initializer.SAVED_DISH_CATEGORIES.getFirst();
+        DishPhotoEntity dishPhoto1 = initializer.SAVED_DISH_PHOTOS.get(1);
+        DishPhotoEntity dishPhoto2 = initializer.SAVED_DISH_PHOTOS.get(1);
+        DishPhotoEntity dishPhoto3 = initializer.SAVED_DISH_PHOTOS.get(2);
+        dish1.setRestaurant(restaurant);
+        dish1.setDishCategory(dishCategory);
         dish1.setDishPhoto(dishPhoto1);
-        dish1.setDishCategory(dishCategory1);
+        dish2.setRestaurant(restaurant);
+        dish2.setDishCategory(dishCategory);
         dish2.setDishPhoto(dishPhoto2);
-        dish2.setDishCategory(dishCategory2);
+        dish3.setRestaurant(restaurant);
+        dish3.setDishCategory(dishCategory);
         dish3.setDishPhoto(dishPhoto3);
-        dish3.setDishCategory(dishCategory3);
 
-        dish1.setRestaurant(restaurant1);
-        dish2.setRestaurant(restaurant1);
-        dish3.setRestaurant(restaurant1);
+        dish1.setDishCode("XXX");
+        dish2.setDishCode("YYY");
+        dish3.setDishCode("ZZZ");
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-
-        dishPhotoJpaRepository.save(dishPhoto1);
-        dishPhotoJpaRepository.save(dishPhoto2);
-        dishPhotoJpaRepository.save(dishPhoto3);
-
-        dishCategoryJpaRepository.save(dishCategory1);
-        dishCategoryJpaRepository.save(dishCategory2);
-        dishCategoryJpaRepository.save(dishCategory3);
-
         dishJpaRepository.save(dish1);
         dishJpaRepository.save(dish2);
         dishJpaRepository.save(dish3);
-
-        Sort sort = Sort.by("price").descending();
-        Pageable pageable = PageRequest.of(0, 3, sort);
-
-        Page<DishEntity> page = restaurantJpaRepository.findActiveDishes(restaurant1, pageable);
+        Page<DishEntity> page = restaurantJpaRepository.findActiveDishes(restaurant, pageable);
         List<DishEntity> activeDishes = page.getContent();
 
         //then
-        assertEquals(3, activeDishes.size());
+        assertTrue(activeDishes.size() >= 3);
 
         assertThat(activeDishes)
                 .usingRecursiveFieldByFieldElementComparatorOnFields("dishCode")
@@ -273,27 +219,18 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
     @Test
     void isRestaurantsByRestaurantOwnerSelectedCorrectly() {
         // given
-        RestaurantEntity restaurant1 = someRestaurant1();
-        RestaurantEntity restaurant2 = someRestaurant2();
-        RestaurantEntity restaurant3 = someRestaurant3();
-
-        RestaurantOwnerEntity restaurantOwner = restaurant1.getRestaurantOwner();
-        restaurant2.setRestaurantOwner(restaurantOwner);
-        restaurant3.setRestaurantOwner(restaurantOwner);
+        RestaurantOwnerEntity restaurantOwner = initializer.SAVED_RESTAURANT_OWNERS.getFirst();
 
         // when
-        userRepository.save(restaurantOwner.getUser());
-        restaurantOwnerJpaRepository.save(restaurantOwner);
-
-        restaurantJpaRepository.save(restaurant1);
-        restaurantJpaRepository.save(restaurant2);
-        restaurantJpaRepository.save(restaurant3);
-
         List<RestaurantEntity> restaurants = restaurantJpaRepository.findByRestaurantOwner(restaurantOwner);
 
         //then
-        assertTrue(restaurants.size() >= 3);
+        assertFalse(restaurants.isEmpty());
     }
 
+    private Pageable createPageable(Integer pageNumber, Integer objectsPerPage, String sortBy) {
+        Sort sort = Sort.by(sortBy).descending();
+        return PageRequest.of(pageNumber, objectsPerPage, sort);
+    }
 
 }

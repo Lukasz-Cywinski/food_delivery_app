@@ -12,9 +12,9 @@ import static pl.project.util.db.DeliveryServiceInstance.*;
 public class OrderInstance {
 
     private final static OffsetDateTime RECEIVED_DATE_TIME =
-            OffsetDateTime.of(2024, 2, 15, 16, 55, 10, 10, ZoneOffset.of("Z"));
+            OffsetDateTime.of(2024, 2, 15, 16, 55, 10, 10, ZoneOffset.ofHours(1));
     private final static OffsetDateTime COMPLETED_DATE_TIME =
-            OffsetDateTime.of(2024, 2, 15, 17, 30, 10, 10, ZoneOffset.of("Z"));
+            OffsetDateTime.of(2024, 2, 15, 17, 30, 10, 10, ZoneOffset.ofHours(1));
 
     public static OrderEntity someOrder1(){
         return OrderEntity.builder()

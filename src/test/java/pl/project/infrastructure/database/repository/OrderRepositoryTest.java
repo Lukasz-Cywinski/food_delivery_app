@@ -1,16 +1,14 @@
 package pl.project.infrastructure.database.repository;
 
 import lombok.AllArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.project.infrastructure.database.entity.CustomerEntity;
-import pl.project.infrastructure.database.entity.DeliveryServiceEntity;
 import pl.project.infrastructure.database.entity.OrderEntity;
+import pl.project.infrastructure.database.repository.jpa.*;
 import pl.project.infrastructure.security.db.UserRepository;
+import pl.project.integration.configuration.Initializer;
 import pl.project.integration.configuration.MyJpaConfiguration;
-import pl.project.infrastructure.database.repository.jpa.CustomerJpaRepository;
-import pl.project.infrastructure.database.repository.jpa.DeliveryServiceJpaRepository;
-import pl.project.infrastructure.database.repository.jpa.OrderJpaRepository;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -20,18 +18,48 @@ import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static pl.project.util.db.CustomerInstance.*;
-import static pl.project.util.db.DeliveryServiceInstance.*;
 import static pl.project.util.db.OrderInstance.*;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 class OrderRepositoryTest extends MyJpaConfiguration {
 
-    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private ServedAddressJpaRepository servedAddressJpaRepository;
+    private RestaurantOwnerJpaRepository restaurantOwnerJpaRepository;
+    private RestaurantJpaRepository restaurantJpaRepository;
+    private DishPhotoJpaRepository dishPhotoJpaRepository;
+    private DishCategoryJpaRepository dishCategoryJpaRepository;
+    private DishJpaRepository dishJpaRepository;
+    private DishOpinionJpaRepository dishOpinionJpaRepository;
+    private DishCompositionJpaRepository dishCompositionJpaRepository;
     private OrderJpaRepository orderJpaRepository;
-    private DeliveryServiceJpaRepository deliveryServiceJpaRepository;
     private CustomerJpaRepository customerJpaRepository;
+    private DeliveryServiceJpaRepository deliveryServiceJpaRepository;
+    private DeliveryAddressJpaRepository deliveryAddressJpaRepository;
+    private DeliveryManJpaRepository deliveryManJpaRepository;
     private UserRepository userRepository;
+
+    private final Initializer initializer = new Initializer();
+    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    @BeforeEach
+    void initializeDbData(){
+        initializer.setServedAddressJpaRepository(servedAddressJpaRepository);
+        initializer.setRestaurantOwnerJpaRepository(restaurantOwnerJpaRepository);
+        initializer.setRestaurantJpaRepository(restaurantJpaRepository);
+        initializer.setDishPhotoJpaRepository(dishPhotoJpaRepository);
+        initializer.setDishCategoryJpaRepository(dishCategoryJpaRepository);
+        initializer.setDishJpaRepository(dishJpaRepository);
+        initializer.setDishOpinionJpaRepository(dishOpinionJpaRepository);
+        initializer.setDishCompositionJpaRepository(dishCompositionJpaRepository);
+        initializer.setOrderJpaRepository(orderJpaRepository);
+        initializer.setCustomerJpaRepository(customerJpaRepository);
+        initializer.setDeliveryServiceJpaRepository(deliveryServiceJpaRepository);
+        initializer.setDeliveryAddressJpaRepository(deliveryAddressJpaRepository);
+        initializer.setDeliveryManJpaRepository(deliveryManJpaRepository);
+        initializer.setUserRepository(userRepository);
+
+        initializer.initializedBData();
+    }
 
     @Test
     void thatOrderCanBeSavedCorrectly() {
@@ -41,46 +69,14 @@ class OrderRepositoryTest extends MyJpaConfiguration {
         OrderEntity order2 = someOrder2();
         OrderEntity order3 = someOrder3();
 
-        DeliveryServiceEntity deliveryService1 = someDeliveryService1();
-        DeliveryServiceEntity deliveryService2 = someDeliveryService2();
-        DeliveryServiceEntity deliveryService3 = someDeliveryService3();
-
-        CustomerEntity customer1 = someCustomer1();
-        CustomerEntity customer2 = someCustomer2();
-        CustomerEntity customer3 = someCustomer3();
-
-        order1.setDeliveryService(deliveryService1);
-        order2.setDeliveryService(deliveryService2);
-        order3.setDeliveryService(deliveryService3);
-
-        order1.setCustomer(customer1);
-        order2.setCustomer(customer2);
-        order3.setCustomer(customer3);
+        String orderCode1 = order1.getOrderCode();
+        String orderCode2 = order1.getOrderCode();
+        String orderCode3 = order1.getOrderCode();
 
         //when
-        userRepository.save(deliveryService1.getDeliveryMan().getUser());
-        userRepository.save(deliveryService2.getDeliveryMan().getUser());
-        userRepository.save(deliveryService3.getDeliveryMan().getUser());
-
-        userRepository.save(customer1.getUser());
-        userRepository.save(customer2.getUser());
-        userRepository.save(customer3.getUser());
-
-        deliveryServiceJpaRepository.save(deliveryService1);
-        deliveryServiceJpaRepository.save(deliveryService2);
-        deliveryServiceJpaRepository.save(deliveryService3);
-
-        customerJpaRepository.save(customer1);
-        customerJpaRepository.save(customer2);
-        customerJpaRepository.save(customer3);
-
-        orderJpaRepository.save(order1);
-        orderJpaRepository.save(order2);
-        orderJpaRepository.save(order3);
-
-        OrderEntity orderFromDb1 = orderJpaRepository.findByOrderCode(order1.getOrderCode()).orElseThrow();
-        OrderEntity orderFromDb2 = orderJpaRepository.findByOrderCode(order2.getOrderCode()).orElseThrow();
-        OrderEntity orderFromDb3 = orderJpaRepository.findByOrderCode(order3.getOrderCode()).orElseThrow();
+        OrderEntity orderFromDb1 = orderJpaRepository.findByOrderCode(orderCode1).orElseThrow();
+        OrderEntity orderFromDb2 = orderJpaRepository.findByOrderCode(orderCode2).orElseThrow();
+        OrderEntity orderFromDb3 = orderJpaRepository.findByOrderCode(orderCode3).orElseThrow();
 
         List<OrderEntity> orders = orderJpaRepository.findAll();
 
@@ -106,24 +102,13 @@ class OrderRepositoryTest extends MyJpaConfiguration {
     @Test
     void thatOrderCompletedTimeIsSavedCorrectly() {
         // given
-        OrderEntity order1 = someOrder1();
-        DeliveryServiceEntity deliveryService1 = someDeliveryService1();
-        CustomerEntity customer1 = someCustomer1();
-        order1.setDeliveryService(deliveryService1);
-
-        order1.setCustomer(customer1);
-        OffsetDateTime completedDateTime = OffsetDateTime.of(2024, 2, 15, 17, 30, 10, 10, ZoneOffset.of("Z"));
+        String orderCode = someOrder1().getOrderCode();
+        OffsetDateTime completedDateTime = OffsetDateTime.
+                of(2024, 2, 15, 17, 30, 10, 10, ZoneOffset.ofHours(1));
 
         //when
-        userRepository.save(deliveryService1.getDeliveryMan().getUser());
-        userRepository.save(customer1.getUser());
-
-        deliveryServiceJpaRepository.save(deliveryService1);
-        customerJpaRepository.save(customer1);
-
-        orderJpaRepository.save(order1);
-        orderJpaRepository.reportCompletedDateTime(completedDateTime, order1.getOrderCode());
-        OrderEntity orderFromDb1 = orderJpaRepository.findByOrderCode(order1.getOrderCode()).orElseThrow();
+        orderJpaRepository.reportCompletedDateTime(completedDateTime, orderCode);
+        OrderEntity orderFromDb1 = orderJpaRepository.findByOrderCode(orderCode).orElseThrow();
 
         //then
         assertEquals(completedDateTime.format(FORMATTER), orderFromDb1.getCompletedDateTime().format(FORMATTER));

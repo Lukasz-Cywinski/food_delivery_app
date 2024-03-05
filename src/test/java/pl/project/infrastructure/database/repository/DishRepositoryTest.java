@@ -2,18 +2,16 @@ package pl.project.infrastructure.database.repository;
 
 import lombok.AllArgsConstructor;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.DishCategoryEntity;
 import pl.project.infrastructure.database.entity.DishEntity;
 import pl.project.infrastructure.database.entity.DishPhotoEntity;
-import pl.project.infrastructure.database.entity.RestaurantEntity;
+import pl.project.infrastructure.database.repository.jpa.*;
 import pl.project.infrastructure.security.db.UserRepository;
+import pl.project.integration.configuration.Initializer;
 import pl.project.integration.configuration.MyJpaConfiguration;
-import pl.project.infrastructure.database.repository.jpa.DishCategoryJpaRepository;
-import pl.project.infrastructure.database.repository.jpa.DishJpaRepository;
-import pl.project.infrastructure.database.repository.jpa.DishPhotoJpaRepository;
-import pl.project.infrastructure.database.repository.jpa.RestaurantJpaRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,141 +19,88 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static pl.project.util.db.DishCategoryInstance.*;
 import static pl.project.util.db.DishInstance.*;
-import static pl.project.util.db.DishPhotoInstance.*;
-import static pl.project.util.db.RestaurantInstance.*;
+import static pl.project.util.db.DishPhotoInstance.someDishPhoto2;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 class DishRepositoryTest extends MyJpaConfiguration {
 
-    private DishJpaRepository dishJpaRepository;
+    private ServedAddressJpaRepository servedAddressJpaRepository;
+    private RestaurantOwnerJpaRepository restaurantOwnerJpaRepository;
+    private RestaurantJpaRepository restaurantJpaRepository;
     private DishPhotoJpaRepository dishPhotoJpaRepository;
     private DishCategoryJpaRepository dishCategoryJpaRepository;
-    private RestaurantJpaRepository restaurantJpaRepository;
+    private DishJpaRepository dishJpaRepository;
+    private DishOpinionJpaRepository dishOpinionJpaRepository;
+    private DishCompositionJpaRepository dishCompositionJpaRepository;
+    private OrderJpaRepository orderJpaRepository;
+    private CustomerJpaRepository customerJpaRepository;
+    private DeliveryServiceJpaRepository deliveryServiceJpaRepository;
+    private DeliveryAddressJpaRepository deliveryAddressJpaRepository;
+    private DeliveryManJpaRepository deliveryManJpaRepository;
     private UserRepository userRepository;
+
+    private final Initializer initializer = new Initializer();
+
+    @BeforeEach
+    void initializeDbData(){
+        initializer.setServedAddressJpaRepository(servedAddressJpaRepository);
+        initializer.setRestaurantOwnerJpaRepository(restaurantOwnerJpaRepository);
+        initializer.setRestaurantJpaRepository(restaurantJpaRepository);
+        initializer.setDishPhotoJpaRepository(dishPhotoJpaRepository);
+        initializer.setDishCategoryJpaRepository(dishCategoryJpaRepository);
+        initializer.setDishJpaRepository(dishJpaRepository);
+        initializer.setDishOpinionJpaRepository(dishOpinionJpaRepository);
+        initializer.setDishCompositionJpaRepository(dishCompositionJpaRepository);
+        initializer.setOrderJpaRepository(orderJpaRepository);
+        initializer.setCustomerJpaRepository(customerJpaRepository);
+        initializer.setDeliveryServiceJpaRepository(deliveryServiceJpaRepository);
+        initializer.setDeliveryAddressJpaRepository(deliveryAddressJpaRepository);
+        initializer.setDeliveryManJpaRepository(deliveryManJpaRepository);
+        initializer.setUserRepository(userRepository);
+
+        initializer.initializedBData();
+    }
 
     @Test
     void thatDishCanBeSavedCorrectly(){
         //given
-        RestaurantEntity restaurant1 = someRestaurant1();
-        RestaurantEntity restaurant2 = someRestaurant2();
-        RestaurantEntity restaurant3 = someRestaurant3();
-
-        DishPhotoEntity dishPhoto1 = someDishPhoto1();
-        DishPhotoEntity dishPhoto2 = someDishPhoto2();
-        DishPhotoEntity dishPhoto3 = someDishPhoto3();
-
-        DishCategoryEntity dishCategory1 = someDishCategory1();
-        DishCategoryEntity dishCategory2 = someDishCategory2();
-        DishCategoryEntity dishCategory3 = someDishCategory3();
-
         DishEntity dish1 = someDish1();
         DishEntity dish2 = someDish2();
         DishEntity dish3 = someDish3();
 
-        dish1.setRestaurant(restaurant1);
-        dish1.setDishPhoto(dishPhoto1);
-        dish1.setDishCategory(dishCategory1);
-
-        dish2.setRestaurant(restaurant2);
-        dish2.setDishPhoto(dishPhoto2);
-        dish2.setDishCategory(dishCategory2);
-
-        dish3.setRestaurant(restaurant3);
-        dish3.setDishPhoto(dishPhoto3);
-        dish3.setDishCategory(dishCategory3);
+        String dishCode1 = someDish1().getDishCode();
+        String dishCode2 = someDish2().getDishCode();
+        String dishCode3 = someDish3().getDishCode();
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-        userRepository.save(restaurant2.getRestaurantOwner().getUser());
-        userRepository.save(restaurant3.getRestaurantOwner().getUser());
+        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dishCode1).orElseThrow();
+        DishEntity dishFromDb2 = dishJpaRepository.findByDishCode(dishCode2).orElseThrow();
+        DishEntity dishFromDb3 = dishJpaRepository.findByDishCode(dishCode3).orElseThrow();
 
-        restaurantJpaRepository.save(restaurant1);
-        restaurantJpaRepository.save(restaurant2);
-        restaurantJpaRepository.save(restaurant3);
-
-        dishPhotoJpaRepository.save(dishPhoto1);
-        dishPhotoJpaRepository.save(dishPhoto2);
-        dishPhotoJpaRepository.save(dishPhoto3);
-
-        dishCategoryJpaRepository.save(dishCategory1);
-        dishCategoryJpaRepository.save(dishCategory2);
-        dishCategoryJpaRepository.save(dishCategory3);
-
-        dishJpaRepository.save(dish1);
-        dishJpaRepository.save(dish2);
-        dishJpaRepository.save(dish3);
-
-        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dish1.getDishCode()).orElseThrow();
-        DishEntity dishFromDb2 = dishJpaRepository.findByDishCode(dish2.getDishCode()).orElseThrow();
-        DishEntity dishFromDb3 = dishJpaRepository.findByDishCode(dish3.getDishCode()).orElseThrow();
-
-        List<DishEntity> dishes = dishJpaRepository.findAll();
+        List<DishEntity> dishesFromDb1 = dishJpaRepository.findAll();
+        List<DishEntity> dishesFromDb2 = List.of(dishFromDb1, dishFromDb2, dishFromDb3);
 
         //then
-                //first
-        assertThat(dishFromDb1)
-                .usingRecursiveComparison()
-                .ignoringFields("id", "restaurant", "dishPhoto", "dishCategory")
-                .isEqualTo(dish1);
+        assertThat(dishesFromDb1)
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "restaurant", "dishPhoto", "dishCategory")
+                .contains(dish1, dish2, dish3);
+        assertThat(dishesFromDb2)
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "restaurant", "dishPhoto", "dishCategory")
+                .contains(dish1, dish2, dish3);
 
-        assertThat(dishFromDb1)
-                .usingRecursiveComparison()
-                .comparingOnlyFields("restaurant", "dishPhoto", "dishCategory")
-                .isNotNull();
-
-                //second
-        assertThat(dishFromDb2)
-                .usingRecursiveComparison()
-                .ignoringFields("id", "restaurant", "dishPhoto", "dishCategory")
-                .isEqualTo(dish2);
-
-        assertThat(dishFromDb2)
-                .usingRecursiveComparison()
-                .comparingOnlyFields("restaurant", "dishPhoto", "dishCategory")
-                .isNotNull();
-
-                //third
-        assertThat(dishFromDb3)
-                .usingRecursiveComparison()
-                .ignoringFields("id", "restaurant", "dishPhoto", "dishCategory")
-                .isEqualTo(dish3);
-
-        assertThat(dishFromDb3)
-                .usingRecursiveComparison()
-                .comparingOnlyFields("restaurant", "dishPhoto", "dishCategory")
-                .isNotNull();
-
-                //all
-        assertEquals(3, dishes.size());
+        assertEquals(3, dishesFromDb1.size());
     }
 
     @Test
     void thatDishNameCanBeModifiedCorrectly(){
         //given
-        RestaurantEntity restaurant1 = someRestaurant1();
-        DishPhotoEntity dishPhoto1 = someDishPhoto1();
-        DishCategoryEntity dishCategory1 = someDishCategory1();
-        DishEntity dish1 = someDish1();
-
-        dish1.setRestaurant(restaurant1);
-        dish1.setDishPhoto(dishPhoto1);
-        dish1.setDishCategory(dishCategory1);
-
+        String dishCode = someDish1().getDishCode();
         String newName = "new name";
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-        dishPhotoJpaRepository.save(dishPhoto1);
-        dishCategoryJpaRepository.save(dishCategory1);
-        dishJpaRepository.save(dish1);
-
-        dishJpaRepository.changeDishName(newName, dish1.getDishCode());
-
-        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dish1.getDishCode()).orElseThrow();
+        dishJpaRepository.changeDishName(newName, dishCode);
+        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dishCode).orElseThrow();
 
         //then
         assertEquals(newName, dishFromDb1.getName());
@@ -164,28 +109,12 @@ class DishRepositoryTest extends MyJpaConfiguration {
     @Test
     void thatDishDescriptionCanBeModifiedCorrectly(){
         //given
-        RestaurantEntity restaurant1 = someRestaurant1();
-        DishPhotoEntity dishPhoto1 = someDishPhoto1();
-        DishCategoryEntity dishCategory1 = someDishCategory1();
-        DishEntity dish1 = someDish1();
-
-        dish1.setRestaurant(restaurant1);
-        dish1.setDishPhoto(dishPhoto1);
-        dish1.setDishCategory(dishCategory1);
-
+        String dishCode = someDish1().getDishCode();
         String newDescription = "new description";
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-        dishPhotoJpaRepository.save(dishPhoto1);
-        dishCategoryJpaRepository.save(dishCategory1);
-        dishJpaRepository.save(dish1);
-
-        dishJpaRepository.changeDishDescription(newDescription, dish1.getDishCode());
-
-        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dish1.getDishCode()).orElseThrow();
+        dishJpaRepository.changeDishDescription(newDescription, dishCode);
+        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dishCode).orElseThrow();
 
         //then
         assertEquals(newDescription, dishFromDb1.getDescription());
@@ -194,28 +123,12 @@ class DishRepositoryTest extends MyJpaConfiguration {
     @Test
     void thatDishPriceCanBeModifiedCorrectly(){
         //given
-        RestaurantEntity restaurant1 = someRestaurant1();
-        DishPhotoEntity dishPhoto1 = someDishPhoto1();
-        DishCategoryEntity dishCategory1 = someDishCategory1();
-        DishEntity dish1 = someDish1();
-
-        dish1.setRestaurant(restaurant1);
-        dish1.setDishPhoto(dishPhoto1);
-        dish1.setDishCategory(dishCategory1);
-
+        String dishCode = someDish1().getDishCode();
         BigDecimal newPrice = BigDecimal.TEN.setScale(2, RoundingMode.HALF_UP);
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-        dishPhotoJpaRepository.save(dishPhoto1);
-        dishCategoryJpaRepository.save(dishCategory1);
-        dishJpaRepository.save(dish1);
-
-        dishJpaRepository.changeDishPrice(newPrice, dish1.getDishCode());
-
-        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dish1.getDishCode()).orElseThrow();
+        dishJpaRepository.changeDishPrice(newPrice, dishCode);
+        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dishCode).orElseThrow();
 
         //then
         assertEquals(newPrice, dishFromDb1.getPrice());
@@ -224,28 +137,12 @@ class DishRepositoryTest extends MyJpaConfiguration {
     @Test
     void thatDishPreparationTimeCanBeModifiedCorrectly(){
         //given
-        RestaurantEntity restaurant1 = someRestaurant1();
-        DishPhotoEntity dishPhoto1 = someDishPhoto1();
-        DishCategoryEntity dishCategory1 = someDishCategory1();
-        DishEntity dish1 = someDish1();
-
-        dish1.setRestaurant(restaurant1);
-        dish1.setDishPhoto(dishPhoto1);
-        dish1.setDishCategory(dishCategory1);
-
+        String dishCode = someDish1().getDishCode();
         Integer newPreparationTime = 100;
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-        dishPhotoJpaRepository.save(dishPhoto1);
-        dishCategoryJpaRepository.save(dishCategory1);
-        dishJpaRepository.save(dish1);
-
-        dishJpaRepository.changeDishPreparationTime(newPreparationTime, dish1.getDishCode());
-
-        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dish1.getDishCode()).orElseThrow();
+        dishJpaRepository.changeDishPreparationTime(newPreparationTime, dishCode);
+        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dishCode).orElseThrow();
 
         //then
         assertEquals(newPreparationTime, dishFromDb1.getAveragePreparationTimeMin());
@@ -254,29 +151,14 @@ class DishRepositoryTest extends MyJpaConfiguration {
     @Test
     void thatDishPhotoCanBeModifiedCorrectly(){
         //given
-        RestaurantEntity restaurant1 = someRestaurant1();
-        DishPhotoEntity dishPhoto1 = someDishPhoto1();
-        DishCategoryEntity dishCategory1 = someDishCategory1();
-        DishEntity dish1 = someDish1();
-
-        dish1.setRestaurant(restaurant1);
-        dish1.setDishPhoto(dishPhoto1);
-        dish1.setDishCategory(dishCategory1);
-
+        String dishCode = someDish1().getDishCode();
         DishPhotoEntity newDishPhoto = someDishPhoto2();
+        newDishPhoto.setUrl("XXXXX");
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-        dishPhotoJpaRepository.save(dishPhoto1);
-        dishCategoryJpaRepository.save(dishCategory1);
-        dishJpaRepository.save(dish1);
-
         dishPhotoJpaRepository.save(newDishPhoto);
-        dishJpaRepository.changeDishPhoto(newDishPhoto, dish1.getDishCode());
-
-        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dish1.getDishCode()).orElseThrow();
+        dishJpaRepository.changeDishPhoto(newDishPhoto, dishCode);
+        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dishCode).orElseThrow();
 
         //then
         assertEquals(newDishPhoto.getUrl(), dishFromDb1.getDishPhoto().getUrl());
@@ -285,29 +167,12 @@ class DishRepositoryTest extends MyJpaConfiguration {
     @Test
     void thatDishCategoryCanBeModifiedCorrectly(){
         //given
-        RestaurantEntity restaurant1 = someRestaurant1();
-        DishPhotoEntity dishPhoto1 = someDishPhoto1();
-        DishCategoryEntity dishCategory1 = someDishCategory1();
-        DishEntity dish1 = someDish1();
-
-        dish1.setRestaurant(restaurant1);
-        dish1.setDishPhoto(dishPhoto1);
-        dish1.setDishCategory(dishCategory1);
-
-        DishCategoryEntity newDishCategory = someDishCategory2();
+        String dishCode = someDish1().getDishCode();
+        DishCategoryEntity newDishCategory = initializer.SAVED_DISH_CATEGORIES.get(1);
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-        dishPhotoJpaRepository.save(dishPhoto1);
-        dishCategoryJpaRepository.save(dishCategory1);
-        dishJpaRepository.save(dish1);
-
-        dishCategoryJpaRepository.save(newDishCategory);
-        dishJpaRepository.changeDishCategory(newDishCategory, dish1.getDishCode());
-
-        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dish1.getDishCode()).orElseThrow();
+        dishJpaRepository.changeDishCategory(newDishCategory, dishCode);
+        DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dishCode).orElseThrow();
 
         //then
         Assertions.assertThat(newDishCategory)
@@ -318,59 +183,11 @@ class DishRepositoryTest extends MyJpaConfiguration {
 
     @Test
     void isDishDeactivatedCorrectly(){
-
         //given
-        RestaurantEntity restaurant1 = someRestaurant1();
-        RestaurantEntity restaurant2 = someRestaurant2();
-        RestaurantEntity restaurant3 = someRestaurant3();
-
-        DishPhotoEntity dishPhoto1 = someDishPhoto1();
-        DishPhotoEntity dishPhoto2 = someDishPhoto2();
-        DishPhotoEntity dishPhoto3 = someDishPhoto3();
-
-        DishCategoryEntity dishCategory1 = someDishCategory1();
-        DishCategoryEntity dishCategory2 = someDishCategory2();
-        DishCategoryEntity dishCategory3 = someDishCategory3();
-
-        DishEntity dish1 = someDish1();
-        DishEntity dish2 = someDish2();
-        DishEntity dish3 = someDish3();
-
-        dish1.setRestaurant(restaurant1);
-        dish1.setDishPhoto(dishPhoto1);
-        dish1.setDishCategory(dishCategory1);
-
-        dish2.setRestaurant(restaurant2);
-        dish2.setDishPhoto(dishPhoto2);
-        dish2.setDishCategory(dishCategory2);
-
-        dish3.setRestaurant(restaurant3);
-        dish3.setDishPhoto(dishPhoto3);
-        dish3.setDishCategory(dishCategory3);
+        String dishCode = someDish1().getDishCode();
 
         //when
-        userRepository.save(restaurant1.getRestaurantOwner().getUser());
-        userRepository.save(restaurant2.getRestaurantOwner().getUser());
-        userRepository.save(restaurant3.getRestaurantOwner().getUser());
-
-        restaurantJpaRepository.save(restaurant1);
-        restaurantJpaRepository.save(restaurant2);
-        restaurantJpaRepository.save(restaurant3);
-
-        dishPhotoJpaRepository.save(dishPhoto1);
-        dishPhotoJpaRepository.save(dishPhoto2);
-        dishPhotoJpaRepository.save(dishPhoto3);
-
-        dishCategoryJpaRepository.save(dishCategory1);
-        dishCategoryJpaRepository.save(dishCategory2);
-        dishCategoryJpaRepository.save(dishCategory3);
-
-        dishJpaRepository.save(dish1);
-        dishJpaRepository.save(dish2);
-        dishJpaRepository.save(dish3);
-
-        dishJpaRepository.deactivate(dish3.getDishCode());
-
+        dishJpaRepository.deactivate(dishCode);
         List<DishEntity> activeDishes = dishJpaRepository.findActive();
 
         // then
