@@ -23,3 +23,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   security:
     enabled: true
+  mvc:
+    hiddenMethod:
+      filter:
+        enabled: true

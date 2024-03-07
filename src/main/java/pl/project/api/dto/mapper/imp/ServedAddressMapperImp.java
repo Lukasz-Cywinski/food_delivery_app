@@ -8,6 +8,8 @@ import pl.project.api.dto.mapper.RestaurantMapper;
 import pl.project.api.dto.mapper.ServedAddressMapper;
 import pl.project.domain.model.ServedAddress;
 
+import java.util.Objects;
+
 @Component
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class ServedAddressMapperImp implements ServedAddressMapper {
@@ -20,7 +22,8 @@ public class ServedAddressMapperImp implements ServedAddressMapper {
                 .id(domainObj.getId())
                 .city(domainObj.getCity())
                 .street(domainObj.getStreet())
-                .restaurant(restaurantMapper.mapToDTO(domainObj.getRestaurant()))
+                .restaurant(Objects.isNull(domainObj.getRestaurant()) ?
+                        null : restaurantMapper.mapToDTO(domainObj.getRestaurant()))
                 .build();
     }
 
@@ -30,7 +33,8 @@ public class ServedAddressMapperImp implements ServedAddressMapper {
                 .id(dto.getId())
                 .city(dto.getCity())
                 .street(dto.getStreet())
-                .restaurant(restaurantMapper.mapFromDTO(dto.getRestaurant()))
+                .restaurant(Objects.isNull(dto.getRestaurant()) ?
+                        null : restaurantMapper.mapFromDTO(dto.getRestaurant()))
                 .build();
     }
 }

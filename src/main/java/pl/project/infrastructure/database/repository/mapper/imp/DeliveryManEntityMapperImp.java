@@ -9,6 +9,8 @@ import pl.project.infrastructure.database.entity.DeliveryManEntity;
 import pl.project.infrastructure.database.repository.mapper.DeliveryManEntityMapper;
 import pl.project.infrastructure.security.db.mapper.UserEntityMapper;
 
+import java.util.Objects;
+
 @Component
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class DeliveryManEntityMapperImp implements DeliveryManEntityMapper {
@@ -24,7 +26,8 @@ public class DeliveryManEntityMapperImp implements DeliveryManEntityMapper {
                 .phoneNumber(entity.getPhoneNumber())
                 .isAvailable(entity.isAvailable())
                 .isActive(entity.isActive())
-                .user(userEntityMapper.mapFromEntity(entity.getUser()))
+                .user(Objects.isNull(entity.getUser()) ?
+                        null : userEntityMapper.mapFromEntity(entity.getUser()))
                 .build();
     }
 
@@ -37,7 +40,8 @@ public class DeliveryManEntityMapperImp implements DeliveryManEntityMapper {
                 .phoneNumber(domainObj.getPhoneNumber())
                 .isAvailable(domainObj.isAvailable())
                 .isActive(domainObj.isActive())
-                .user(userEntityMapper.mapToEntity(domainObj.getUser()))
+                .user(Objects.isNull(domainObj.getUser()) ?
+                        null : userEntityMapper.mapToEntity(domainObj.getUser()))
                 .build();
     }
 }

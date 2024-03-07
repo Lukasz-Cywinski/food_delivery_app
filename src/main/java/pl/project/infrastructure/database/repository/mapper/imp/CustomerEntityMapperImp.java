@@ -10,6 +10,8 @@ import pl.project.infrastructure.database.repository.mapper.CustomerEntityMapper
 import pl.project.infrastructure.database.repository.mapper.DeliveryAddressEntityMapper;
 import pl.project.infrastructure.security.db.mapper.UserEntityMapper;
 
+import java.util.Objects;
+
 @Component
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class CustomerEntityMapperImp implements CustomerEntityMapper {
@@ -24,9 +26,11 @@ public class CustomerEntityMapperImp implements CustomerEntityMapper {
                 .surname(entity.getSurname())
                 .phoneNumber(entity.getPhoneNumber())
                 .email(entity.getEmail())
-                .deliveryAddress(deliveryAddressEntityMapper.mapFromEntity(entity.getDeliveryAddress()))
+                .deliveryAddress(Objects.isNull(entity.getDeliveryAddress()) ?
+                        null : deliveryAddressEntityMapper.mapFromEntity(entity.getDeliveryAddress()))
                 .isActive(entity.isActive())
-                .user(userEntityMapper.mapFromEntity(entity.getUser()))
+                .user(Objects.isNull(entity.getUser()) ?
+                        null : userEntityMapper.mapFromEntity(entity.getUser()))
                 .build();
     }
 
@@ -37,9 +41,11 @@ public class CustomerEntityMapperImp implements CustomerEntityMapper {
                 .surname(domainObj.getSurname())
                 .phoneNumber(domainObj.getPhoneNumber())
                 .email(domainObj.getEmail())
-                .deliveryAddress(deliveryAddressEntityMapper.mapToEntity(domainObj.getDeliveryAddress()))
+                .deliveryAddress(Objects.isNull(domainObj.getDeliveryAddress()) ?
+                        null : deliveryAddressEntityMapper.mapToEntity(domainObj.getDeliveryAddress()))
                 .isActive(domainObj.isActive())
-                .user(userEntityMapper.mapToEntity(domainObj.getUser()))
+                .user(Objects.isNull(domainObj.getUser()) ?
+                        null : userEntityMapper.mapToEntity(domainObj.getUser()))
                 .build();
     }
 

@@ -8,6 +8,8 @@ import pl.project.infrastructure.database.entity.DeliveryServiceEntity;
 import pl.project.infrastructure.database.repository.mapper.DeliveryManEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.DeliveryServiceEntityMapper;
 
+import java.util.Objects;
+
 @Component
 @AllArgsConstructor
 public class DeliveryServiceEntityMapperImp implements DeliveryServiceEntityMapper {
@@ -20,7 +22,8 @@ public class DeliveryServiceEntityMapperImp implements DeliveryServiceEntityMapp
                 .deliveryServiceCode(entity.getDeliveryServiceCode())
                 .receivedDateTime(entity.getReceivedDateTime())
                 .completedDateTime(entity.getCompletedDateTime())
-                .deliveryMan(deliveryManEntityMapper.mapFromEntity(entity.getDeliveryMan()))
+                .deliveryMan(Objects.isNull(entity.getDeliveryMan()) ?
+                        null : deliveryManEntityMapper.mapFromEntity(entity.getDeliveryMan()))
                 .build();
     }
 
@@ -30,7 +33,8 @@ public class DeliveryServiceEntityMapperImp implements DeliveryServiceEntityMapp
                 .deliveryServiceCode(domainObj.getDeliveryServiceCode())
                 .receivedDateTime(domainObj.getReceivedDateTime())
                 .completedDateTime(domainObj.getCompletedDateTime())
-                .deliveryMan(deliveryManEntityMapper.mapToEntity(domainObj.getDeliveryMan()))
+                .deliveryMan(Objects.isNull(domainObj.getDeliveryMan()) ?
+                        null : deliveryManEntityMapper.mapToEntity(domainObj.getDeliveryMan()))
                 .build();
     }
 }

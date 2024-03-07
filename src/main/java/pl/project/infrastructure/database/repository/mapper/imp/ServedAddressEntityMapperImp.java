@@ -8,6 +8,8 @@ import pl.project.infrastructure.database.entity.ServedAddressEntity;
 import pl.project.infrastructure.database.repository.mapper.RestaurantEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.ServedAddressEntityMapper;
 
+import java.util.Objects;
+
 @Component
 @AllArgsConstructor
 public class ServedAddressEntityMapperImp implements ServedAddressEntityMapper {
@@ -19,7 +21,8 @@ public class ServedAddressEntityMapperImp implements ServedAddressEntityMapper {
                 .id(entity.getId())
                 .city(entity.getCity())
                 .street(entity.getStreet())
-                .restaurant(restaurantEntityMapper.mapFromEntity(entity.getRestaurant()))
+                .restaurant(Objects.isNull(entity.getRestaurant()) ?
+                        null : restaurantEntityMapper.mapFromEntity(entity.getRestaurant()))
                 .build();
     }
 
@@ -28,7 +31,8 @@ public class ServedAddressEntityMapperImp implements ServedAddressEntityMapper {
                 .id(domainObj.getId())
                 .city(domainObj.getCity())
                 .street(domainObj.getStreet())
-                .restaurant(restaurantEntityMapper.mapToEntity(domainObj.getRestaurant()))
+                .restaurant(Objects.isNull(domainObj.getRestaurant()) ?
+                        null : restaurantEntityMapper.mapToEntity(domainObj.getRestaurant()))
                 .build();
     }
 }

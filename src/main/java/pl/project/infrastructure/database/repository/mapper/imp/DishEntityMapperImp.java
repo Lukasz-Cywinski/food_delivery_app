@@ -10,6 +10,8 @@ import pl.project.infrastructure.database.repository.mapper.DishEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.DishPhotoEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.RestaurantEntityMapper;
 
+import java.util.Objects;
+
 @Component
 @AllArgsConstructor
 public class DishEntityMapperImp implements DishEntityMapper {
@@ -26,9 +28,12 @@ public class DishEntityMapperImp implements DishEntityMapper {
                 .description(entity.getDescription())
                 .price(entity.getPrice())
                 .averagePreparationTimeMin(entity.getAveragePreparationTimeMin())
-                .restaurant(restaurantEntityMapper.mapFromEntity(entity.getRestaurant()))
-                .dishPhoto(dishPhotoEntityMapper.mapFromEntity(entity.getDishPhoto()))
-                .dishCategory(dishCategoryEntityMapper.mapFromEntity(entity.getDishCategory()))
+                .restaurant(Objects.isNull(entity.getRestaurant()) ?
+                        null : restaurantEntityMapper.mapFromEntity(entity.getRestaurant()))
+                .dishPhoto(Objects.isNull(entity.getDishPhoto()) ?
+                        null : dishPhotoEntityMapper.mapFromEntity(entity.getDishPhoto()))
+                .dishCategory(Objects.isNull(entity.getDishCategory()) ?
+                        null : dishCategoryEntityMapper.mapFromEntity(entity.getDishCategory()))
                 .isActive(entity.isActive())
                 .build();
     }
@@ -41,9 +46,12 @@ public class DishEntityMapperImp implements DishEntityMapper {
                 .description(domainObj.getDescription())
                 .price(domainObj.getPrice())
                 .averagePreparationTimeMin(domainObj.getAveragePreparationTimeMin())
-                .restaurant(restaurantEntityMapper.mapToEntity(domainObj.getRestaurant()))
-                .dishPhoto(dishPhotoEntityMapper.mapToEntity(domainObj.getDishPhoto()))
-                .dishCategory(dishCategoryEntityMapper.mapToEntity(domainObj.getDishCategory()))
+                .restaurant(Objects.isNull(domainObj.getRestaurant()) ?
+                        null : restaurantEntityMapper.mapToEntity(domainObj.getRestaurant()))
+                .dishPhoto(Objects.isNull(domainObj.getDishPhoto()) ?
+                        null : dishPhotoEntityMapper.mapToEntity(domainObj.getDishPhoto()))
+                .dishCategory(Objects.isNull(domainObj.getDishCategory()) ?
+                        null : dishCategoryEntityMapper.mapToEntity(domainObj.getDishCategory()))
                 .isActive(domainObj.isActive())
                 .build();
     }

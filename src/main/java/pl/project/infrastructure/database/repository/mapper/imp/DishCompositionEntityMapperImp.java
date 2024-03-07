@@ -9,6 +9,8 @@ import pl.project.infrastructure.database.repository.mapper.DishCompositionEntit
 import pl.project.infrastructure.database.repository.mapper.DishEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.OrderEntityMapper;
 
+import java.util.Objects;
+
 @Component
 @AllArgsConstructor
 public class DishCompositionEntityMapperImp implements DishCompositionEntityMapper {
@@ -20,8 +22,10 @@ public class DishCompositionEntityMapperImp implements DishCompositionEntityMapp
         return DishComposition.builder()
                 .id(entity.getId())
                 .quantity(entity.getQuantity())
-                .dish(dishEntityMapper.mapFromEntity(entity.getDish()))
-                .order(orderEntityMapper.mapFromEntity(entity.getOrder()))
+                .dish(Objects.isNull(entity.getDish()) ?
+                        null : dishEntityMapper.mapFromEntity(entity.getDish()))
+                .order(Objects.isNull(entity.getOrder()) ?
+                        null : orderEntityMapper.mapFromEntity(entity.getOrder()))
                 .build();
     }
 
@@ -29,8 +33,10 @@ public class DishCompositionEntityMapperImp implements DishCompositionEntityMapp
         return DishCompositionEntity.builder()
                 .id(domainObj.getId())
                 .quantity(domainObj.getQuantity())
-                .dish(dishEntityMapper.mapToEntity(domainObj.getDish()))
-                .order(orderEntityMapper.mapToEntity(domainObj.getOrder()))
+                .dish(Objects.isNull(domainObj.getDish()) ?
+                        null : dishEntityMapper.mapToEntity(domainObj.getDish()))
+                .order(Objects.isNull(domainObj.getOrder()) ?
+                        null : orderEntityMapper.mapToEntity(domainObj.getOrder()))
                 .build();
     }
 }

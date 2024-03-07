@@ -8,6 +8,8 @@ import pl.project.infrastructure.database.repository.mapper.CustomerEntityMapper
 import pl.project.infrastructure.database.repository.mapper.DeliveryServiceEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.OrderEntityMapper;
 
+import java.util.Objects;
+
 @Component
 @AllArgsConstructor
 public class OrderEntityMapperImp implements OrderEntityMapper {
@@ -21,8 +23,10 @@ public class OrderEntityMapperImp implements OrderEntityMapper {
                 .orderCode(entity.getOrderCode())
                 .receivedDateTime(entity.getReceivedDateTime())
                 .completedDateTime(entity.getCompletedDateTime())
-                .customer(customerEntityMapper.mapFromEntity(entity.getCustomer()))
-                .deliveryService(deliveryServiceEntityMapper.mapFromEntity(entity.getDeliveryService()))
+                .customer(Objects.isNull(entity.getCustomer()) ?
+                        null : customerEntityMapper.mapFromEntity(entity.getCustomer()))
+                .deliveryService(Objects.isNull(entity.getDeliveryService()) ?
+                        null : deliveryServiceEntityMapper.mapFromEntity(entity.getDeliveryService()))
                 .build();
     }
 
@@ -32,8 +36,10 @@ public class OrderEntityMapperImp implements OrderEntityMapper {
                 .orderCode(domainObj.getOrderCode())
                 .receivedDateTime(domainObj.getReceivedDateTime())
                 .completedDateTime(domainObj.getCompletedDateTime())
-                .customer(customerEntityMapper.mapToEntity(domainObj.getCustomer()))
-                .deliveryService(deliveryServiceEntityMapper.mapToEntity(domainObj.getDeliveryService()))
+                .customer(Objects.isNull(domainObj.getCustomer()) ?
+                        null : customerEntityMapper.mapToEntity(domainObj.getCustomer()))
+                .deliveryService(Objects.isNull(domainObj.getDeliveryService()) ?
+                        null : deliveryServiceEntityMapper.mapToEntity(domainObj.getDeliveryService()))
                 .build();
     }
 }

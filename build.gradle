@@ -48,6 +48,12 @@ dependencies {
 
 	// other
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+//	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation:3.2.3'
+
+
 }
 
 test {

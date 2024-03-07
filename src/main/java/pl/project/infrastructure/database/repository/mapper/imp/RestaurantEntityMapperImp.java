@@ -8,6 +8,8 @@ import pl.project.infrastructure.database.entity.RestaurantEntity;
 import pl.project.infrastructure.database.repository.mapper.RestaurantEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.RestaurantOwnerEntityMapper;
 
+import java.util.Objects;
+
 @Component
 @AllArgsConstructor
 public class RestaurantEntityMapperImp implements RestaurantEntityMapper {
@@ -20,7 +22,8 @@ public class RestaurantEntityMapperImp implements RestaurantEntityMapper {
                 .restaurantCode(entity.getRestaurantCode())
                 .name(entity.getName())
                 .added(entity.getAdded())
-                .restaurantOwner(restaurantOwnerEntityMapper.mapFromEntity(entity.getRestaurantOwner()))
+                .restaurantOwner(Objects.isNull(entity.getRestaurantOwner()) ?
+                        null : restaurantOwnerEntityMapper.mapFromEntity(entity.getRestaurantOwner()))
                 .isActive(entity.isActive())
                 .build();
     }
@@ -31,7 +34,8 @@ public class RestaurantEntityMapperImp implements RestaurantEntityMapper {
                 .restaurantCode(domainObj.getRestaurantCode())
                 .name(domainObj.getName())
                 .added(domainObj.getAdded())
-                .restaurantOwner(restaurantOwnerEntityMapper.mapToEntity(domainObj.getRestaurantOwner()))
+                .restaurantOwner(Objects.isNull(domainObj.getRestaurantOwner()) ?
+                        null : restaurantOwnerEntityMapper.mapToEntity(domainObj.getRestaurantOwner()))
                 .isActive(domainObj.isActive())
                 .build();
     }

@@ -9,6 +9,8 @@ import pl.project.infrastructure.database.repository.mapper.CustomerEntityMapper
 import pl.project.infrastructure.database.repository.mapper.DishEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.DishOpinionEntityMapper;
 
+import java.util.Objects;
+
 @Component
 @AllArgsConstructor
 public class DishOpinionEntityMapperImp implements DishOpinionEntityMapper {
@@ -21,8 +23,10 @@ public class DishOpinionEntityMapperImp implements DishOpinionEntityMapper {
                 .id(entity.getId())
                 .opinion(entity.getOpinion())
                 .productEvaluation(entity.getProductEvaluation())
-                .dish(dishEntityMapper.mapFromEntity(entity.getDish()))
-                .customer(customerEntityMapper.mapFromEntity(entity.getCustomer()))
+                .dish(Objects.isNull(entity.getDish()) ?
+                        null : dishEntityMapper.mapFromEntity(entity.getDish()))
+                .customer(Objects.isNull(entity.getCustomer()) ?
+                        null : customerEntityMapper.mapFromEntity(entity.getCustomer()))
                 .build();
     }
 
@@ -31,8 +35,10 @@ public class DishOpinionEntityMapperImp implements DishOpinionEntityMapper {
                 .id(domainObj.getId())
                 .opinion(domainObj.getOpinion())
                 .productEvaluation(domainObj.getProductEvaluation())
-                .dish(dishEntityMapper.mapToEntity(domainObj.getDish()))
-                .customer(customerEntityMapper.mapToEntity(domainObj.getCustomer()))
+                .dish(Objects.isNull(domainObj.getDish()) ?
+                        null : dishEntityMapper.mapToEntity(domainObj.getDish()))
+                .customer(Objects.isNull(domainObj.getCustomer()) ?
+                        null : customerEntityMapper.mapToEntity(domainObj.getCustomer()))
                 .build();
     }
 }
