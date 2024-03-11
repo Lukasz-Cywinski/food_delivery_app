@@ -31,7 +31,7 @@ public class SecurityConfiguration {
     private final Map<String, String[]> requestMatcherPatterns = Map.of(
             AUTHORITY_ALL, new String[] {"/", "/login", "/error", "/registration/**"},
             AUTHORITY_CUSTOMER, new String[] {"/customer/**"},
-            AUTHORITY_RESTAURANT_OWNER, new String[] {"/restaurant_owner/**"},
+            AUTHORITY_RESTAURANT_OWNER, new String[] {"/restaurant_owner/**", "/images/**"},
             AUTHORITY_DELIVERY_MAN, new String[] {"/delivery_man/**"},
             AUTHORITY_REST_API, new String[] {"/rest_api/**"},
             AUTHORITY_ADMIN, new String[] {"/admin/**"}

@@ -8,5 +8,7 @@ public interface DishPhotoDAO {
 
     Optional<DishPhoto> createDishPhoto(DishPhoto dishPhoto);
 
+    void deleteDishPhoto (DishPhoto dishPhoto);
+
     Integer changePhotoName(String newPhotoName, Integer dishPhotoId);
 }

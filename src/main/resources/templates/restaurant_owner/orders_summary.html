@@ -9,7 +9,6 @@
     <title>Restaurant update</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/navbar-static/">
-    <!--    <link href="../bootstrap-templates/assets/dist/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
@@ -30,10 +29,6 @@
           }
         }
     </style>
-
-
-    <!-- Custom styles for this template -->
-    <!--    <link href="navbar-top.css" rel="stylesheet">-->
 </head>
 <body style="background-color:rgb(190,190,190);">
 
@@ -42,6 +37,18 @@
         <h5 class="navbar-brand">Actions:</h5>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a th:href="@{/restaurant_owner/restaurant_management}" class="nav-link">Restaurant management</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/restaurant_owner/menu_management}" class="nav-link">Menu management</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/restaurant_owner/user_management}" class="nav-link">User management</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/restaurant_owner/orders_summary}" class="nav-link">Orders summary</a>
+                </li>
             </ul>
             <form class="d-flex">
                 <a th:href="@{/restaurant_owner}" class="btn btn-outline-info" role="button">Owner Home</a>
@@ -73,6 +80,5 @@
         </table>
     </div>
 </main>
-<!--<script src="../bootstrap-templates/assets/dist/js/bootstrap.bundle.min.js"></script>-->
 </body>
 </html>

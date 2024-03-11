@@ -7,6 +7,8 @@ import pl.project.domain.exception.EntityCreationException;
 import pl.project.domain.exception.EntityReadException;
 import pl.project.domain.model.Dish;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class DishService {
@@ -24,7 +26,6 @@ public class DishService {
     }
 
     public Dish createDish(Dish dish) {
-        dishPhotoService.createDishPhoto(dish.getDishPhoto());
         return dishDAO.createDish(dish)
                 .orElseThrow(() -> new EntityCreationException(DISH_CREATION_EXCEPTION.formatted(dish)));
     }
@@ -34,14 +35,16 @@ public class DishService {
                 + dishDAO.changeDishDescription(dish.getDescription(), dishCode)
                 + dishDAO.changeDishPrice(dish.getPrice(), dishCode)
                 + dishDAO.changeDishPreparationTime(dish.getAveragePreparationTimeMin(), dishCode)
-                + dishDAO.changeDishPhoto(
-                        dishPhotoService.createDishPhoto(dish.getDishPhoto()), dishCode)
                 + dishDAO.changeDishCategory(dish.getDishCategory(), dishCode))
                 > 0;
     }
 
-
     public boolean deactivateDish(String dishCode) {
         return dishDAO.deactivateDish(dishCode) == 1;
+    }
+
+    public List<Dish> getActiveDishesForRestaurants(String restaurantCode) {
+        //TODO test
+        return dishDAO.findActiveDishesByRestaurant(restaurantCode);
     }
 }

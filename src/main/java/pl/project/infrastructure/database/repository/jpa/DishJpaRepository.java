@@ -24,6 +24,14 @@ public interface DishJpaRepository extends JpaRepository<DishEntity, Integer> {
     List<DishEntity> findActive();
 
     @Query("""
+                SELECT d FROM DishEntity d
+                JOIN d.restaurant r
+                WHERE d.isActive = true
+                AND r.restaurantCode = ?1
+                """)
+    List<DishEntity> findActiveByRestaurant(String restaurantCode);
+
+    @Query("""
                 UPDATE DishEntity d
                 SET d.name = ?1
                 WHERE d.dishCode = ?2

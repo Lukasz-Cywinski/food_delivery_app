@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pl.project.infrastructure.database.entity.DishCategoryEntity;
 import pl.project.infrastructure.database.entity.DishEntity;
 import pl.project.infrastructure.database.entity.DishPhotoEntity;
+import pl.project.infrastructure.database.entity.RestaurantEntity;
 import pl.project.infrastructure.database.repository.jpa.*;
 import pl.project.infrastructure.security.db.UserRepository;
 import pl.project.integration.configuration.Initializer;
@@ -90,6 +91,29 @@ class DishRepositoryTest extends MyJpaConfiguration {
                 .contains(dish1, dish2, dish3);
 
         assertEquals(3, dishesFromDb1.size());
+    }
+
+    @Test
+    void thatActiveDishesCanByFindCorrectlyByRestaurant(){
+        //given
+        RestaurantEntity restaurant = initializer.SAVED_RESTAURANTS.getFirst();
+        String dishCode = restaurant.getRestaurantCode();
+        DishEntity dish1 = initializer.SAVED_DISHES.get(0);
+        DishEntity dish2 = initializer.SAVED_DISHES.get(1);
+        DishEntity dish3 = initializer.SAVED_DISHES.get(2);
+        dish1.setRestaurant(restaurant);
+        dish2.setRestaurant(restaurant);
+        dish3.setRestaurant(restaurant);
+
+        //when
+        dishJpaRepository.save(dish1);
+        dishJpaRepository.save(dish2);
+        dishJpaRepository.save(dish3);
+
+        List<DishEntity> result = dishJpaRepository.findActiveByRestaurant(dishCode);
+
+        //then
+        assertEquals(3, result.size());
     }
 
     @Test

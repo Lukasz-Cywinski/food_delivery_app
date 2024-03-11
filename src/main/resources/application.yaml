@@ -2,7 +2,8 @@ server:
   port: 8080
   servlet:
     context-path: /food-delivery
-
+    multipart:
+      max-file-size: 10MB
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource

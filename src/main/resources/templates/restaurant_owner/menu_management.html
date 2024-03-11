@@ -30,10 +30,6 @@
           }
         }
     </style>
-
-
-    <!-- Custom styles for this template -->
-<!--    <link href="navbar-top.css" rel="stylesheet">-->
 </head>
 <body style="background-color:rgb(190,190,190);">
 
@@ -42,6 +38,18 @@
         <h5 class="navbar-brand">Actions:</h5>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a th:href="@{/restaurant_owner/restaurant_management}" class="nav-link">Restaurant management</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/restaurant_owner/menu_management}" class="nav-link">Menu management</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/restaurant_owner/user_management}" class="nav-link">User management</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/restaurant_owner/orders_summary}" class="nav-link">Orders summary</a>
+                </li>
             </ul>
             <form class="d-flex">
                 <a th:href="@{/restaurant_owner}" class="btn btn-outline-info" role="button">Owner Home</a>
@@ -49,51 +57,76 @@
             <form class="d-flex">
                 <a th:href="@{/logout}" class="btn btn-outline-danger" role="button">Logout</a>
             </form>
-
-
         </div>
     </div>
 </nav>
-<!---->
-<!---->
-<!---->
-
-<!--TO JEST OK-->
 <main class="container">
     <div style="background-color:rgb(190,190,190);" class=" p-5 rounded">
-<!--        <form action="#" th:action="@{/restaurant_owner/menu_management/show_dishes}" th:object="${restaurantDTO}" method="POST">-->
-<!--            <div class="form-group">-->
-<!--                <label>Choose restaurant</label>-->
-<!--                <select th:field=*{restaurantCode} class="form-control">-->
-<!--                    <option th:value="null" selected>Choose restaurant</option>-->
-<!--                    <option class="selected"-->
-<!--                            th:each="restaurant : ${restaurantDTOs}"-->
-<!--                            th:value="${restaurant.restaurantCode}"-->
-<!--                            th:text="${'Restaurant: ' + restaurant.name}"></option>-->
-<!--                </select>-->
-<!--            </div>-->
-<!--            <button type="submit" class="btn btn-info">Show</button>-->
-<!--        </form>-->
-<!--TO POWYŻEJ JEST OK-->
-
-
-        <div th:object="${restaurantCode}">
-                <form action="#" th:action="@{/restaurant_owner/menu_management}" th:object="${restaurantDTO}" method="GET">
-                    <div class="form-group">
-                        <label>Choose restaurant</label>
-                        <select id="restaurantCode" name="restaurantCode" class="form-control">
-                            <option class="selected"
-                                    th:each="restaurant : ${restaurantDTOs}"
-                                    th:value="${restaurant.restaurantCode}"
-                                    th:text="${'Restaurant: ' + restaurant.name}"
-                                    th:selected="${restaurant.restaurantCode==restaurantCode}"></option>
-                        </select>
+        <form action="#" th:action="@{/restaurant_owner/menu_management/add_dish}" th:object="${dishDTO}" enctype="multipart/form-data" method="POST">
+            <h1>Create new dish</h1>
+            <div>
+                <div class="form-group">
+                    <label for="dishName">Dish name</label>
+                    <input th:name="name" type="text" class="form-control" id="dishName" placeholder="Put name">
+                </div>
+                <div class="form-group">
+                    <label for="dishPrice">Dish Price</label>
+                    <input th:name="price" type="number" class="form-control" id="dishPrice" placeholder="Put price €" min="0" value="0" step=".01">
+                </div>
+                <div class="form-group">
+                    <label for="dishPreparationTime">Dish Price</label>
+                    <input th:name="averagePreparationTimeMin" type="number" class="form-control" id="dishPreparationTime" placeholder="Put preparation time [min]" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="dishCategory">Choose dish category</label>
+                    <select th:field="*{dishCategoryId}" class="form-control" id="dishCategory">
+                        <option class="selected"
+                                th:each="category : ${dishCategoryDTOs}"
+                                th:value="${category.id}"
+                                th:text="${'Category: ' + category.name}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="restaurant">Choose restaurant</label>
+                    <select th:field="*{restaurantCode}" id="restaurant" class="form-control">
+                        <option class="selected"
+                                th:each="restaurant : ${restaurantDTOs}"
+                                th:value="${restaurant.restaurantCode}"
+                                th:text="${'Restaurant: ' + restaurant.name}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dishDescription">Dish description</label>
+                    <textarea th:name="description" class="form-control" id="dishDescription" rows="3"></textarea>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="btn btn-primary btn-rounded">
+                        <label class="form-label text-white m-1" for="dishPhoto">Add photo</label>
+                        <input th:name="dishPhoto" type="file" class="form-control d-none" id="dishPhoto" accept="image/png, image/jpeg, image/jpg"/>
                     </div>
-                    <button type="submit" class="btn btn-info">Show</button>
-                </form>
+                </div>
+                <button type="submit" class="btn btn-info">Create new dish</button>
+            </div>
+        </form>
+        <p><br></p>
+        <p><br></p>
+        <div>
+            <h1>Served dishes for chosen restaurant</h1>
+            <form action="#" th:action="@{/restaurant_owner/menu_management}" th:object="${restaurantCode}" method="GET">
+                <div class="form-group">
+                    <label for="restaurantCode">Choose restaurant</label>
+                    <select id="restaurantCode" name="restaurantCode" class="form-control">
+                        <option class="selected"
+                                th:each="restaurant : ${restaurantDTOs}"
+                                th:value="${restaurant.restaurantCode}"
+                                th:text="${'Restaurant: ' + restaurant.name}"
+                                th:selected="${restaurant.restaurantCode==restaurantCode}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-info">Show dishes for selected restaurant</button>
+            </form>
         </div>
 
-        <h1>Served dishes</h1>
         <table class="table table-striped table-dark">
             <thead>
             <tr>
@@ -128,14 +161,7 @@
             </tr>
             </tbody>
         </table>
-
-
     </div>
 </main>
-
-
-<script src="../bootstrap-templates/assets/dist/js/bootstrap.bundle.min.js"></script>
-
-
 </body>
 </html>

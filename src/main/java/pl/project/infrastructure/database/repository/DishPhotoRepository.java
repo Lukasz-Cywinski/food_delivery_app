@@ -28,6 +28,11 @@ public class DishPhotoRepository implements DishPhotoDAO {
     }
 
     @Override
+    public void deleteDishPhoto(DishPhoto dishPhoto) {
+        dishPhotoJpaRepository.delete(dishPhotoEntityMapper.mapToEntity(dishPhoto));
+    }
+
+    @Override
     public Integer changePhotoName(String newPhotoName, Integer dishPhotoId) {
         return dishPhotoJpaRepository.changePhotoName(newPhotoName, dishPhotoId);
     }

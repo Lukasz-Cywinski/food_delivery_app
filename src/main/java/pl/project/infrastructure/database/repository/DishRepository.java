@@ -13,6 +13,7 @@ import pl.project.infrastructure.database.repository.mapper.DishEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.DishPhotoEntityMapper;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -38,6 +39,13 @@ public class DishRepository implements DishDAO {
     public Optional<Dish> findDishByDishCode(String dishCode) {
         return dishJpaRepository.findByDishCode(dishCode)
                 .map(dishEntityMapper::mapFromEntity);
+    }
+
+    @Override
+    public List<Dish> findActiveDishesByRestaurant(String restaurantCode) {
+        return dishJpaRepository.findActiveByRestaurant(restaurantCode).stream()
+                .map(dishEntityMapper::mapFromEntity)
+                .toList();
     }
 
 //    @Override
