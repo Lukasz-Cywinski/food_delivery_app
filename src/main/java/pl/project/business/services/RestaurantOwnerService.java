@@ -127,9 +127,13 @@ public class RestaurantOwnerService {
     public Dish createDish(Dish dish, MultipartFile dishPhotoContent) {
 //        TODO - test
         DishPhoto dishPhoto = dishPhotoService.createDishPhoto(dishPhotoContent);
+        DishCategory dishCategory = dishCategoryService.getDishCategoryById(dish.getDishCategory().getId());
+        Restaurant restaurant = restaurantService.getRestaurantByRestaurantCode(dish.getRestaurant().getRestaurantCode());
         return dishService.createDish(dish
                 .withDishPhoto(dishPhoto)
                 .withDishCode(UUID.randomUUID().toString())
+                .withRestaurant(restaurant)
+                .withDishCategory(dishCategory)
                 .withActive(true));
     }
 

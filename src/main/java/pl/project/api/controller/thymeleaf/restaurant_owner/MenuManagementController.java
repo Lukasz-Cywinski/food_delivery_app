@@ -16,7 +16,6 @@ import pl.project.api.dto.mapper.DishCategoryMapper;
 import pl.project.api.dto.mapper.DishMapper;
 import pl.project.api.dto.mapper.RestaurantMapper;
 import pl.project.business.services.RestaurantOwnerService;
-import pl.project.domain.model.Dish;
 import pl.project.domain.model.RestaurantOwner;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
@@ -54,12 +53,17 @@ public class MenuManagementController {
         List<DishCategoryDTO> dishCategories = restaurantOwnerService.getDishCategories().stream()
                 .map(dishCategoryMapper::mapToDTO)
                 .toList();
-        List<Dish> dishes = List.of();
+        List<DishDTO> dishes = List.of();
 
         if (Objects.isNull(restaurantCode)) restaurantCode = "";
+        else {
+            dishes = restaurantOwnerService.getActiveDishesForRestaurants(restaurantCode).stream()
+                    .map(a -> dishMapper.mapToDTO(a))
+                    .toList();
+        }
 
         return Map.of(
-                "dishesDTO", dishes,
+                "dishDTOs", dishes,
                 "dishDTO", DishDTO.builder().build(),
                 "restaurantDTOs", restaurants,
                 "dishCategoryDTO", DishCategoryDTO.builder().build(),

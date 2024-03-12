@@ -24,5 +24,7 @@ public class DishDTO {
     Integer averagePreparationTimeMin;
     String restaurantCode;
     Integer dishCategoryId;
-//    String dishPhotoURL;
+    String dishCategoryName;
+    String dishPhotoURL;
+    String dishPhotoName;
 }

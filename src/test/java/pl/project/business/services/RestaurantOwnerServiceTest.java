@@ -242,7 +242,7 @@ class RestaurantOwnerServiceTest {
         //given
         Dish dish = instanceMapper.mapFromEntity(someDish1());
         when(dishService.createDish(dish)).thenReturn(dish);
-        when(dishPhotoService.createDishPhoto(dish.getDishPhoto())).thenReturn(dish.getDishPhoto());
+//        when(dishPhotoService.createDishPhoto(dish.getDishPhoto())).thenReturn(dish.getDishPhoto());
 
         //when
 //        TODO - update test

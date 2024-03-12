@@ -45,8 +45,7 @@ public class DishPhotoService {
         try {
             dishPhotoDAO.deleteDishPhoto(dishPhoto);
             Files.delete(Paths.get(
-                    ResourcePaths.PATH_FROM_ROOT_TO_PROJECT +
-                            dishPhoto.getUrl()));
+                    ResourcePaths.PATH_TO_PHOTO_STORAGE_WITH_FORMATTER.formatted(dishPhoto.getName())));
         } catch (Exception e) {
             throw new DishPhotoStorageException(DISH_PHOTO_DELETE_EXCEPTION.formatted(dishPhoto.getName()));
         }
@@ -54,10 +53,10 @@ public class DishPhotoService {
     }
 
     private boolean savePhotoInStorage(MultipartFile dishPhotoContent, DishPhoto dishPhoto) {
+        String str = ResourcePaths.PATH_TO_PHOTO_STORAGE_WITH_FORMATTER.formatted(dishPhoto.getName());
         try {
             dishPhotoContent.transferTo(Paths.get(
-                    ResourcePaths.PATH_FROM_ROOT_TO_PROJECT +
-                            ResourcePaths.URL_TO_PHOTO_STORAGE_WITH_FORMATTER.formatted(dishPhoto.getName())
+                    ResourcePaths.PATH_TO_PHOTO_STORAGE_WITH_FORMATTER.formatted(dishPhoto.getName())
             ));
         } catch (Exception e) {
             return false;

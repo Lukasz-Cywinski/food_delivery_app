@@ -34,7 +34,7 @@ public class RestaurantEntity {
     @TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
     private OffsetDateTime added;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "restaurant_owner_id", nullable = false)
     private RestaurantOwnerEntity restaurantOwner;
 
