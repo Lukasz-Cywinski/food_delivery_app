@@ -10,7 +10,8 @@ import pl.project.api.dto.RestaurantDTO;
 import pl.project.api.dto.ServedAddressDTO;
 import pl.project.api.dto.mapper.RestaurantMapper;
 import pl.project.api.dto.mapper.ServedAddressMapper;
-import pl.project.business.services.RestaurantOwnerService;
+import pl.project.business.services.restaurant_owner.RestaurantManagementService;
+import pl.project.business.services.restaurant_owner.RestaurantOwnerService;
 import pl.project.domain.model.RestaurantOwner;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
@@ -32,6 +33,7 @@ public class RestaurantManagementController {
 
     private final ProjectUserDetailsService projectUserDetailsService;
     RestaurantOwnerService restaurantOwnerService;
+    RestaurantManagementService restaurantManagementService;
     RestaurantMapper restaurantMapper;
     ServedAddressMapper servedAddressMapper;
 
@@ -42,8 +44,7 @@ public class RestaurantManagementController {
     }
 
     private Map<String, ?> populateRestaurantManagementWithData() {
-        RestaurantOwner restaurantOwner = restaurantOwnerService.getRestaurantOwner(getActiveUserEmail());
-        List<RestaurantDTO> restaurants = restaurantOwnerService.getRestaurantsByRestaurantOwner(restaurantOwner).stream()
+        List<RestaurantDTO> restaurants = restaurantManagementService.getRestaurantsByRestaurantOwner(getActiveUserEmail()).stream()
                 .map(restaurantMapper::mapToDTO)
                 .toList();
         return Map.of(
@@ -61,8 +62,8 @@ public class RestaurantManagementController {
 
     private Map<String, ?> populateRestaurantUpdateWithData(String restaurantCode) {
         RestaurantDTO restaurantDTO = restaurantMapper.mapToDTO(
-                restaurantOwnerService.getRestaurantByRestaurantCode(restaurantCode));
-        List<ServedAddressDTO> servedAddresses = restaurantOwnerService.getServedAddresses(restaurantCode).stream()
+                restaurantManagementService.getRestaurantByRestaurantCode(restaurantCode));
+        List<ServedAddressDTO> servedAddresses = restaurantManagementService.getServedAddresses(restaurantCode).stream()
                 .map(servedAddressMapper::mapToDTO)
                 .toList();
         return Map.of(
@@ -77,16 +78,16 @@ public class RestaurantManagementController {
             RestaurantDTO restaurantDTO
     ){
         servedAddressDTO.setRestaurant(restaurantDTO);
-        restaurantOwnerService.createServedAddress(servedAddressMapper.mapFromDTO(servedAddressDTO));
+        restaurantManagementService.createServedAddress(servedAddressMapper.mapFromDTO(servedAddressDTO));
         return REDIRECT_RESTAURANT_MANAGEMENT + "/%s".formatted(restaurantDTO.getRestaurantCode());
     }
 
     @DeleteMapping(RESTAURANT_DELETE_SERVED_ADDRESS)
     public String deleteServedAddress(
-            ServedAddressDTO servedAddressDTO,
+            Integer servedAddressId,
             String restaurantCode
     ){
-        restaurantOwnerService.deleteServedAddress(servedAddressMapper.mapFromDTO(servedAddressDTO));
+        restaurantManagementService.deleteServedAddress(servedAddressId);
         return REDIRECT_RESTAURANT_MANAGEMENT + "/%s".formatted(restaurantCode);
     }
 
@@ -94,7 +95,7 @@ public class RestaurantManagementController {
     public String addRestaurant(
             @RequestParam(value = "restaurantName") String restaurantName
     ) {
-        restaurantOwnerService.createRestaurant(restaurantName, getActiveUserEmail());
+        restaurantManagementService.createRestaurant(restaurantName, getActiveUserEmail());
         return REDIRECT_RESTAURANT_MANAGEMENT;
     }
 
@@ -102,7 +103,7 @@ public class RestaurantManagementController {
     public String deactivateRestaurant(
             @RequestParam(value = "restaurantCode") String restaurantCode
     ) {
-        restaurantOwnerService.deactivateRestaurant(restaurantCode);
+        restaurantManagementService.deactivateRestaurant(restaurantCode);
         return REDIRECT_RESTAURANT_MANAGEMENT;
     }
 

@@ -3,9 +3,8 @@ package pl.project.api.controller.thymeleaf.restaurant_owner;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import pl.project.api.controller.addresses.RestaurantOwnerAddresses;
@@ -15,7 +14,9 @@ import pl.project.api.dto.RestaurantDTO;
 import pl.project.api.dto.mapper.DishCategoryMapper;
 import pl.project.api.dto.mapper.DishMapper;
 import pl.project.api.dto.mapper.RestaurantMapper;
-import pl.project.business.services.RestaurantOwnerService;
+import pl.project.business.services.restaurant_owner.MenuManagementService;
+import pl.project.business.services.restaurant_owner.RestaurantManagementService;
+import pl.project.business.services.restaurant_owner.RestaurantOwnerService;
 import pl.project.domain.model.RestaurantOwner;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
@@ -29,12 +30,17 @@ import java.util.Objects;
 public class MenuManagementController {
 
     static final String ADD_DISH = "/add_dish";
+    static final String DEACTIVATE_DISH = "/deactivate_dish";
+    static final String DISH_UPDATE = "/{dishCode}";
     static final String REDIRECT_MENU_MANAGEMENT = "redirect:%s".formatted(RestaurantOwnerAddresses.MENU_MANAGEMENT);
 
+    RestaurantManagementService restaurantManagementService;
     ProjectUserDetailsService projectUserDetailsService;
     RestaurantOwnerService restaurantOwnerService;
-    RestaurantMapper restaurantMapper;
+    MenuManagementService menuManagementService;
+
     DishCategoryMapper dishCategoryMapper;
+    RestaurantMapper restaurantMapper;
     DishMapper dishMapper;
 
     @GetMapping
@@ -46,22 +52,21 @@ public class MenuManagementController {
     }
 
     private Map<String, ?> populateMenuManagementWithData(String restaurantCode) {
-        RestaurantOwner restaurantOwner = restaurantOwnerService.getRestaurantOwner(getActiveUserEmail());
-        List<RestaurantDTO> restaurants = restaurantOwnerService.getRestaurantsByRestaurantOwner(restaurantOwner).stream()
+        List<RestaurantDTO> restaurants = restaurantManagementService
+                .getRestaurantsByRestaurantOwner(getActiveUserEmail()).stream()
                 .map(restaurantMapper::mapToDTO)
                 .toList();
-        List<DishCategoryDTO> dishCategories = restaurantOwnerService.getDishCategories().stream()
+        List<DishCategoryDTO> dishCategories = menuManagementService.getDishCategories().stream()
                 .map(dishCategoryMapper::mapToDTO)
                 .toList();
         List<DishDTO> dishes = List.of();
 
         if (Objects.isNull(restaurantCode)) restaurantCode = "";
         else {
-            dishes = restaurantOwnerService.getActiveDishesForRestaurants(restaurantCode).stream()
+            dishes = menuManagementService.getActiveDishesForRestaurants(restaurantCode).stream()
                     .map(a -> dishMapper.mapToDTO(a))
                     .toList();
         }
-
         return Map.of(
                 "dishDTOs", dishes,
                 "dishDTO", DishDTO.builder().build(),
@@ -72,13 +77,39 @@ public class MenuManagementController {
         );
     }
 
+    @GetMapping(DISH_UPDATE)
+    public ModelAndView dishUpdate(
+            @PathVariable String dishCode
+    ){
+        System.out.println();
+        return new ModelAndView("restaurant_owner/dishUpdate",
+                populateDishUpdateWithData());
+    }
+
+    private Map<String, ?> populateDishUpdateWithData() {
+        return Map.of(
+
+        );
+    }
+
     @PostMapping(ADD_DISH)
     public String addDish(
             MultipartFile dishPhoto,
             DishDTO dishDTO
-    ){
-        restaurantOwnerService.createDish(dishMapper.mapFromDTO(dishDTO), dishPhoto);
+    ) {
+        menuManagementService.createDish(dishMapper.mapFromDTO(dishDTO), dishPhoto);
         return REDIRECT_MENU_MANAGEMENT;
+    }
+
+    @PostMapping(DEACTIVATE_DISH)
+    public ModelAndView deactivateDish(
+            ModelMap model,
+            @RequestParam(value = "dishCode") String dishCode,
+            @RequestParam(value = "restaurantCode") String restaurantCode
+    ) {
+        model.addAttribute("restaurantCode", restaurantCode);
+        menuManagementService.deactivateDish(dishCode);
+        return new ModelAndView(REDIRECT_MENU_MANAGEMENT, model);
     }
 
 //    @PostMapping(MENU_MANAGEMENT_SHOW_DISHES)
@@ -100,7 +131,7 @@ public class MenuManagementController {
 //        return REDIRECT_MENU_MANAGEMENT;
 //    }
 
-        private String getActiveUserEmail() {
+    private String getActiveUserEmail() {
         return projectUserDetailsService.getUserEmail(
                 SecurityContextHolder.getContext().getAuthentication().getName());
     }

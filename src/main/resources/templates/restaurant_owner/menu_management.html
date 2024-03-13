@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>Restaurant Owner Home</title>
+    <title>Menu management</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/navbar-static/">
     <link href="../bootstrap-templates/assets/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -156,7 +156,8 @@
                 </td>
                 <td>
                     <form action="#" th:action="@{/restaurant_owner/menu_management/deactivate_dish}" method="POST">
-                        <button type="submit" class="btn btn-danger btn-block">Delete</button>
+                        <input type="hidden" th:name="restaurantCode" th:value="${dish.restaurantCode}">
+                        <button th:name="dishCode" th:value="${dish.dishCode}" type="submit" class="btn btn-danger btn-block">Delete</button>
                     </form>
                 </td>
             </tr>

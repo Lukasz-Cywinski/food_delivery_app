@@ -14,7 +14,7 @@ public interface ServedAddressDAO {
 
     Integer changeStreet(String newStreet, Integer servedAddressId);
 
-    Integer deleteServedAddress(ServedAddress servedAddress);
+    void deleteServedAddress(Integer servedAddressId);
 
     List<ServedAddress> getServedAddresses(Restaurant restaurant);
 

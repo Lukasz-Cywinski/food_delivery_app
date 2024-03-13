@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.project.business.dao.CustomerDAO;
 import pl.project.business.services.subsidiary.*;
-import pl.project.domain.exception.EntityCreationException;
-import pl.project.domain.exception.EntityReadException;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
 import pl.project.domain.model.*;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 import pl.project.infrastructure.security.User;
@@ -22,13 +22,6 @@ public class CustomerService {
     private final String CUSTOMER_READ_EXCEPTION = "Fail to found customer by email: %s";
 
     private final CustomerDAO customerDAO;
-    private final DishService dishService;
-    private final OrderService orderService;
-    private final RestaurantService restaurantService;
-    private final DishOpinionService dishOpinionService;
-    private final DeliveryAddressService deliveryAddressService;
-    private final DishCompositionService dishCompositionService;
-    private final DeliveryServiceService deliveryServiceService;
 
     private final ProjectUserDetailsService projectUserDetailsService;
 
@@ -37,7 +30,7 @@ public class CustomerService {
     public Customer createCustomer(Customer customer) {
         User user = projectUserDetailsService.saveUserAndAssignRoles(customer.getUser());
         return customerDAO.addCustomer(customer.withUser(user))
-                .orElseThrow(() -> new EntityCreationException(CUSTOMER_CREATION_EXCEPTION.formatted(customer)));
+                .orElseThrow(() -> new OwnerResourceCreationException(CUSTOMER_CREATION_EXCEPTION.formatted(customer)));
     }
 
     @Transactional
@@ -58,53 +51,7 @@ public class CustomerService {
     private Customer getCustomer(String customerEmail) {
         User user = projectUserDetailsService.getUserAndRoleByEmail(customerEmail);
         return customerDAO.getCustomerByEmail(customerEmail)
-                .orElseThrow(() -> new EntityReadException(CUSTOMER_READ_EXCEPTION.formatted(customerEmail)))
+                .orElseThrow(() -> new OwnerResourceReadException(CUSTOMER_READ_EXCEPTION.formatted(customerEmail)))
                 .withUser(user);
     }
-
-    // Customer Delivery Services
-    @Transactional
-    public boolean modifyCustomerDeliveryAddress(DeliveryAddress deliveryAddress, String customerEmail) {
-        return deliveryAddressService.modifyCustomerDeliveryAddress(deliveryAddress, getCustomer(customerEmail));
-    }
-
-    // Dish Opinion Services
-    @Transactional
-    public DishOpinion createDishOpinion(String customerEmail, String dishCode, String opinion, BigDecimal productEvaluation){
-        Customer customer = getCustomer(customerEmail);
-        Dish dish = dishService.getDish(dishCode);
-        DishOpinion dishOpinion = DishOpinion.builder()
-                .opinion(opinion)
-                .productEvaluation(productEvaluation)
-                .dish(dish)
-                .customer(customer)
-                .build();
-        return dishOpinionService.createDishOpinion(dishOpinion);
-    }
-
-    // Order Services
-    @Transactional
-    public Order createOrder(String customerEmail, List<DishComposition> compositionsWithoutAssignedOrder){
-        Order order = orderService.createOrder(getCustomer(customerEmail), deliveryServiceService.createDeliveryService());
-        dishCompositionService.createDishCompositions(order, compositionsWithoutAssignedOrder);
-        return order;
-    }
-
-    @Transactional
-    public boolean cancelOrder(String orderCode){
-        return orderService.cancelOrder(orderCode);
-    }
-
-    // Restaurant Service
-    @Transactional
-    public List<Restaurant> getRestaurants(PageableProperties pageableProperties){
-        return restaurantService.getActiveRestaurants(pageableProperties);
-    }
-
-    // Dish Service
-    @Transactional
-    public List<Dish> getDishesFromRestaurant(Restaurant restaurant, PageableProperties pageableProperties){
-        return restaurantService.getDishesFromRestaurant(restaurant, pageableProperties);
-    }
-
 }

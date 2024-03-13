@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.project.business.dao.DishOpinionDAO;
 import pl.project.business.services.subsidiary.pageable.PageableService;
-import pl.project.domain.exception.EntityCreationException;
-import pl.project.domain.exception.EntityReadException;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
 import pl.project.domain.model.Dish;
 import pl.project.domain.model.DishOpinion;
 import pl.project.domain.model.PageableProperties;
@@ -26,14 +26,14 @@ public class DishOpinionService {
 
     public DishOpinion createDishOpinion(DishOpinion dishOpinion){
         return dishOpinionDAO.createDishOpinion(dishOpinion)
-                .orElseThrow(() -> new EntityCreationException(OPINION_CREATION_EXCEPTION
+                .orElseThrow(() -> new OwnerResourceCreationException(OPINION_CREATION_EXCEPTION
                 .formatted(dishOpinion.getCustomer(), dishOpinion.getDish())));
     }
 
     @Transactional
     public BigDecimal getAverageDishEvaluation(Dish dish){
         return dishOpinionDAO.getAverageDishEvaluation(dish)
-                .orElseThrow(() -> new EntityReadException(OPINION_READ_EXCEPTION.formatted(dish)));
+                .orElseThrow(() -> new OwnerResourceReadException(OPINION_READ_EXCEPTION.formatted(dish)));
     }
 
     @Transactional

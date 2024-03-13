@@ -4,7 +4,7 @@ package pl.project.infrastructure.database.repository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import pl.project.business.dao.ServedAddressDAO;
-import pl.project.domain.exception.EntityReadException;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
 import pl.project.domain.model.Restaurant;
 import pl.project.domain.model.ServedAddress;
 import pl.project.infrastructure.database.repository.jpa.RestaurantJpaRepository;
@@ -28,7 +28,7 @@ public class ServedAddressRepository implements ServedAddressDAO {
     public Optional<ServedAddress> createServedAddress(ServedAddress servedAddress) {
         Restaurant restaurant = restaurantEntityMapper.mapFromEntity(
                 restaurantJpaRepository.findByRestaurantCode(servedAddress.getRestaurant().getRestaurantCode())
-                        .orElseThrow(() -> new EntityReadException("Fail to attach restaurant %s to served address"
+                        .orElseThrow(() -> new OwnerResourceReadException("Fail to attach restaurant %s to served address"
                                 .formatted(servedAddress.getRestaurant().getRestaurantCode()))));
         ServedAddress toSave = servedAddress.withRestaurant(restaurant);
         return Optional.ofNullable(
@@ -51,9 +51,8 @@ public class ServedAddressRepository implements ServedAddressDAO {
     }
 
     @Override
-    public Integer deleteServedAddress(ServedAddress servedAddress) {
-        return servedAddressJpaRepository.deleteServedAddress(
-                servedAddressEntityMapper.mapToEntity(servedAddress));
+    public void deleteServedAddress(Integer servedAddressId) {
+        servedAddressJpaRepository.deleteById(servedAddressId);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package pl.project.api.controller.thymeleaf.registration;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +17,7 @@ import pl.project.api.dto.mapper.DeliveryAddressMapper;
 import pl.project.api.dto.mapper.RestaurantOwnerMapper;
 import pl.project.api.dto.mapper.UserMapper;
 import pl.project.business.services.CustomerService;
-import pl.project.business.services.RestaurantOwnerService;
+import pl.project.business.services.restaurant_owner.RestaurantOwnerService;
 import pl.project.domain.model.Customer;
 import pl.project.domain.model.DeliveryAddress;
 import pl.project.domain.model.RestaurantOwner;
