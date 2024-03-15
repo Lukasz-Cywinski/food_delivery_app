@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.project.business.dao.DishOpinionDAO;
 import pl.project.business.services.subsidiary.pageable.PageableService;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceCreateException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
 import pl.project.domain.model.Dish;
 import pl.project.domain.model.DishOpinion;
@@ -26,7 +26,7 @@ public class DishOpinionService {
 
     public DishOpinion createDishOpinion(DishOpinion dishOpinion){
         return dishOpinionDAO.createDishOpinion(dishOpinion)
-                .orElseThrow(() -> new OwnerResourceCreationException(OPINION_CREATION_EXCEPTION
+                .orElseThrow(() -> new OwnerResourceCreateException(OPINION_CREATION_EXCEPTION
                 .formatted(dishOpinion.getCustomer(), dishOpinion.getDish())));
     }
 

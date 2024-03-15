@@ -1,29 +1,7 @@
 package pl.project.business.services.subsidiary;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.project.business.dao.DeliveryManDAO;
-import pl.project.business.dao.DeliveryServiceDAO;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
-import pl.project.domain.exception.NoAvailableDeliveryMan;
-import pl.project.domain.model.DeliveryMan;
-import pl.project.domain.model.DeliveryService;
-import pl.project.domain.model.Order;
-import pl.project.util.domain.InstanceMapper;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import static pl.project.util.db.DeliveryManInstance.*;
-import static pl.project.util.db.DeliveryServiceInstance.*;
-import static pl.project.util.db.OrderInstance.*;
 
 @ExtendWith(MockitoExtension.class)
 class DeliveryServiceServiceTest {

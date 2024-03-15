@@ -9,7 +9,7 @@ import pl.project.business.dao.DishDAO;
 import pl.project.business.dao.DishPhotoDAO;
 import pl.project.business.dao.RestaurantDAO;
 import pl.project.domain.exception.restaurant_owner.OwnerDishPhotoStorageException;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceCreateException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceDeleteException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
 import pl.project.domain.model.Dish;
@@ -23,7 +23,7 @@ import java.util.UUID;
 
 import static pl.project.api.controller.addresses.ResourcePaths.PATH_TO_PHOTO_STORAGE_WITH_FORMATTER;
 import static pl.project.api.controller.addresses.ResourcePaths.URL_TO_PHOTO_STORAGE_WITH_FORMATTER;
-import static pl.project.domain.message.ExceptionMessages.*;
+import static pl.project.domain.exception.ExceptionMessages.*;
 
 @Service
 @AllArgsConstructor
@@ -50,7 +50,7 @@ public class MenuManagementService {
                     .withActive(true))
                     .orElseThrow(RuntimeException::new);
         } catch (Exception e) {
-            throw new OwnerResourceCreationException(RESOURCE_CREATION_EXCEPTION
+            throw new OwnerResourceCreateException(RESOURCE_CREATION_EXCEPTION
                     .formatted(Dish.class.getSimpleName(), dish.getName()), e);
         }
     }

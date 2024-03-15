@@ -22,8 +22,6 @@ public class ServedAddressMapperImp implements ServedAddressMapper {
                 .id(domainObj.getId())
                 .city(domainObj.getCity())
                 .street(domainObj.getStreet())
-                .restaurant(Objects.isNull(domainObj.getRestaurant()) ?
-                        null : restaurantMapper.mapToDTO(domainObj.getRestaurant()))
                 .build();
     }
 
@@ -33,8 +31,6 @@ public class ServedAddressMapperImp implements ServedAddressMapper {
                 .id(dto.getId())
                 .city(dto.getCity())
                 .street(dto.getStreet())
-                .restaurant(Objects.isNull(dto.getRestaurant()) ?
-                        null : restaurantMapper.mapFromDTO(dto.getRestaurant()))
                 .build();
     }
 }

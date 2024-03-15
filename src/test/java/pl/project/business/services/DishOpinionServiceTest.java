@@ -1,31 +1,9 @@
 package pl.project.business.services;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import pl.project.business.dao.DishOpinionDAO;
-import pl.project.business.services.subsidiary.pageable.PageableService;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
-import pl.project.domain.model.Dish;
-import pl.project.domain.model.DishOpinion;
-import pl.project.domain.model.PageableProperties;
-import pl.project.util.domain.InstanceMapper;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-import static pl.project.util.db.DishOpinionInstance.someDishOpinion1;
-import static pl.project.util.db.DishOpinionInstance.someDishOpinion2;
 
 @ExtendWith(MockitoExtension.class)
 class DishOpinionServiceTest {

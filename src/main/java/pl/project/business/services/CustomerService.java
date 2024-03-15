@@ -4,15 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.project.business.dao.CustomerDAO;
-import pl.project.business.services.subsidiary.*;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceCreateException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
 import pl.project.domain.model.*;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 import pl.project.infrastructure.security.User;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -30,7 +26,7 @@ public class CustomerService {
     public Customer createCustomer(Customer customer) {
         User user = projectUserDetailsService.saveUserAndAssignRoles(customer.getUser());
         return customerDAO.addCustomer(customer.withUser(user))
-                .orElseThrow(() -> new OwnerResourceCreationException(CUSTOMER_CREATION_EXCEPTION.formatted(customer)));
+                .orElseThrow(() -> new OwnerResourceCreateException(CUSTOMER_CREATION_EXCEPTION.formatted(customer)));
     }
 
     @Transactional

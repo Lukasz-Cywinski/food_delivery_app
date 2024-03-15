@@ -1,21 +1,7 @@
 package pl.project.business.services.subsidiary;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.project.business.dao.DishPhotoDAO;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
-import pl.project.domain.model.DishPhoto;
-import pl.project.util.domain.InstanceMapper;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static pl.project.util.db.DishPhotoInstance.someDishPhoto1;
-import static pl.project.util.db.DishPhotoInstance.someDishPhoto2;
 
 @ExtendWith(MockitoExtension.class)
 class DishPhotoServiceTest {

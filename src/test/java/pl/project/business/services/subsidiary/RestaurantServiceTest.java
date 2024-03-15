@@ -1,36 +1,9 @@
 package pl.project.business.services.subsidiary;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import pl.project.business.dao.RestaurantDAO;
-import pl.project.business.services.subsidiary.pageable.PageableService;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
-import pl.project.domain.model.Dish;
-import pl.project.domain.model.PageableProperties;
-import pl.project.domain.model.Restaurant;
-import pl.project.domain.model.RestaurantOwner;
-import pl.project.util.domain.InstanceMapper;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
-import static pl.project.util.db.DishInstance.someDish1;
-import static pl.project.util.db.DishInstance.someDish2;
-import static pl.project.util.db.RestaurantInstance.someRestaurant1;
-import static pl.project.util.db.RestaurantInstance.someRestaurant2;
-import static pl.project.util.db.RestaurantOwnerInstance.someRestaurantOwner1;
-import static pl.project.util.db.RestaurantOwnerInstance.someRestaurantOwner2;
 
 @ExtendWith(MockitoExtension.class)
 class RestaurantServiceTest {

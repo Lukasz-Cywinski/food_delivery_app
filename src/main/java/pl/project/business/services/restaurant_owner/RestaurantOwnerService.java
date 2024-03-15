@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.project.business.dao.RestaurantOwnerDAO;
-import pl.project.business.services.subsidiary.*;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceCreateException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
 import pl.project.domain.model.*;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
@@ -27,7 +26,7 @@ public class RestaurantOwnerService {
     public RestaurantOwner createRestaurantOwner(RestaurantOwner restaurantOwner) {
         User user = projectUserDetailsService.saveUserAndAssignRoles(restaurantOwner.getUser());
         return restaurantOwnerDAO.createRestaurantOwner(restaurantOwner.withUser(user))
-                .orElseThrow(() -> new OwnerResourceCreationException(RESTAURANT_OWNER_CREATION_EXCEPTION.formatted(restaurantOwner.getEmail())));
+                .orElseThrow(() -> new OwnerResourceCreateException(RESTAURANT_OWNER_CREATION_EXCEPTION.formatted(restaurantOwner.getEmail())));
     }
 
     @Transactional

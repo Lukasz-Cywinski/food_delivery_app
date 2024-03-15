@@ -1,32 +1,9 @@
 package pl.project.business.services;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.project.business.dao.CustomerDAO;
-import pl.project.business.services.subsidiary.*;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
-import pl.project.domain.model.*;
-import pl.project.infrastructure.security.ProjectUserDetailsService;
-import pl.project.util.db.DeliveryServiceInstance;
-import pl.project.util.domain.InstanceMapper;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-import static pl.project.util.db.CustomerInstance.*;
-import static pl.project.util.db.DeliveryAddressInstance.someDeliveryAddress2;
-import static pl.project.util.db.DishCompositionInstance.*;
-import static pl.project.util.db.DishInstance.*;
-import static pl.project.util.db.DishOpinionInstance.someDishOpinion1;
-import static pl.project.util.db.OrderInstance.someOrder1;
-import static pl.project.util.db.RestaurantInstance.*;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {

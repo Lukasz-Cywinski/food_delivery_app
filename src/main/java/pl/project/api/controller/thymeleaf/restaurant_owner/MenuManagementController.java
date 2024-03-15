@@ -1,13 +1,19 @@
 package pl.project.api.controller.thymeleaf.restaurant_owner;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import pl.project.api.controller.addresses.RestaurantOwnerAddresses;
+import pl.project.api.controller.exception.ExceptionMessages;
+import pl.project.api.controller.exception.OwnerIncorrectInputException;
 import pl.project.api.dto.DishCategoryDTO;
 import pl.project.api.dto.DishDTO;
 import pl.project.api.dto.RestaurantDTO;
@@ -17,12 +23,15 @@ import pl.project.api.dto.mapper.RestaurantMapper;
 import pl.project.business.services.restaurant_owner.MenuManagementService;
 import pl.project.business.services.restaurant_owner.RestaurantManagementService;
 import pl.project.business.services.restaurant_owner.RestaurantOwnerService;
+import pl.project.domain.model.Dish;
 import pl.project.domain.model.RestaurantOwner;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static pl.project.api.controller.exception.ExceptionMessages.*;
 
 @Controller
 @AllArgsConstructor
@@ -95,8 +104,13 @@ public class MenuManagementController {
     @PostMapping(ADD_DISH)
     public String addDish(
             MultipartFile dishPhoto,
-            DishDTO dishDTO
+            @Valid DishDTO dishDTO,
+            BindingResult result
     ) {
+        if(result.hasErrors()){
+            throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+                    .formatted(getFailedFields(result), Dish.class.getSimpleName()));
+        }
         menuManagementService.createDish(dishMapper.mapFromDTO(dishDTO), dishPhoto);
         return REDIRECT_MENU_MANAGEMENT;
     }

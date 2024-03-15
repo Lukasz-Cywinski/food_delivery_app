@@ -1,4 +1,4 @@
-package pl.project.domain.message;
+package pl.project.domain.exception;
 
 public class ExceptionMessages {
 

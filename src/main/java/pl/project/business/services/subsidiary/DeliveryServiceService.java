@@ -2,16 +2,6 @@ package pl.project.business.services.subsidiary;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.project.business.dao.DeliveryManDAO;
-import pl.project.business.dao.DeliveryServiceDAO;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
-import pl.project.domain.exception.NoAvailableDeliveryMan;
-import pl.project.domain.model.DeliveryMan;
-import pl.project.domain.model.DeliveryService;
-import pl.project.domain.model.Order;
-
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor

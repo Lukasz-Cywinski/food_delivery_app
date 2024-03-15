@@ -1,30 +1,11 @@
 package pl.project.business.services.subsidiary;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.project.business.dao.OrderDAO;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
-import pl.project.domain.model.Customer;
-import pl.project.domain.model.DeliveryService;
-import pl.project.domain.model.Order;
-import pl.project.util.domain.InstanceMapper;
-
-import java.time.OffsetDateTime;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
-import static pl.project.util.db.CustomerInstance.someCustomer1;
-import static pl.project.util.db.DeliveryServiceInstance.someDeliveryService1;
-import static pl.project.util.db.OrderInstance.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {

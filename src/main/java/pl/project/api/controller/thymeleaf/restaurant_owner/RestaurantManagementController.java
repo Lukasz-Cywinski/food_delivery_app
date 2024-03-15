@@ -1,22 +1,31 @@
 package pl.project.api.controller.thymeleaf.restaurant_owner;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import pl.project.api.controller.addresses.RestaurantOwnerAddresses;
+import pl.project.api.controller.exception.ExceptionMessages;
+import pl.project.api.controller.exception.OwnerIncorrectInputException;
 import pl.project.api.dto.RestaurantDTO;
 import pl.project.api.dto.ServedAddressDTO;
 import pl.project.api.dto.mapper.RestaurantMapper;
 import pl.project.api.dto.mapper.ServedAddressMapper;
 import pl.project.business.services.restaurant_owner.RestaurantManagementService;
 import pl.project.business.services.restaurant_owner.RestaurantOwnerService;
-import pl.project.domain.model.RestaurantOwner;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceCreateException;
+import pl.project.domain.model.Restaurant;
+import pl.project.domain.model.ServedAddress;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
 import java.util.List;
 import java.util.Map;
+
+import static pl.project.api.controller.exception.ExceptionMessages.getFailedFields;
+import static pl.project.domain.exception.ExceptionMessages.*;
 
 @Controller
 @AllArgsConstructor
@@ -74,12 +83,18 @@ public class RestaurantManagementController {
 
     @PostMapping(RESTAURANT_ADD_SERVED_ADDRESS)
     public String addServedAddress(
-            ServedAddressDTO servedAddressDTO,
-            RestaurantDTO restaurantDTO
+           @Valid ServedAddressDTO servedAddressDTO,
+            BindingResult result,
+            String restaurantCode
     ){
-        servedAddressDTO.setRestaurant(restaurantDTO);
-        restaurantManagementService.createServedAddress(servedAddressMapper.mapFromDTO(servedAddressDTO));
-        return REDIRECT_RESTAURANT_MANAGEMENT + "/%s".formatted(restaurantDTO.getRestaurantCode());
+        if(result.hasErrors()){
+            throw new OwnerIncorrectInputException(ExceptionMessages.OWNER_INCORRECT_INPUT_EXCEPTION
+                    .formatted(getFailedFields(result), ServedAddress.class.getSimpleName()));
+        }
+        Restaurant restaurant = restaurantManagementService.getRestaurantByRestaurantCode(restaurantCode);
+        ServedAddress servedAddress = servedAddressMapper.mapFromDTO(servedAddressDTO).withRestaurant(restaurant);
+        restaurantManagementService.createServedAddress(servedAddress);
+        return REDIRECT_RESTAURANT_MANAGEMENT + "/%s".formatted(restaurantCode);
     }
 
     @DeleteMapping(RESTAURANT_DELETE_SERVED_ADDRESS)

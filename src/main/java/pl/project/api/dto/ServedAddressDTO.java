@@ -1,5 +1,9 @@
 package pl.project.api.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +17,13 @@ import pl.project.domain.model.Restaurant;
 public class ServedAddressDTO {
 
     Integer id;
+
+    @Pattern(regexp = "^[A-Za-z0-9_-]{1,32}$")
     String city;
+
+    @Pattern(regexp = "^[A-Za-z0-9_-]{1,32}$")
     String street;
-    RestaurantDTO restaurant;
+
+//    @Pattern(regexp = "^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$")
+//    String restaurantCode;
 }

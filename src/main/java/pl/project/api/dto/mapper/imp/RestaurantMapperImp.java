@@ -24,7 +24,6 @@ public class RestaurantMapperImp implements RestaurantMapper {
                 .restaurantCode(domainObj.getRestaurantCode())
                 .name(domainObj.getName())
                 .added(domainObj.getAdded().format(FORMATTER))
-                .isActive(domainObj.isActive())
                 .build();
     }
 

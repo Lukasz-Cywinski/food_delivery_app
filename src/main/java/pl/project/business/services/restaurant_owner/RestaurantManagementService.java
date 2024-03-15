@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.project.business.dao.RestaurantDAO;
 import pl.project.business.dao.RestaurantOwnerDAO;
 import pl.project.business.dao.ServedAddressDAO;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceCreateException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceDeleteException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
 import pl.project.domain.model.*;
@@ -15,7 +15,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static pl.project.domain.message.ExceptionMessages.*;
+import static pl.project.domain.exception.ExceptionMessages.*;
 
 @Service
 @AllArgsConstructor
@@ -40,7 +40,7 @@ public class RestaurantManagementService {
             return restaurantDAO.createRestaurant(restaurant).orElseThrow(RuntimeException::new);
         }
         catch (Exception e){
-            throw new OwnerResourceCreationException(RESOURCE_CREATION_EXCEPTION
+            throw new OwnerResourceCreateException(RESOURCE_CREATION_EXCEPTION
                     .formatted(Restaurant.class.getName(), restaurantName), e);
         }
     }
@@ -87,7 +87,7 @@ public class RestaurantManagementService {
             return servedAddressDAO.createServedAddress(servedAddress).orElseThrow(RuntimeException::new);
         }
         catch (Exception e){
-            throw new OwnerResourceCreationException(RESOURCE_CREATION_EXCEPTION
+            throw new OwnerResourceCreateException(RESOURCE_CREATION_EXCEPTION
                     .formatted(ServedAddress.class.getName(), servedAddress), e);
         }
     }

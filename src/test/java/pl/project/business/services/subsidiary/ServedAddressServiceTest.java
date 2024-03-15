@@ -1,25 +1,9 @@
 package pl.project.business.services.subsidiary;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.project.business.dao.ServedAddressDAO;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreationException;
-import pl.project.domain.model.Restaurant;
-import pl.project.domain.model.ServedAddress;
-import pl.project.util.domain.InstanceMapper;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-import static pl.project.util.db.RestaurantInstance.someRestaurant1;
-import static pl.project.util.db.ServedAddressInstance.someServedAddress1;
-import static pl.project.util.db.ServedAddressInstance.someServedAddress2;
 
 @ExtendWith(MockitoExtension.class)
 class ServedAddressServiceTest {
