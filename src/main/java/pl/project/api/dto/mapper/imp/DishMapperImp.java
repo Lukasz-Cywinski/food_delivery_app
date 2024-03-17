@@ -9,14 +9,11 @@ import pl.project.domain.model.Dish;
 import pl.project.domain.model.DishCategory;
 import pl.project.domain.model.Restaurant;
 
+import java.util.Objects;
+
 @Component
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class DishMapperImp implements DishMapper {
-
-    private final String MAPPER_ENTITY_READ_EXCEPTION = "Failed to found resource %s by code: %s in dish mapper";
-
-//    RestaurantDAO restaurantDAO;
-//    DishCategoryDAO dishCategoryDAO;
 
     @Override
     public DishDTO mapToDTO(Dish domainObj) {
@@ -28,8 +25,10 @@ public class DishMapperImp implements DishMapper {
                 .averagePreparationTimeMin(domainObj.getAveragePreparationTimeMin())
                 .restaurantCode(domainObj.getRestaurant().getRestaurantCode())
                 .dishCategoryId(domainObj.getDishCategory().getId())
-                .dishPhotoURL(domainObj.getDishPhoto().getUrl())
-                .dishPhotoName(domainObj.getDishPhoto().getName()
+                .dishPhotoURL(Objects.isNull(domainObj.getDishPhoto()) ?
+                        null : domainObj.getDishPhoto().getUrl())
+                .dishPhotoName(Objects.isNull(domainObj.getDishPhoto()) ?
+                        "Photo unavailable" : domainObj.getDishPhoto().getName()
                         .substring(domainObj.getDishPhoto().getName().indexOf("_") + 1))
                 .dishCategoryName(domainObj.getDishCategory().getName())
                 .build();
@@ -49,14 +48,6 @@ public class DishMapperImp implements DishMapper {
                 .dishCategory(DishCategory.builder()
                         .id(dto.getDishCategoryId())
                         .build())
-//                .restaurant(restaurantDAO.findRestaurantByRestaurantCode(dto.getRestaurantCode())
-//                        .orElseThrow(()-> new EntityReadException(
-//                                MAPPER_ENTITY_READ_EXCEPTION.formatted(RestaurantEntity.class, dto.getRestaurantCode())
-//                        )))
-//                .dishCategory(dishCategoryDAO.getDishCategoryByDishCategoryId(dto.getDishCategoryId())
-//                        .orElseThrow(() -> new EntityReadException(
-//                                MAPPER_ENTITY_READ_EXCEPTION.formatted(DishCategoryEntity.class, dto.getDishCategoryId())
-//                        )))
                 .build();
     }
 }

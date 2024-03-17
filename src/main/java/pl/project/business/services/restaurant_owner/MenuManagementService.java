@@ -37,7 +37,10 @@ public class MenuManagementService {
     @Transactional
     public Dish createDish(Dish dish, MultipartFile dishPhotoContent) {
         try {
-            DishPhoto dishPhoto = createDishPhoto(dishPhotoContent);
+            DishPhoto dishPhoto = null;
+            if(!dishPhotoContent.isEmpty()){
+                dishPhoto = createDishPhoto(dishPhotoContent);
+            }
             DishCategory dishCategory = dishCategoryDAO.getDishCategoryByDishCategoryId(dish.getDishCategory().getId())
                     .orElseThrow(RuntimeException::new);
             Restaurant restaurant = restaurantDAO.findRestaurantByRestaurantCode(dish.getRestaurant().getRestaurantCode())

@@ -6,13 +6,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import pl.project.api.controller.addresses.RestaurantOwnerAddresses;
-import pl.project.api.controller.exception.ExceptionMessages;
 import pl.project.api.controller.exception.OwnerIncorrectInputException;
 import pl.project.api.dto.DishCategoryDTO;
 import pl.project.api.dto.DishDTO;
@@ -24,23 +21,21 @@ import pl.project.business.services.restaurant_owner.MenuManagementService;
 import pl.project.business.services.restaurant_owner.RestaurantManagementService;
 import pl.project.business.services.restaurant_owner.RestaurantOwnerService;
 import pl.project.domain.model.Dish;
-import pl.project.domain.model.RestaurantOwner;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static pl.project.api.controller.exception.ExceptionMessages.*;
+import static pl.project.api.controller.exception.ExceptionMessages.OWNER_INCORRECT_INPUT_EXCEPTION;
+import static pl.project.api.controller.exception.ExceptionMessages.getFailedFields;
 
 @Controller
 @AllArgsConstructor
 @RequestMapping(RestaurantOwnerAddresses.MENU_MANAGEMENT)
 public class MenuManagementController {
 
-    static final String ADD_DISH = "/add_dish";
-    static final String DEACTIVATE_DISH = "/deactivate_dish";
-    static final String DISH_UPDATE = "/{dishCode}";
+    static final String DISH_INFO = "/{dishCode}";
     static final String REDIRECT_MENU_MANAGEMENT = "redirect:%s".formatted(RestaurantOwnerAddresses.MENU_MANAGEMENT);
 
     RestaurantManagementService restaurantManagementService;
@@ -86,12 +81,47 @@ public class MenuManagementController {
         );
     }
 
-    @GetMapping(DISH_UPDATE)
+    @PostMapping
+    public String addDish(
+            MultipartFile dishPhoto,
+            @Valid DishDTO dishDTO,
+            BindingResult result
+    ) {
+        validateDishInput(dishPhoto, result);
+        menuManagementService.createDish(dishMapper.mapFromDTO(dishDTO), dishPhoto);
+        return REDIRECT_MENU_MANAGEMENT;
+    }
+
+    private void validateDishInput(MultipartFile dishPhoto, BindingResult result){
+        if(result.hasErrors()){
+            throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+                    .formatted(getFailedFields(result), Dish.class.getSimpleName()));
+        }
+        if (!Objects.requireNonNull(dishPhoto.getOriginalFilename()).isEmpty() && dishPhoto.getSize() == 0){
+            throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+                    .formatted("File is empty", Dish.class.getSimpleName()));
+        }
+
+        if (!dishPhoto.isEmpty()){
+            if (Objects.isNull(dishPhoto.getContentType())){
+                throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+                        .formatted("Unable to read file extension", Dish.class.getSimpleName()));
+            }
+            switch (dishPhoto.getContentType()){
+                case "image/jpeg":
+                case "image/jpg":
+                case "image/png": break;
+                default: throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+                        .formatted("File extension %s is not supported".formatted(dishPhoto.getContentType()), Dish.class.getSimpleName()));
+            }
+        }
+    }
+
+    @GetMapping(DISH_INFO)
     public ModelAndView dishUpdate(
             @PathVariable String dishCode
     ){
-        System.out.println();
-        return new ModelAndView("restaurant_owner/dishUpdate",
+        return new ModelAndView("restaurant_owner/dish_info",
                 populateDishUpdateWithData());
     }
 
@@ -101,21 +131,7 @@ public class MenuManagementController {
         );
     }
 
-    @PostMapping(ADD_DISH)
-    public String addDish(
-            MultipartFile dishPhoto,
-            @Valid DishDTO dishDTO,
-            BindingResult result
-    ) {
-        if(result.hasErrors()){
-            throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
-                    .formatted(getFailedFields(result), Dish.class.getSimpleName()));
-        }
-        menuManagementService.createDish(dishMapper.mapFromDTO(dishDTO), dishPhoto);
-        return REDIRECT_MENU_MANAGEMENT;
-    }
-
-    @PostMapping(DEACTIVATE_DISH)
+    @DeleteMapping
     public ModelAndView deactivateDish(
             ModelMap model,
             @RequestParam(value = "dishCode") String dishCode,
@@ -125,25 +141,6 @@ public class MenuManagementController {
         menuManagementService.deactivateDish(dishCode);
         return new ModelAndView(REDIRECT_MENU_MANAGEMENT, model);
     }
-
-//    @PostMapping(MENU_MANAGEMENT_SHOW_DISHES)
-//    public String showDishesForRestaurant(
-////            String restaurantCode
-////           @Valid @RequestParam RestaurantDTO restaurantDTO
-////           @Valid @ModelAttribute("restaurantDTO") RestaurantDTO restaurantDTO,
-//           @Valid RestaurantDTO restaurantDTO,
-//           BindingResult result
-//    ){
-//        if(result.hasErrors()){
-//            System.out.println(">>>>>>>>>>>>>>");
-//            System.out.println(">>>>>>>>>>>>>>");
-//            System.out.println("problem walidacji");
-//            System.out.println(">>>>>>>>>>>>>>");
-//            System.out.println(">>>>>>>>>>>>>>");
-//        }
-//        System.out.println();
-//        return REDIRECT_MENU_MANAGEMENT;
-//    }
 
     private String getActiveUserEmail() {
         return projectUserDetailsService.getUserEmail(

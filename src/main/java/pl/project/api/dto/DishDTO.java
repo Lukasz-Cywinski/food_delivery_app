@@ -18,7 +18,7 @@ public class DishDTO {
     @Pattern(regexp = "^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$")
     String dishCode;
 
-    @Pattern(regexp = "^[A-Za-z0-9_-]{1,32}$")
+    @Pattern(regexp = "^[A-Za-z0-9_]{1,32}$")
     String name;
 
     @Size(max = 64)

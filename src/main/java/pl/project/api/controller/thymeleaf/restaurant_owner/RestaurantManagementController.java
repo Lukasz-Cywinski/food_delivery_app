@@ -17,13 +17,17 @@ import pl.project.api.dto.mapper.ServedAddressMapper;
 import pl.project.business.services.restaurant_owner.RestaurantManagementService;
 import pl.project.business.services.restaurant_owner.RestaurantOwnerService;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceCreateException;
+import pl.project.domain.model.Dish;
 import pl.project.domain.model.Restaurant;
 import pl.project.domain.model.ServedAddress;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static pl.project.api.controller.exception.ExceptionMessages.OWNER_INCORRECT_INPUT_EXCEPTION;
 import static pl.project.api.controller.exception.ExceptionMessages.getFailedFields;
 import static pl.project.domain.exception.ExceptionMessages.*;
 
@@ -32,12 +36,7 @@ import static pl.project.domain.exception.ExceptionMessages.*;
 @RequestMapping(RestaurantOwnerAddresses.RESTAURANT_MANAGEMENT)
 public class RestaurantManagementController {
 
-    static final String ADD_RESTAURANT = "/add_restaurant";
-    static final String DEACTIVATE_RESTAURANT = "/deactivate_restaurant";
-    static final String RESTAURANT_UPDATE = "/{restaurantCode}";
-    static final String RESTAURANT_ADD_SERVED_ADDRESS = "/add_servedAddress";
-    static final String RESTAURANT_DELETE_SERVED_ADDRESS = "/delete_servedAddress";
-    // Redirect
+    static final String RESTAURANT_INFO = "/{restaurantCode}";
     static final String REDIRECT_RESTAURANT_MANAGEMENT = "redirect:%s".formatted(RestaurantOwnerAddresses.RESTAURANT_MANAGEMENT);
 
     private final ProjectUserDetailsService projectUserDetailsService;
@@ -61,11 +60,11 @@ public class RestaurantManagementController {
         );
     }
 
-    @GetMapping(RESTAURANT_UPDATE)
+    @GetMapping(RESTAURANT_INFO)
     public ModelAndView updateRestaurant(
             @PathVariable String restaurantCode
     ) {
-        return new ModelAndView("restaurant_owner/restaurant_update",
+        return new ModelAndView("restaurant_owner/restaurant_info",
                 populateRestaurantUpdateWithData(restaurantCode));
     }
 
@@ -81,11 +80,11 @@ public class RestaurantManagementController {
         );
     }
 
-    @PostMapping(RESTAURANT_ADD_SERVED_ADDRESS)
+    @PostMapping(RESTAURANT_INFO)
     public String addServedAddress(
            @Valid ServedAddressDTO servedAddressDTO,
             BindingResult result,
-            String restaurantCode
+            @PathVariable String restaurantCode
     ){
         if(result.hasErrors()){
             throw new OwnerIncorrectInputException(ExceptionMessages.OWNER_INCORRECT_INPUT_EXCEPTION
@@ -97,24 +96,30 @@ public class RestaurantManagementController {
         return REDIRECT_RESTAURANT_MANAGEMENT + "/%s".formatted(restaurantCode);
     }
 
-    @DeleteMapping(RESTAURANT_DELETE_SERVED_ADDRESS)
+    @DeleteMapping(RESTAURANT_INFO)
     public String deleteServedAddress(
             Integer servedAddressId,
-            String restaurantCode
+            @PathVariable String restaurantCode
     ){
         restaurantManagementService.deleteServedAddress(servedAddressId);
         return REDIRECT_RESTAURANT_MANAGEMENT + "/%s".formatted(restaurantCode);
     }
 
-    @PostMapping(ADD_RESTAURANT)
+    @PostMapping
     public String addRestaurant(
             @RequestParam(value = "restaurantName") String restaurantName
     ) {
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9_]{1,32}$");
+        Matcher matcher = pattern.matcher(restaurantName);
+        if(!matcher.find()){
+            throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+                    .formatted(restaurantName, Restaurant.class.getSimpleName()));
+        }
         restaurantManagementService.createRestaurant(restaurantName, getActiveUserEmail());
         return REDIRECT_RESTAURANT_MANAGEMENT;
     }
 
-    @PostMapping(DEACTIVATE_RESTAURANT)
+    @DeleteMapping
     public String deactivateRestaurant(
             @RequestParam(value = "restaurantCode") String restaurantCode
     ) {

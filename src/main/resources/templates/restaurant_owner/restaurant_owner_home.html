@@ -81,12 +81,12 @@
                 <td th:text="${order.orderNumber}"></td>
                 <td th:text="${order.receivedTime}"></td>
                 <td>
-                    <form action="#" th:action="@{/restaurant_owner/order_details/{order.orderNumber}" method="GET">
+                    <form th:action="@{/restaurant_owner/order_details/{order.orderNumber}" method="GET">
                         <button type="submit" class="btn btn-info btn-block">Show</button>
                     </form>
                 </td>
                 <td>
-                    <form action="#" th:action="@{/restaurant_owner/notify_delivery_man/{order.orderNumber}" method="POST">
+                    <form th:action="@{/restaurant_owner/notify_delivery_man/{order.orderNumber}" method="POST">
                         <button type="submit" class="btn btn-info btn-block">Notify</button>
                     </form>
                 </td>
