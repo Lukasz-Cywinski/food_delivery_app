@@ -71,13 +71,13 @@ public interface DishJpaRepository extends JpaRepository<DishEntity, Integer> {
     @Modifying(clearAutomatically = true)
     Integer changeDishPhoto(DishPhotoEntity newDishPhoto, String dishCode);
 
-    @Query("""
-                UPDATE DishEntity d
-                SET d.dishCategory = ?1
-                WHERE d.dishCode = ?2
-                """)
+    @Query(value = """
+                UPDATE dish d
+                SET dish_category_id = ?1
+                WHERE dish_code = ?2
+                """, nativeQuery = true)
     @Modifying(clearAutomatically = true)
-    Integer changeDishCategory(DishCategoryEntity newDishCategory, String dishCode);
+    Integer changeDishCategory(Integer newDishCategoryId, String dishCode);
 
     @Query("""
                 UPDATE DishEntity d

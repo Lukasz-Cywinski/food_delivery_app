@@ -28,7 +28,7 @@ public interface DishDAO {
 
     Integer changeDishPhoto(DishPhoto newDishPhoto, String dishCode);
 
-    Integer changeDishCategory(DishCategory newDishCategory, String dishCode);
+    Integer changeDishCategory(Integer newDishCategoryId, String dishCode);
 
     Integer deactivateDish(String dishCode);
 }

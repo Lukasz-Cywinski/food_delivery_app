@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import pl.project.api.controller.exception.OwnerIncorrectInputException;
 import pl.project.domain.exception.restaurant_owner.*;
+import pl.project.domain.exception.storage.DishPhotoStorageException;
 
 @Slf4j
 @ControllerAdvice
@@ -71,7 +72,7 @@ public class OwnerExceptionHandler {
         return modelView;
     }
 
-    @ExceptionHandler(OwnerDishPhotoStorageException.class)
+    @ExceptionHandler(DishPhotoStorageException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView handleDishPhotoStorageException(Exception e) {
         String message = String.format(e.getMessage());

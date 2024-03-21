@@ -4,24 +4,21 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import pl.project.business.dao.DishCategoryDAO;
-import pl.project.business.dao.DishDAO;
-import pl.project.business.dao.DishPhotoDAO;
-import pl.project.business.dao.RestaurantDAO;
-import pl.project.domain.exception.restaurant_owner.OwnerDishPhotoStorageException;
+import pl.project.business.dao.*;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceCreateException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceDeleteException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
+import pl.project.domain.exception.restaurant_owner.OwnerResourceUpdateException;
 import pl.project.domain.model.Dish;
 import pl.project.domain.model.DishCategory;
 import pl.project.domain.model.DishPhoto;
 import pl.project.domain.model.Restaurant;
 
-import java.nio.file.Paths;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-import static pl.project.api.controller.addresses.ResourcePaths.PATH_TO_PHOTO_STORAGE_WITH_FORMATTER;
 import static pl.project.api.controller.addresses.ResourcePaths.URL_TO_PHOTO_STORAGE_WITH_FORMATTER;
 import static pl.project.domain.exception.ExceptionMessages.*;
 
@@ -33,12 +30,13 @@ public class MenuManagementService {
     private final DishPhotoDAO dishPhotoDAO;
     private final RestaurantDAO restaurantDAO;
     private final DishCategoryDAO dishCategoryDAO;
+    private final DishPhotoFileStorageDAO dishPhotoFileStorageDAO;
 
     @Transactional
     public Dish createDish(Dish dish, MultipartFile dishPhotoContent) {
         try {
             DishPhoto dishPhoto = null;
-            if(!dishPhotoContent.isEmpty()){
+            if (!dishPhotoContent.isEmpty()) {
                 dishPhoto = createDishPhoto(dishPhotoContent);
             }
             DishCategory dishCategory = dishCategoryDAO.getDishCategoryByDishCategoryId(dish.getDishCategory().getId())
@@ -46,11 +44,11 @@ public class MenuManagementService {
             Restaurant restaurant = restaurantDAO.findRestaurantByRestaurantCode(dish.getRestaurant().getRestaurantCode())
                     .orElseThrow(RuntimeException::new);
             return dishDAO.createDish(dish
-                    .withDishPhoto(dishPhoto)
-                    .withDishCode(UUID.randomUUID().toString())
-                    .withRestaurant(restaurant)
-                    .withDishCategory(dishCategory)
-                    .withActive(true))
+                            .withDishPhoto(dishPhoto)
+                            .withDishCode(UUID.randomUUID().toString())
+                            .withRestaurant(restaurant)
+                            .withDishCategory(dishCategory)
+                            .withActive(true))
                     .orElseThrow(RuntimeException::new);
         } catch (Exception e) {
             throw new OwnerResourceCreateException(RESOURCE_CREATION_EXCEPTION
@@ -64,36 +62,15 @@ public class MenuManagementService {
                 .name(dishPhotoName)
                 .url(URL_TO_PHOTO_STORAGE_WITH_FORMATTER.formatted(dishPhotoName))
                 .build();
-        savePhotoInStorage(dishPhotoContent, dishPhoto);
+        dishPhotoFileStorageDAO.savePhotoInStorage(dishPhotoContent, dishPhoto);
         return dishPhotoDAO.createDishPhoto(dishPhoto).orElseThrow(RuntimeException::new);
     }
-
-    private void savePhotoInStorage(MultipartFile dishPhotoContent, DishPhoto dishPhoto) {
-        try {
-            dishPhotoContent.transferTo(Paths.get(
-                    PATH_TO_PHOTO_STORAGE_WITH_FORMATTER.formatted(dishPhoto.getName())));
-        } catch (Exception e) {
-            throw new OwnerDishPhotoStorageException(DISH_PHOTO_STORAGE_SAVE_EXCEPTION.formatted(dishPhoto.getName()), e);
-        }
-    }
-
-//    public void deleteDishPhoto(String dishPhotoURL) {
-//        String dishPhotoName = Arrays.asList(dishPhotoURL.split("/")).getLast();
-//        try {
-//            dishPhotoDAO.deleteDishPhoto(dishPhoto);
-//            Files.delete(Paths.get(
-//                    PATH_TO_PHOTO_STORAGE_WITH_FORMATTER.formatted(dishPhotoName)));
-//        } catch (Exception e) {
-//            throw new OwnerDishPhotoStorageException(DISH_PHOTO_STORAGE_DELETE_EXCEPTION.formatted(dishPhotoName));
-//        }
-//    }
 
     @Transactional
     public List<Dish> getActiveDishesForRestaurants(String restaurantCode) {
         try {
             return dishDAO.findActiveDishesByRestaurant(restaurantCode);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new OwnerResourceReadException(RESOURCE_READ_EXCEPTION.formatted(Dish.class.getSimpleName(), restaurantCode), e);
         }
     }
@@ -102,8 +79,7 @@ public class MenuManagementService {
     public boolean deactivateDish(String dishCode) {
         try {
             return dishDAO.deactivateDish(dishCode) == 1;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new OwnerResourceDeleteException(RESOURCE_DELETE_EXCEPTION.formatted(Dish.class.getSimpleName(), dishCode), e);
         }
     }
@@ -112,18 +88,44 @@ public class MenuManagementService {
     public List<DishCategory> getDishCategories() {
         try {
             return dishCategoryDAO.getAllDishCategories();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new OwnerResourceReadException(RESOURCE_DELETE_EXCEPTION
                     .formatted(Dish.class.getSimpleName(), "all dish categories"), e);
         }
     }
 
+    @Transactional
+    public Dish getDishByDishCode(String dishCode) {
+        try {
+            return dishDAO.findDishByDishCode(dishCode).orElseThrow(RuntimeException::new);
+        }
+        catch (Exception e){
+            throw new OwnerResourceReadException(RESOURCE_READ_EXCEPTION.formatted(Dish.class.getSimpleName(), dishCode), e);
+        }
+    }
 
+    @Transactional
+    public void updateDish(Dish dish, MultipartFile dishPhotoContent, String dishCode) {
+        String newDishName = dish.getName();
+        String newDishDescription = dish.getDescription();
+        String dishPhotoUrl = dish.getDishPhoto().getUrl();
+        BigDecimal newDishPrice = dish.getPrice();
+        Integer newDishAveragePreparationTime = dish.getAveragePreparationTimeMin();
+        Integer newDishCategoryId = dish.getDishCategory().getId();
 
-
-
-
+        try {
+            if (Objects.nonNull(newDishName) && !newDishName.isEmpty()) dishDAO.changeDishName(newDishName, dishCode);
+            if (Objects.nonNull(newDishDescription) && !newDishDescription.isEmpty()) dishDAO.changeDishDescription(newDishDescription, dishCode);
+            if (Objects.nonNull(newDishPrice)) dishDAO.changeDishPrice(newDishPrice, dishCode);
+            if (Objects.nonNull(newDishAveragePreparationTime)) dishDAO.changeDishPreparationTime(newDishAveragePreparationTime, dishCode);
+            if (Objects.nonNull(newDishCategoryId)) dishDAO.changeDishCategory(newDishCategoryId, dishCode);
+            if (!dishPhotoContent.isEmpty()) dishPhotoFileStorageDAO.updatePhotoInStorage(dishPhotoContent, dishPhotoUrl);
+        }
+        catch (Exception e){
+            throw new OwnerResourceUpdateException(RESOURCE_MODIFICATION_EXCEPTION
+                    .formatted(Dish.class.getSimpleName(), dishCode));
+        }
+    }
 
 
 // TO DEAL LATER
@@ -134,13 +136,6 @@ public class MenuManagementService {
 //                .orElseThrow(() -> new OwnerResourceReadException(ENTITY_READ_EXCEPTION.formatted(DishCategoryEntity.class, id)));
 //    }
 //
-//    private final DishPhotoService dishPhotoService;
-//
-//    // without transactional -> methods all called from another Transactional methods
-//    public Dish getDish(String dishCode) {
-//        return dishDAO.findDishByDishCode(dishCode)
-//                .orElseThrow(() -> new OwnerResourceReadException(DISH_READ_EXCEPTION.formatted(dishCode)));
-//    }
 //
 //    public boolean modifyDishData(Dish dish, String dishCode) {
 //        return (dishDAO.changeDishName(dish.getName(), dishCode)

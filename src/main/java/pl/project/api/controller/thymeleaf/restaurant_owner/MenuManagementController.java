@@ -37,6 +37,7 @@ public class MenuManagementController {
 
     static final String DISH_INFO = "/{dishCode}";
     static final String REDIRECT_MENU_MANAGEMENT = "redirect:%s".formatted(RestaurantOwnerAddresses.MENU_MANAGEMENT);
+    static final String REDIRECT_DISH_INFO = "redirect:%s%s".formatted(RestaurantOwnerAddresses.MENU_MANAGEMENT, DISH_INFO);
 
     RestaurantManagementService restaurantManagementService;
     ProjectUserDetailsService projectUserDetailsService;
@@ -92,43 +93,40 @@ public class MenuManagementController {
         return REDIRECT_MENU_MANAGEMENT;
     }
 
-    private void validateDishInput(MultipartFile dishPhoto, BindingResult result){
-        if(result.hasErrors()){
+    private void validateDishInput(MultipartFile dishPhoto, BindingResult result) {
+        if (result.hasErrors()) {
             throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
                     .formatted(getFailedFields(result), Dish.class.getSimpleName()));
         }
-        if (!Objects.requireNonNull(dishPhoto.getOriginalFilename()).isEmpty() && dishPhoto.getSize() == 0){
+        validateDishPhotoInputContent(dishPhoto);
+    }
+
+    private static void validateDishPhotoInputContent(MultipartFile dishPhoto) {
+        if (dishPhoto.getSize() > 5_242_880){
+            throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+                    .formatted("File is too big", Dish.class.getSimpleName()));
+        }
+
+        if (!Objects.requireNonNull(dishPhoto.getOriginalFilename()).isEmpty() && dishPhoto.getSize() == 0) {
             throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
                     .formatted("File is empty", Dish.class.getSimpleName()));
         }
 
-        if (!dishPhoto.isEmpty()){
-            if (Objects.isNull(dishPhoto.getContentType())){
+        if (!dishPhoto.isEmpty()) {
+            if (Objects.isNull(dishPhoto.getContentType())) {
                 throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
                         .formatted("Unable to read file extension", Dish.class.getSimpleName()));
             }
-            switch (dishPhoto.getContentType()){
+            switch (dishPhoto.getContentType()) {
                 case "image/jpeg":
                 case "image/jpg":
-                case "image/png": break;
-                default: throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
-                        .formatted("File extension %s is not supported".formatted(dishPhoto.getContentType()), Dish.class.getSimpleName()));
+                case "image/png":
+                    break;
+                default:
+                    throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+                            .formatted("File extension %s is not supported".formatted(dishPhoto.getContentType()), Dish.class.getSimpleName()));
             }
         }
-    }
-
-    @GetMapping(DISH_INFO)
-    public ModelAndView dishUpdate(
-            @PathVariable String dishCode
-    ){
-        return new ModelAndView("restaurant_owner/dish_info",
-                populateDishUpdateWithData());
-    }
-
-    private Map<String, ?> populateDishUpdateWithData() {
-        return Map.of(
-
-        );
     }
 
     @DeleteMapping
@@ -140,6 +138,38 @@ public class MenuManagementController {
         model.addAttribute("restaurantCode", restaurantCode);
         menuManagementService.deactivateDish(dishCode);
         return new ModelAndView(REDIRECT_MENU_MANAGEMENT, model);
+    }
+
+    @GetMapping(DISH_INFO)
+    public ModelAndView dishUpdate(
+            @PathVariable String dishCode
+    ) {
+        return new ModelAndView("restaurant_owner/dish_info",
+                populateDishInfoWithData(dishCode));
+    }
+
+    private Map<String, ?> populateDishInfoWithData(String dishCode) {
+        DishDTO dishDTO = dishMapper.mapToDTO(menuManagementService.getDishByDishCode(dishCode));
+        List<DishCategoryDTO> dishCategories = menuManagementService.getDishCategories().stream()
+                .map(dishCategoryMapper::mapToDTO)
+                .toList();
+        return Map.of(
+                "dishCategoryDTO", DishCategoryDTO.builder().build(),
+                "dishCategoryDTOs", dishCategories,
+                "dishDTO", dishDTO
+        );
+    }
+
+    @PatchMapping(DISH_INFO)
+    public String updateDishName(
+            MultipartFile updatePhoto,
+            DishDTO dishDTO,
+            @PathVariable String dishCode,
+            BindingResult result
+    ) {
+        validateDishInput(updatePhoto, result);
+        menuManagementService.updateDish(dishMapper.mapFromDTO(dishDTO), updatePhoto, dishCode);
+        return REDIRECT_DISH_INFO;
     }
 
     private String getActiveUserEmail() {

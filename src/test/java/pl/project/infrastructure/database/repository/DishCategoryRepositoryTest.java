@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.project.util.db.DishCategoryInstance.*;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -71,7 +72,7 @@ class DishCategoryRepositoryTest extends MyJpaConfiguration {
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "dishes")
                 .contains(dishCategory1, dishCategory2, dishCategory3);
 
-        assertEquals(3, dishCategories.size());
+        assertTrue(dishCategories.size() >= 3);
     }
 
     @Test

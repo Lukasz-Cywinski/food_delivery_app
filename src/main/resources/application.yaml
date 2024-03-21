@@ -3,7 +3,7 @@ server:
   servlet:
     context-path: /food-delivery
     multipart:
-      max-file-size: 10MB
+      max-file-size: 5MB
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
@@ -28,3 +28,5 @@ spring:
 #    hiddenMethod:
 #      filter:
 #        enabled: true
+  flyway:
+    baseline-on-migrate: true

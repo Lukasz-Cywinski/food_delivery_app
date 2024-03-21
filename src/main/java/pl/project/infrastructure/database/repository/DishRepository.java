@@ -83,11 +83,15 @@ public class DishRepository implements DishDAO {
     }
 
     @Override
-    public Integer changeDishCategory(DishCategory newDishCategory, String dishCode) {
-        return dishJpaRepository.changeDishCategory(
-                dishCategoryEntityMapper.mapToEntity(newDishCategory),
-                dishCode);
+    public Integer changeDishCategory(Integer newDishCategoryId, String dishCode) {
+        return dishJpaRepository.changeDishCategory(newDishCategoryId, dishCode);
     }
+//    @Override
+//    public Integer changeDishCategory(Integer newDishCategoryId, String dishCode) {
+//        return dishJpaRepository.changeDishCategory(
+//                dishCategoryEntityMapper.mapToEntity(newDishCategory),
+//                dishCode);
+//    }
 
     @Override
     public Integer deactivateDish(String dishCode) {

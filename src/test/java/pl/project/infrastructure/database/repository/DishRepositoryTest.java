@@ -193,9 +193,10 @@ class DishRepositoryTest extends MyJpaConfiguration {
         //given
         String dishCode = someDish1().getDishCode();
         DishCategoryEntity newDishCategory = initializer.SAVED_DISH_CATEGORIES.get(1);
+        Integer newDishCategoryId = newDishCategory.getId();
 
         //when
-        dishJpaRepository.changeDishCategory(newDishCategory, dishCode);
+        dishJpaRepository.changeDishCategory(newDishCategoryId, dishCode);
         DishEntity dishFromDb1 = dishJpaRepository.findByDishCode(dishCode).orElseThrow();
 
         //then

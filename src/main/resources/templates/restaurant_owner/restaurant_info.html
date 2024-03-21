@@ -94,7 +94,6 @@
                 <td th:text="${servedAddress.street}"></td>
                 <td th:object="${restaurantDTO}">
                     <form th:action="@{/restaurant_owner/restaurant_management/{restaurantCode}(restaurantCode=${restaurantCode})}" th:method="DELETE">
-<!--                        <input type="hidden" th:name="restaurantCode" th:value="${restaurantDTO.restaurantCode}">-->
                         <input type="hidden" th:name="servedAddressId" th:value="${servedAddress.id}">
                         <button type="submit" class="btn btn-danger btn-block">Delete</button>
                     </form>

@@ -107,11 +107,13 @@
                     <div class="btn btn-primary btn-rounded">
                         <label class="form-label text-white m-1" for="dishPhoto">Add photo
                             <br>
-                            <small id="dishPhotoHelp" class="form-text text-dark">Optional, allowed formats: .png; .jpeg; .jpg</small>
+                            <small id="dishPhotoHelp" class="form-text text-dark">Optional, allowed formats: .png; .jpeg; .jpg<br>1 file to 5MB max</small>
                         </label>
                         <input th:name="dishPhoto" type="file" class="form-control d-none" id="dishPhoto" accept="image/png, image/jpeg, image/jpg"/>
-                        <br>
                     </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <span id="imageSize"></span><br>
                 </div>
                 <button type="submit" class="btn btn-info">Create new dish</button>
             </div>
@@ -174,5 +176,24 @@
         </table>
     </div>
 </main>
+
+<script>
+    document.getElementById('dishPhoto').addEventListener('change', function() {
+        var file = this.files[0];
+        if (file) {
+            var fileSize = file.size; // Size in bytes
+            var sizeKB = fileSize / 1024; // Size in kilobytes
+            var sizeMB = sizeKB / 1024; // Size in megabytes
+            if(sizeKB < 100){
+                document.getElementById('imageSize').innerHTML = "Image Size: " + sizeKB.toFixed(2) + " KB";
+            }
+            else{
+                document.getElementById('imageSize').innerHTML = "Image Size: " + sizeMB.toFixed(2) + " MB";
+            }
+        } else {
+            document.getElementById('imageSize').innerHTML = "";
+        }
+    });
+</script>
 </body>
 </html>

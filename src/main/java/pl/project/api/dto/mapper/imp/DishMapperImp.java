@@ -7,6 +7,7 @@ import pl.project.api.dto.DishDTO;
 import pl.project.api.dto.mapper.DishMapper;
 import pl.project.domain.model.Dish;
 import pl.project.domain.model.DishCategory;
+import pl.project.domain.model.DishPhoto;
 import pl.project.domain.model.Restaurant;
 
 import java.util.Objects;
@@ -47,6 +48,10 @@ public class DishMapperImp implements DishMapper {
                         .build())
                 .dishCategory(DishCategory.builder()
                         .id(dto.getDishCategoryId())
+                        .build())
+                .dishPhoto(DishPhoto.builder()
+                        .name(dto.getDishPhotoName())
+                        .url(dto.getDishPhotoURL())
                         .build())
                 .build();
     }
