@@ -100,7 +100,7 @@ class DeliveryAddressRepositoryTest extends MyJpaConfiguration {
         DeliveryAddressEntity addressFromDb = deliveryAddressJpaRepository.findById(addressId).orElseThrow();
 
         //then
-        assertEquals(newPostalCode, addressFromDb.getPostalCode());
+        assertEquals(newPostalCode, addressFromDb.getBuildingNumber());
     }
 
     @Test

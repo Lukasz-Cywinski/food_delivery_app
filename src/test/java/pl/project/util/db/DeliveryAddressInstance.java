@@ -7,7 +7,7 @@ public class DeliveryAddressInstance {
     public static DeliveryAddressEntity someDeliveryAddress1(){
         return DeliveryAddressEntity.builder()
                 .city("city1")
-                .postalCode("11-111")
+                .buildingNumber("11-111")
                 .street("street1")
                 .build();
     }
@@ -15,7 +15,7 @@ public class DeliveryAddressInstance {
     public static DeliveryAddressEntity someDeliveryAddress2(){
         return DeliveryAddressEntity.builder()
                 .city("city2")
-                .postalCode("22-222")
+                .buildingNumber("22-222")
                 .street("street2")
                 .build();
     }
@@ -23,7 +23,7 @@ public class DeliveryAddressInstance {
     public static DeliveryAddressEntity someDeliveryAddress3(){
         return DeliveryAddressEntity.builder()
                 .city("city3")
-                .postalCode("33-333")
+                .buildingNumber("33-333")
                 .street("street3")
                 .build();
     }
