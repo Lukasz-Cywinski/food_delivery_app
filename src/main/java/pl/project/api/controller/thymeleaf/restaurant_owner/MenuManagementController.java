@@ -19,7 +19,7 @@ import pl.project.api.dto.mapper.DishMapper;
 import pl.project.api.dto.mapper.RestaurantMapper;
 import pl.project.business.services.restaurant_owner.MenuManagementService;
 import pl.project.business.services.restaurant_owner.RestaurantManagementService;
-import pl.project.business.services.restaurant_owner.RestaurantOwnerService;
+import pl.project.business.services.restaurant_owner.UserManagementService;
 import pl.project.domain.model.Dish;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static pl.project.api.controller.exception.ExceptionMessages.OWNER_INCORRECT_INPUT_EXCEPTION;
+import static pl.project.api.controller.exception.ExceptionMessages.INCORRECT_INPUT_EXCEPTION;
 import static pl.project.api.controller.exception.ExceptionMessages.getFailedFields;
 
 @Controller
@@ -41,7 +41,7 @@ public class MenuManagementController {
 
     RestaurantManagementService restaurantManagementService;
     ProjectUserDetailsService projectUserDetailsService;
-    RestaurantOwnerService restaurantOwnerService;
+    UserManagementService userManagementService;
     MenuManagementService menuManagementService;
 
     DishCategoryMapper dishCategoryMapper;
@@ -95,7 +95,7 @@ public class MenuManagementController {
 
     private void validateDishInput(MultipartFile dishPhoto, BindingResult result) {
         if (result.hasErrors()) {
-            throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+            throw new OwnerIncorrectInputException(INCORRECT_INPUT_EXCEPTION
                     .formatted(getFailedFields(result), Dish.class.getSimpleName()));
         }
         validateDishPhotoInputContent(dishPhoto);
@@ -103,18 +103,18 @@ public class MenuManagementController {
 
     private static void validateDishPhotoInputContent(MultipartFile dishPhoto) {
         if (dishPhoto.getSize() > 5_242_880){
-            throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+            throw new OwnerIncorrectInputException(INCORRECT_INPUT_EXCEPTION
                     .formatted("File is too big", Dish.class.getSimpleName()));
         }
 
         if (!Objects.requireNonNull(dishPhoto.getOriginalFilename()).isEmpty() && dishPhoto.getSize() == 0) {
-            throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+            throw new OwnerIncorrectInputException(INCORRECT_INPUT_EXCEPTION
                     .formatted("File is empty", Dish.class.getSimpleName()));
         }
 
         if (!dishPhoto.isEmpty()) {
             if (Objects.isNull(dishPhoto.getContentType())) {
-                throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+                throw new OwnerIncorrectInputException(INCORRECT_INPUT_EXCEPTION
                         .formatted("Unable to read file extension", Dish.class.getSimpleName()));
             }
             switch (dishPhoto.getContentType()) {
@@ -123,7 +123,7 @@ public class MenuManagementController {
                 case "image/png":
                     break;
                 default:
-                    throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+                    throw new OwnerIncorrectInputException(INCORRECT_INPUT_EXCEPTION
                             .formatted("File extension %s is not supported".formatted(dishPhoto.getContentType()), Dish.class.getSimpleName()));
             }
         }

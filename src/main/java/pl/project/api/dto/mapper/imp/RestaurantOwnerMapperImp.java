@@ -17,4 +17,14 @@ public class RestaurantOwnerMapperImp implements RestaurantOwnerMapper {
                 .email(restaurantOwnerDTO.getEmail())
                 .build();
     }
+
+    @Override
+    public RestaurantOwnerDTO mapToDTO(RestaurantOwner domainObj) {
+        return RestaurantOwnerDTO.builder()
+                .name(domainObj.getName())
+                .surname(domainObj.getSurname())
+                .phoneNumber(domainObj.getPhoneNumber())
+                .email(domainObj.getEmail())
+                .build();
+    }
 }

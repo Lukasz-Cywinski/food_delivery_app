@@ -1,5 +1,6 @@
 package pl.project.api.dto;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,13 @@ import lombok.NoArgsConstructor;
 public class DeliveryAddressDTO {
 
     Integer id;
+
+    @Pattern(regexp = "^[A-Za-z0-9_]{1,32}$")
     String city;
-    String postalCode;
+
+    @Pattern(regexp = "\\d+/\\d*")
+    String buildingNumber;
+
+    @Pattern(regexp = "^[A-Za-z0-9_]{1,32}$")
     String street;
 }

@@ -12,6 +12,7 @@ public class UserMapperImp implements UserMapper {
         return User.builder()
                 .userName(userDTO.getUserName())
                 .email(userDTO.getEmail())
+                .password(userDTO.getPassword())
                 .build();
     }
 }

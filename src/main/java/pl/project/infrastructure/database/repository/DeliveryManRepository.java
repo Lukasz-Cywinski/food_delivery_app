@@ -19,7 +19,7 @@ public class DeliveryManRepository implements DeliveryManDAO {
     private final DeliveryManEntityMapper deliveryManEntityMapper;
 
     @Override
-    public Optional<DeliveryMan> addDeliveryMan(DeliveryMan deliveryMan) {
+    public Optional<DeliveryMan> createDeliveryMan(DeliveryMan deliveryMan) {
         return Optional.ofNullable(
                 deliveryManEntityMapper.mapFromEntity(
                         deliveryManJpaRepository.save(

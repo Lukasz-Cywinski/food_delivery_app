@@ -11,7 +11,6 @@ import pl.project.api.controller.addresses.HomeAddresses;
 @AllArgsConstructor
 @RequestMapping(HomeAddresses.HOME)
 public class HomeController {
-
     @GetMapping
     public String homePage(){
         return "home";

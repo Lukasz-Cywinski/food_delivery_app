@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.project.api.controller.addresses.RestaurantOwnerAddresses;
 
+import static pl.project.api.controller.addresses.RestaurantOwnerAddresses.*;
+
 @Controller
 @AllArgsConstructor
-@RequestMapping(RestaurantOwnerAddresses.ORDERS_SUMMARY)
+@RequestMapping(ORDERS_SUMMARY)
 public class OrdersSummaryController {
 
     @GetMapping

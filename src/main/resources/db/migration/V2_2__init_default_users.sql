@@ -17,7 +17,7 @@ insert into food_delivery_user (id, user_name, email,  password, active) values 
 insert into food_delivery_user (id, user_name, email,  password, active) values (-5, 'default_admin', 'adminEmail@gmail.com', '$2a$12$uNrvMadWwrpZqVJeMO/JvOaEl3cuUto0qO0rQgQFpziW3EXqmUkRS', true);
 
 
-insert into delivery_address (id, city, postal_code, street) values (-1, 'default city', 'default postal code', 'default street');
+insert into delivery_address (id, city, building_number, street) values (-1, 'default city', 'default building number', 'default street');
 insert into customer (id, name, surname, phone_number, email, delivery_address_id, is_active, user_id) values (-1, 'default name', 'default surname', 'default phone number', 'customerEmail@mail.com', -1, true, -1);
 
 insert into restaurant_owner (id, name, surname, phone_number, email, is_active, user_id) values (-1, 'default name', 'default surname', 'default phone number', 'restaurantOwnerEmail@mail.com', true, -2);

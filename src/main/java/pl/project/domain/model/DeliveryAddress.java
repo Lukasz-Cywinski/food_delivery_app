@@ -8,13 +8,13 @@ import java.util.Set;
 @With
 @Value
 @Builder
-@EqualsAndHashCode(of = {"city", "postalCode", "street"})
-@ToString(of = {"city", "street", "postalCode"})
+@EqualsAndHashCode(of = {"city", "buildingNumber", "street"})
+@ToString(of = {"city", "street", "buildingNumber"})
 public class DeliveryAddress {
 
     Integer id;
     String city;
-    String postalCode;
+    String buildingNumber;
     String street;
 //    Set<Customer> customers;
 

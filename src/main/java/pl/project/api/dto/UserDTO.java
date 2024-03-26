@@ -1,5 +1,7 @@
 package pl.project.api.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +16,11 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserDTO {
 
+    @Pattern(regexp = "^[A-Za-z0-9_]{1,32}$")
     String userName;
+
+    @Email
     String email;
+
     String password;
 }

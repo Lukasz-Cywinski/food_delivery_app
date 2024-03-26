@@ -4,7 +4,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 public class ExceptionMessages {
-    public static String OWNER_INCORRECT_INPUT_EXCEPTION = "Incorrect input params: %s_____ for resource: %s";
+    public static String INCORRECT_INPUT_EXCEPTION = "Incorrect input params: %s_____ for resource: %s";
 
     public static String getFailedFields(BindingResult result) {
         return result.getAllErrors().stream()

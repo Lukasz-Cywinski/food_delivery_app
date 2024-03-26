@@ -22,7 +22,7 @@ public class CustomerRepository implements CustomerDAO {
     private final DeliveryAddressEntityMapper deliveryAddressEntityMapper;
 
     @Override
-    public Optional<Customer> addCustomer(Customer customer) {
+    public Optional<Customer> createCustomer(Customer customer) {
         return Optional.ofNullable(
                 customerEntityMapper.mapFromEntity(
                         customerJpaRepository.save(

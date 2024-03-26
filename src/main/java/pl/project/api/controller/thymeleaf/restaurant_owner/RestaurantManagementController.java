@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import pl.project.api.controller.addresses.RestaurantOwnerAddresses;
 import pl.project.api.controller.exception.ExceptionMessages;
 import pl.project.api.controller.exception.OwnerIncorrectInputException;
 import pl.project.api.dto.RestaurantDTO;
@@ -15,9 +14,7 @@ import pl.project.api.dto.ServedAddressDTO;
 import pl.project.api.dto.mapper.RestaurantMapper;
 import pl.project.api.dto.mapper.ServedAddressMapper;
 import pl.project.business.services.restaurant_owner.RestaurantManagementService;
-import pl.project.business.services.restaurant_owner.RestaurantOwnerService;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreateException;
-import pl.project.domain.model.Dish;
+import pl.project.business.services.restaurant_owner.UserManagementService;
 import pl.project.domain.model.Restaurant;
 import pl.project.domain.model.ServedAddress;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
@@ -27,20 +24,20 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static pl.project.api.controller.exception.ExceptionMessages.OWNER_INCORRECT_INPUT_EXCEPTION;
+import static pl.project.api.controller.addresses.RestaurantOwnerAddresses.*;
+import static pl.project.api.controller.exception.ExceptionMessages.INCORRECT_INPUT_EXCEPTION;
 import static pl.project.api.controller.exception.ExceptionMessages.getFailedFields;
-import static pl.project.domain.exception.ExceptionMessages.*;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping(RestaurantOwnerAddresses.RESTAURANT_MANAGEMENT)
+@RequestMapping(RESTAURANT_MANAGEMENT)
 public class RestaurantManagementController {
 
     static final String RESTAURANT_INFO = "/{restaurantCode}";
-    static final String REDIRECT_RESTAURANT_MANAGEMENT = "redirect:%s".formatted(RestaurantOwnerAddresses.RESTAURANT_MANAGEMENT);
+    static final String REDIRECT_RESTAURANT_MANAGEMENT = "redirect:%s".formatted(RESTAURANT_MANAGEMENT);
 
     private final ProjectUserDetailsService projectUserDetailsService;
-    RestaurantOwnerService restaurantOwnerService;
+    UserManagementService userManagementService;
     RestaurantManagementService restaurantManagementService;
     RestaurantMapper restaurantMapper;
     ServedAddressMapper servedAddressMapper;
@@ -87,7 +84,7 @@ public class RestaurantManagementController {
             @PathVariable String restaurantCode
     ){
         if(result.hasErrors()){
-            throw new OwnerIncorrectInputException(ExceptionMessages.OWNER_INCORRECT_INPUT_EXCEPTION
+            throw new OwnerIncorrectInputException(ExceptionMessages.INCORRECT_INPUT_EXCEPTION
                     .formatted(getFailedFields(result), ServedAddress.class.getSimpleName()));
         }
         Restaurant restaurant = restaurantManagementService.getRestaurantByRestaurantCode(restaurantCode);
@@ -112,7 +109,7 @@ public class RestaurantManagementController {
         Pattern pattern = Pattern.compile("^[A-Za-z0-9_]{1,32}$");
         Matcher matcher = pattern.matcher(restaurantName);
         if(!matcher.find()){
-            throw new OwnerIncorrectInputException(OWNER_INCORRECT_INPUT_EXCEPTION
+            throw new OwnerIncorrectInputException(INCORRECT_INPUT_EXCEPTION
                     .formatted(restaurantName, Restaurant.class.getSimpleName()));
         }
         restaurantManagementService.createRestaurant(restaurantName, getActiveUserEmail());

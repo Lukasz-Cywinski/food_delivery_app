@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface DeliveryManDAO {
 
-    Optional<DeliveryMan> addDeliveryMan(DeliveryMan deliveryMan);
+    Optional<DeliveryMan> createDeliveryMan(DeliveryMan deliveryMan);
 
     Optional<DeliveryMan> getDeliveryManByPersonalCode(String personalCode);
 

@@ -96,7 +96,7 @@ class DeliveryAddressRepositoryTest extends MyJpaConfiguration {
         Integer addressId = initializer.SAVED_DELIVERY_ADDRESSES.getFirst().getId();
 
         //when
-        deliveryAddressJpaRepository.changePostalCode(newPostalCode, addressId);
+        deliveryAddressJpaRepository.changeBuildingNumber(newPostalCode, addressId);
         DeliveryAddressEntity addressFromDb = deliveryAddressJpaRepository.findById(addressId).orElseThrow();
 
         //then

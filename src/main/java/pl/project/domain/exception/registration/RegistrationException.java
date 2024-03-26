@@ -1,0 +1,11 @@
+package pl.project.domain.exception.registration;
+
+public class RegistrationException extends RuntimeException{
+    public RegistrationException(String message) {
+        super(message);
+    }
+
+    public RegistrationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}

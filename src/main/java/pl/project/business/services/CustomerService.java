@@ -25,7 +25,7 @@ public class CustomerService {
     @Transactional
     public Customer createCustomer(Customer customer) {
         User user = projectUserDetailsService.saveUserAndAssignRoles(customer.getUser());
-        return customerDAO.addCustomer(customer.withUser(user))
+        return customerDAO.createCustomer(customer.withUser(user))
                 .orElseThrow(() -> new OwnerResourceCreateException(CUSTOMER_CREATION_EXCEPTION.formatted(customer)));
     }
 

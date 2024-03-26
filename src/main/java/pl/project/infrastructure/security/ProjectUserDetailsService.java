@@ -83,6 +83,11 @@ public class ProjectUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_EXCEPTION.formatted(userName)));
     }
 
+//    @Transactional
+    public Integer changeEmail(String newEmail, String oldEmail){
+        return userRepository.changeEmail(newEmail, oldEmail);
+    }
+
     private List<GrantedAuthority> getUserAuthority(Set<RoleEntity> userRoles) {
         return userRoles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRole()))

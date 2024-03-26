@@ -18,7 +18,7 @@ public class DeliveryAddressRepository implements DeliveryAddressDAO {
     private final DeliveryAddressEntityMapper deliveryAddressEntityMapper;
 
     @Override
-    public Optional<DeliveryAddress> addDeliveryAddress(DeliveryAddress deliveryAddress) {
+    public Optional<DeliveryAddress> createDeliveryAddress(DeliveryAddress deliveryAddress) {
         return Optional.ofNullable(
                 deliveryAddressEntityMapper.mapFromEntity(
                         deliveryAddressJpaRepository.save(
@@ -35,7 +35,7 @@ public class DeliveryAddressRepository implements DeliveryAddressDAO {
 
     @Override
     public Integer changeDeliveryAddressPostalCode(String newPostalCode, Integer deliveryAddressId) {
-        return deliveryAddressJpaRepository.changePostalCode(newPostalCode, deliveryAddressId);
+        return deliveryAddressJpaRepository.changeBuildingNumber(newPostalCode, deliveryAddressId);
     }
 
     @Override

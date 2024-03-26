@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CustomerDAO {
 
-    Optional<Customer> addCustomer(Customer customer);
+    Optional<Customer> createCustomer(Customer customer);
 
     Optional<Customer> getCustomerByEmail(String email);
 

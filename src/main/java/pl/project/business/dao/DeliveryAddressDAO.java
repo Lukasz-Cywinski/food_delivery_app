@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface DeliveryAddressDAO {
 
-    Optional<DeliveryAddress> addDeliveryAddress(DeliveryAddress deliveryAddress);
+    Optional<DeliveryAddress> createDeliveryAddress(DeliveryAddress deliveryAddress);
 
     Integer changeDeliveryAddressCity(String newCity, Integer deliveryAddressId);
 

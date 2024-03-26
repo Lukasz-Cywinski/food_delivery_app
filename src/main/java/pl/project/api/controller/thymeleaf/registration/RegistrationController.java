@@ -1,123 +1,166 @@
 package pl.project.api.controller.thymeleaf.registration;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.project.api.controller.addresses.HomeAddresses;
-import pl.project.api.dto.CustomerDTO;
-import pl.project.api.dto.DeliveryAddressDTO;
-import pl.project.api.dto.RestaurantOwnerDTO;
-import pl.project.api.dto.UserDTO;
-import pl.project.api.dto.mapper.CustomerMapper;
-import pl.project.api.dto.mapper.DeliveryAddressMapper;
-import pl.project.api.dto.mapper.RestaurantOwnerMapper;
-import pl.project.api.dto.mapper.UserMapper;
-import pl.project.business.services.CustomerService;
-import pl.project.business.services.restaurant_owner.RestaurantOwnerService;
-import pl.project.domain.model.Customer;
-import pl.project.domain.model.DeliveryAddress;
-import pl.project.domain.model.RestaurantOwner;
-import pl.project.infrastructure.security.ProjectUserDetailsService;
+import pl.project.api.controller.exception.RegistrationIncorrectInputException;
+import pl.project.api.dto.*;
+import pl.project.api.dto.mapper.*;
+import pl.project.business.services.registration.RegistrationService;
 import pl.project.infrastructure.security.Role;
-import pl.project.infrastructure.security.User;
 
-import java.util.Set;
+import static pl.project.api.controller.addresses.HomeAddresses.*;
+import static pl.project.api.controller.exception.ExceptionMessages.INCORRECT_INPUT_EXCEPTION;
+import static pl.project.api.controller.exception.ExceptionMessages.getFailedFields;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping(HomeAddresses.REGISTRATION_HOME)
+@RequestMapping(REGISTRATION_HOME)
 public class RegistrationController {
 
-    private final CustomerService customerService;
-    private final RestaurantOwnerService restaurantOwnerService;
-    private final CustomerMapper customerMapper;
+    private final RegistrationService registrationService;
     private final RestaurantOwnerMapper restaurantOwnerMapper;
     private final UserMapper userMapper;
+    private final CustomerMapper customerMapper;
+    private final DeliveryManMapper deliveryManMapper;
     private final DeliveryAddressMapper deliveryAddressMapper;
-    private final ProjectUserDetailsService projectUserDetailsService;
 
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    static final String NEW_RESTAURANT_OWNER = "/new_restaurant_owner";
+    static final String NEW_CUSTOMER = "/new_customer";
+    static final String NEW_DELIVERY_MAN = "/new_delivery_man";
+    static final String NEW_REST_API_USER = "/new_rest_api_user";
 
-    static final String CREATE_NEW_RESTAURANT_OWNER = "/create_new_restaurant_owner";
-    static final String CREATE_NEW_CUSTOMER = "/create_new_customer";
-    static final String CREATE_NEW_DELIVERY_MAN = "/create_new_delivery_man";
-    static final String CREATE_NEW_REST_API_USER = "/create_new_rest_api_user";
-    static final String ADD = "/add";
+    static final String REDIRECT_RESTAURANT_OWNER = "redirect:%s".formatted(RESTAURANT_OWNER_HOME);
+    static final String REDIRECT_CUSTOMER = "redirect:%s".formatted(CUSTOMER_HOME);
+    static final String REDIRECT_DELIVERY_MAN = "redirect:%s".formatted(DELIVERY_MAN_HOME);
+    static final String REDIRECT_REST_API = "redirect:%s".formatted(REST_API_HOME);
+
 
     @GetMapping()
     public String registrationHome() {
-        return "registration/registration_main_page";
+        return "registration/registration_home";
     }
 
-    @GetMapping(value = CREATE_NEW_RESTAURANT_OWNER)
-    public String registryNewRestaurantOwnerPanel(Model model) {
-        return "registration/create_new_restaurant_owner";
+    @GetMapping(value = NEW_RESTAURANT_OWNER)
+    public String registryNewRestaurantOwnerPanel() {
+        return "registration/new_restaurant_owner";
     }
 
-    @GetMapping(value = CREATE_NEW_CUSTOMER)
-    public String registryNewCustomerPanel(Model model) {
-        return "registration/create_new_customer";
+    @GetMapping(value = NEW_CUSTOMER)
+    public String registryNewCustomerPanel() {
+        return "registration/new_customer";
     }
 
-    @GetMapping(value = CREATE_NEW_DELIVERY_MAN)
+    @GetMapping(value = NEW_DELIVERY_MAN)
     public String registryNewDeliveryManPanel() {
-        return "registration/create_new_delivery_man";
+        return "registration/new_delivery_man";
     }
 
-    @GetMapping(value = CREATE_NEW_REST_API_USER)
+    @GetMapping(value = NEW_REST_API_USER)
     public String registryNewRestApiUserPanel() {
-        return "registration/create_new_rest_api_user";
+        return "registration/new_rest_api_user";
     }
 
 
-    @PostMapping(value = CREATE_NEW_CUSTOMER + ADD)
+    @PostMapping(value = NEW_CUSTOMER)
     public String registryNewCustomer(
             UserDTO userDTO,
+            BindingResult resultUser,
             CustomerDTO customerDTO,
-            DeliveryAddressDTO deliveryAddressDTO
+            BindingResult resultCustomer,
+            DeliveryAddressDTO deliveryAddressDTO,
+            BindingResult resultDeliveryAddress
     ) {
-        User user = userMapper.mapFromDTO(userDTO)
-                .withPassword(encoder.encode(userDTO.getPassword()))
-                .withRoles(Set.of(Role.CUSTOMER))
-                .withActive(true);
-        DeliveryAddress deliveryAddress = deliveryAddressMapper.mapFromDTO(deliveryAddressDTO);
-        Customer customer = customerMapper.mapFromDTO(customerDTO)
-                .withUser(user)
-                .withDeliveryAddress(deliveryAddress)
-                .withActive(true);
-        customerService.createCustomer(customer);
-        return "redirect:/customer";
+        validateCustomerInput(resultUser, resultCustomer, resultDeliveryAddress);
+        registrationService.createCustomer(
+                customerMapper.mapFromDTO(customerDTO),
+                userMapper.mapFromDTO(userDTO),
+                deliveryAddressMapper.mapFromDTO(deliveryAddressDTO));
+        return REDIRECT_CUSTOMER;
     }
 
-    @PostMapping(value = CREATE_NEW_RESTAURANT_OWNER + ADD)
+    private void validateCustomerInput(BindingResult resultUser, BindingResult resultCustomer, BindingResult resultDeliveryAddress) {
+        if (resultCustomer.hasErrors()) {
+            throw new RegistrationIncorrectInputException(INCORRECT_INPUT_EXCEPTION
+                    .formatted(getFailedFields(resultCustomer), Role.CUSTOMER.name()));
+        }
+        if (resultUser.hasErrors()) {
+            throw new RegistrationIncorrectInputException(INCORRECT_INPUT_EXCEPTION
+                    .formatted(getFailedFields(resultUser), Role.CUSTOMER.name()));
+        }
+        if (resultDeliveryAddress.hasErrors()) {
+            throw new RegistrationIncorrectInputException(INCORRECT_INPUT_EXCEPTION
+                    .formatted(getFailedFields(resultDeliveryAddress), Role.CUSTOMER.name()));
+        }
+    }
+
+    @PostMapping(value = NEW_RESTAURANT_OWNER)
     public String registryNewRestaurantOwner(
             UserDTO userDTO,
-            RestaurantOwnerDTO restaurantOwnerDTO
+            BindingResult resultUser,
+            RestaurantOwnerDTO restaurantOwnerDTO,
+            BindingResult resultRestaurantOwner
     ) {
-        User user = userMapper.mapFromDTO(userDTO)
-                .withPassword(encoder.encode(userDTO.getPassword()))
-                .withRoles(Set.of(Role.RESTAURANT_OWNER))
-                .withActive(true);
-        RestaurantOwner restaurantOwner = restaurantOwnerMapper.mapFromDTO(restaurantOwnerDTO)
-                .withUser(user)
-                .withActive(true);
-        restaurantOwnerService.createRestaurantOwner(restaurantOwner);
-        return "redirect:/restaurant_owner";
+        validateRestaurantOwnerInput(resultUser, resultRestaurantOwner);
+        registrationService.createRestaurantOwner(restaurantOwnerMapper.mapFromDTO(restaurantOwnerDTO),
+                userMapper.mapFromDTO(userDTO));
+        return REDIRECT_RESTAURANT_OWNER;
     }
 
-    @PostMapping(value = CREATE_NEW_REST_API_USER + ADD)
+    private void validateRestaurantOwnerInput(BindingResult resultUser, BindingResult resultRestaurantOwner) {
+        if (resultRestaurantOwner.hasErrors()) {
+            throw new RegistrationIncorrectInputException(INCORRECT_INPUT_EXCEPTION
+                    .formatted(getFailedFields(resultRestaurantOwner), Role.RESTAURANT_OWNER.name()));
+        }
+        if (resultUser.hasErrors()) {
+            throw new RegistrationIncorrectInputException(INCORRECT_INPUT_EXCEPTION
+                    .formatted(getFailedFields(resultUser), Role.RESTAURANT_OWNER.name()));
+        }
+    }
+
+    @PostMapping(value = NEW_DELIVERY_MAN)
+    public String registryNewDeliveryMan(
+            UserDTO userDTO,
+            BindingResult resultUser,
+            DeliveryManDTO deliveryManDTO,
+            BindingResult resultDeliveryMan
+
+    ){
+        validateDeliveryManUser(resultUser, resultDeliveryMan);
+        registrationService.createDeliveryMan(
+                deliveryManMapper.mapFromDTO(deliveryManDTO),
+                userMapper.mapFromDTO(userDTO));
+        return REDIRECT_DELIVERY_MAN;
+    }
+
+    private void validateDeliveryManUser(BindingResult resultUser, BindingResult resultDeliveryMan) {
+        if (resultDeliveryMan.hasErrors()) {
+            throw new RegistrationIncorrectInputException(INCORRECT_INPUT_EXCEPTION
+                    .formatted(getFailedFields(resultDeliveryMan), Role.DELIVERY_MAN.name()));
+        }
+        if (resultUser.hasErrors()) {
+            throw new RegistrationIncorrectInputException(INCORRECT_INPUT_EXCEPTION
+                    .formatted(getFailedFields(resultUser), Role.DELIVERY_MAN.name()));
+        }
+    }
+
+    @PostMapping(value = NEW_REST_API_USER)
     public String registryNewRestApiUser(
-            UserDTO userDTO
+            UserDTO userDTO,
+            BindingResult resultUser
     ) {
-        User user = userMapper.mapFromDTO(userDTO)
-                .withRoles(Set.of(Role.REST_API))
-                .withPassword(encoder.encode(userDTO.getPassword()))
-                .withActive(true);
-        projectUserDetailsService.saveUserAndAssignRoles(user);
-        return "redirect:/rest_api";
+        validateRestApiUserInput(resultUser);
+        registrationService.createRestApiUser(userMapper.mapFromDTO(userDTO));
+        return REDIRECT_REST_API;
+    }
+
+    private void validateRestApiUserInput(BindingResult resultUser) {
+        if (resultUser.hasErrors()) {
+            throw new RegistrationIncorrectInputException(INCORRECT_INPUT_EXCEPTION
+                    .formatted(getFailedFields(resultUser), Role.REST_API.name()));
+        }
     }
 }

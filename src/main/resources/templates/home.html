@@ -1,145 +1,134 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Food Delivery Home</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/navbar-static/">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
           crossorigin="anonymous">
-    <title>Food delivery main page</title>
+
+    <style>
+        .bd-placeholder-img {
+          font-size: 1.125rem;
+          text-anchor: middle;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          user-select: none;
+        }
+
+        @media (min-width: 768px) {
+          .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+          }
+        }
+    </style>
+
 </head>
+<body style="background-color:rgb(190,190,190);">
 
-<body style="background-color:rgb(230, 255, 242);">
-<div class="container bg-success">
-    <div class="row mt-3 bg-success text-light">
-        <h1 style="text-align:center">Food delivery app</h1>
-        <h2 style="text-align:center">Home page</h2>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+        <h5 class="navbar-brand">Actions:</h5>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Customer
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" th:href="@{/registration/new_customer}">Create new</a>
+                            <a class="dropdown-item" th:href="@{/customer}">Log in</a>
+                        </div>
+                    </div>
+                </li>
+                <li><p>---</p></li>
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Restaurant owner
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <a class="dropdown-item" th:href="@{/registration/new_restaurant_owner}">Create new</a>
+                            <a class="dropdown-item" th:href="@{/restaurant_owner}">Log in</a>
+                        </div>
+                    </div>
+                </li>
+                <li><p>---</p></li>
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Delivery man
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                            <a class="dropdown-item" th:href="@{/registration/new_delivery_man}">Create new</a>
+                            <a class="dropdown-item" th:href="@{/delivery_man}">Log in</a>
+                        </div>
+                    </div>
+                </li>
+                <li><p>---</p></li>
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Rest api user
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                            <a class="dropdown-item" th:href="@{/registration/new_rest_api_user}">Create new</a>
+                            <a class="dropdown-item" th:href="@{/rest_api}">Log in</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="row mt-3">
-        <table class="table table-hover">
-            <tr class="table-primary">
-                <th>Action button</th>
-                <th>Description</th>
-            </tr>
-            <tr class="table-secondary">
-                <td class="align-middle">
-                    <div class="col-md-4">
-                        <a th:href="@{/registration}" class="btn btn-success btn-lg btn-block" role="button">Create new user</a>
-                    </div>
-                </td>
-                <td class="align-middle">
-                    <p>
-                        You can create new user with specific role. You can create:
-                    </p>
-                    <ol>
-                        <li>Customer</li>
-                        <li>Restaurant owner</li>
-                        <li>Delivery man</li>
-                        <li>Rest api user</li>
-                    </ol>
-                </td>
-            </tr>
-            <tr class="table-primary">
-                <td colspan="2" style="text-align:center">
-                    <h3><b>Services by role</b></h3>
-                </td>
-            </tr>
-            <tr class="table-secondary">
-                <td class="align-middle">
-                    <div class="col-md-4">
-                        <a th:href="@{/customer}" class="btn btn-success btn-lg btn-block" role="button">Customer</a>
-                    </div>
-                </td>
-                <td class="align-middle">
-                    <p>
-                        <b>Restaurant Customer</b> panel. To gain access you have to log in. <br>
-                        You can log in as:
-                    </p>
-                    <ul>
-                        <li>Previous created user</li>
-                        <li>Default user with:
-                            <ul>
-                                <li>Username: <b>default_customer</b></li>
-                                <li>Email: <b>customerEmail@mail.com</b></li>
-                                <li>Password: <b>top_secret123</b></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-            <tr class="table-secondary">
-                <td class="align-middle">
-                    <div class="col-md-4">
-                        <a th:href="@{/restaurant_owner}" class="btn btn-success btn-lg btn-block" role="button">Restaurant owner</a>
-                    </div>
-                </td>
-                <td class="align-middle">
-                    <p>
-                        <b>Restaurant Owner</b> panel. To gain access you have to log in. <br>
-                        You can log in as:
-                    </p>
-                    <ul>
-                        <li>Previous created user</li>
-                        <li>Default user with:
-                            <ul>
-                                <li>Username: <b>default_restaurant_owner</b></li>
-                                <li>Email: <b>restaurantOwnerEmail@mail.com</b></li>
-                                <li>Password: <b>top_secret123</b></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-            <tr class="table-secondary">
-                <td class="align-middle">
-                    <div class="col-md-4">
-                        <a th:href="@{/delivery_man}" class="btn btn-success btn-lg btn-block" role="button">Delivery man</a>
-                    </div>
-                </td>
-                <td class="align-middle">
-                    <p>
-                        <b>Delivery Man</b> panel. To gain access you have to log in. <br>
-                        You can log in as:
-                    </p>
-                    <ul>
-                        <li>Previous created user</li>
-                        <li>Default user with:
-                            <ul>
-                                <li>Username: <b>default_delivery_man</b></li>
-                                <li>Email: <b>deliveryManEmail@mail.com</b></li>
-                                <li>Password: <b>top_secret123</b></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-            <tr class="table-secondary">
-                <td class="align-middle">
-                    <div class="col-md-4">
-                        <a th:href="@{/rest_api}" class="btn btn-success btn-lg btn-block" role="button">Rest api user</a>
-                    </div>
-                </td>
-                <td class="align-middle">
-                    <p>
-                        <b>Rest Api User</b> panel. To gain access you have to log in. <br>
-                        You can log in as:
-                    </p>
-                    <ul>
-                        <li>Previous created user</li>
-                        <li>Default user with:
-                            <ul>
-                                <li>Username: <b>default_rest_api_user</b></li>
-                                <li>Email: <b>apiUserEmail@mail.com</b></li>
-                                <li>Password: <b>top_secret123</b></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
+</nav>
+
+<main class="container">
+    <h1>Food delivery app - home page</h1>
+    <h3>You can create new user or use default user</h3>
+    <table class="table table-hover table-dark">
+        <thead>
+        <tr>
+            <th scope="col">Default user name</th>
+            <th scope="col">Role</th>
+            <th scope="col">Password</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>default_customer</td>
+            <td>CUSTOMER - order food, create opinion</td>
+            <td>top_secret123</td>
+        </tr>
+        <tr>
+            <td>default_restaurant_owner</td>
+            <td>RESTAURANT_OWNER - create new restaurant, add dishes, modify them, realize orders</td>
+            <td>top_secret123</td>
+        </tr>
+        <tr>
+            <td>default_delivery_man</td>
+            <td>DELIVERY_MAN - for now in development</td>
+            <td>top_secret123</td>
+        </tr>
+        <tr>
+            <td>default_rest_api_user</td>
+            <td>REST_API - for now in development</td>
+            <td>top_secret123</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-
 </html>

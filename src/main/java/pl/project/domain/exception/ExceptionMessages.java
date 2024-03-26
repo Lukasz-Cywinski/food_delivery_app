@@ -11,4 +11,5 @@ public class ExceptionMessages {
     public final static String DISH_PHOTO_STORAGE_READ_EXCEPTION = "Failed to read photo: %s";
     public final static String DISH_PHOTO_STORAGE_UPDATE_EXCEPTION = "Failed to update photo: %s";
     public final static String DISH_PHOTO_STORAGE_DELETE_EXCEPTION = "Failed to delete photo: %s";
+    public final static String REGISTRATION_EXCEPTION = "Failed to register user: %s %n Internal server error or user parameter is occupied by other user";
 }

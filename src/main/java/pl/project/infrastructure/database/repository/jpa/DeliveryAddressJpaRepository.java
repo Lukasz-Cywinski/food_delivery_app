@@ -19,11 +19,11 @@ public interface DeliveryAddressJpaRepository extends JpaRepository<DeliveryAddr
 
     @Query("""
                 UPDATE DeliveryAddressEntity d_ad
-                SET d_ad.postalCode = ?1
+                SET d_ad.buildingNumber = ?1
                 WHERE d_ad.id = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    Integer changePostalCode(String newPostalCode, Integer deliveryAddressId);
+    Integer changeBuildingNumber(String newBuildingNumber, Integer deliveryAddressId);
 
     @Query("""
                 UPDATE DeliveryAddressEntity d_ad

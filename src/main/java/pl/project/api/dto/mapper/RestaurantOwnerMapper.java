@@ -5,4 +5,5 @@ import pl.project.domain.model.RestaurantOwner;
 
 public interface RestaurantOwnerMapper {
     RestaurantOwner mapFromDTO(RestaurantOwnerDTO dto);
+    RestaurantOwnerDTO mapToDTO(RestaurantOwner domainObj);
 }
