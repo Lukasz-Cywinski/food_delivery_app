@@ -13,9 +13,9 @@ public interface DishCompositionDAO {
 
     Optional<DishComposition> createDishComposition(DishComposition dishComposition);
 
-    List<Order> getActiveOrdersForRestaurant(Restaurant restaurant);
+    List<Order> getActiveOrdersForRestaurant(String restaurantCode);
 
-    List <Order> getRealizedOrdersForRestaurant(Restaurant restaurant);
+    List <Order> getRealizedOrdersForRestaurant(String restaurantCode);
 
     void deleteDishComposition(DishComposition dishComposition);
 }

@@ -97,9 +97,9 @@ class DishCompositionRepositoryTest extends MyJpaConfiguration {
         //given
         //when
         Set<OrderEntity> noCompletedOrders = dishCompositionJpaRepository.findActiveOrdersForRestaurant(
-                restaurantJpaRepository.findByRestaurantCode(someRestaurant1().getRestaurantCode()).orElseThrow());
+                someRestaurant1().getRestaurantCode());
         Set<OrderEntity> completedOrders = dishCompositionJpaRepository.findActiveOrdersForRestaurant(
-                restaurantJpaRepository.findByRestaurantCode(someRestaurant2().getRestaurantCode()).orElseThrow());
+                someRestaurant2().getRestaurantCode());
 
         //then
         assertEquals(1, noCompletedOrders.size());

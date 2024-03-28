@@ -42,17 +42,17 @@ public class DishCompositionRepository implements DishCompositionDAO {
     }
 
     @Override
-    public List<Order> getActiveOrdersForRestaurant(Restaurant restaurant) {
+    public List<Order> getActiveOrdersForRestaurant(String restaurantCode) {
         return dishCompositionJpaRepository.findActiveOrdersForRestaurant(
-                restaurantEntityMapper.mapToEntity(restaurant)).stream()
+                restaurantCode).stream()
                 .map(orderEntityMapper::mapFromEntity)
                 .toList();
     }
 
     @Override
-    public List<Order> getRealizedOrdersForRestaurant(Restaurant restaurant) {
+    public List<Order> getRealizedOrdersForRestaurant(String restaurantCode) {
         return dishCompositionJpaRepository.findRealizedOrdersForRestaurant(
-                restaurantEntityMapper.mapToEntity(restaurant)).stream()
+                restaurantCode).stream()
                 .map(orderEntityMapper::mapFromEntity)
                 .toList();
     }

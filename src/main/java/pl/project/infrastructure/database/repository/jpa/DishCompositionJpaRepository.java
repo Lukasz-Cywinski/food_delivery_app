@@ -19,21 +19,32 @@ public interface DishCompositionJpaRepository extends JpaRepository<DishComposit
                 """)
     List<DishCompositionEntity> findByOrder(OrderEntity order);
 
-@Query("""
-                SELECT o FROM DishCompositionEntity d_co
-                JOIN d_co.order o
-                JOIN d_co.dish d
-                WHERE d.restaurant = ?1
-                AND o.completedDateTime IS NULL
-                """)
-    Set<OrderEntity> findActiveOrdersForRestaurant(RestaurantEntity restaurant);
+//@Query("""
+//                SELECT o FROM DishCompositionEntity d_co
+//                JOIN d_co.order o
+//                JOIN d_co.dish d
+//                WHERE d.restaurant = ?1
+//                AND o.completedDateTime IS NULL
+//                """)
+//    Set<OrderEntity> findActiveOrdersForRestaurant(RestaurantEntity restaurant);
 
     @Query("""
                 SELECT o FROM DishCompositionEntity d_co
                 JOIN d_co.order o
                 JOIN d_co.dish d
-                WHERE d.restaurant = ?1
+                JOIN d.restaurant r
+                WHERE r.restaurantCode = ?1
+                AND o.completedDateTime IS NULL
+                """)
+    Set<OrderEntity> findActiveOrdersForRestaurant(String restaurantCode);
+
+    @Query("""
+                SELECT o FROM DishCompositionEntity d_co
+                JOIN d_co.order o
+                JOIN d_co.dish d
+                JOIN d.restaurant r
+                WHERE r.restaurantCode = ?1
                 AND o.completedDateTime IS NOT NULL
                 """)
-    Set<OrderEntity> findRealizedOrdersForRestaurant(RestaurantEntity restaurant);
+    Set<OrderEntity> findRealizedOrdersForRestaurant(String restaurantCode);
 }

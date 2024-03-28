@@ -32,34 +32,8 @@
     </style>
 </head>
 <body style="background-color:rgb(190,190,190);">
+<div th:insert="~{restaurant_owner/nav_bar :: navBar}"></div>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-    <div class="container-fluid">
-        <h5 class="navbar-brand">Actions:</h5>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item">
-                    <a th:href="@{/restaurant_owner/restaurant_management}" class="nav-link">Restaurant management</a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/restaurant_owner/menu_management}" class="nav-link">Menu management</a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/restaurant_owner/user_management}" class="nav-link">User management</a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/restaurant_owner/orders_summary}" class="nav-link">Orders summary</a>
-                </li>
-            </ul>
-            <form class="d-flex">
-                <a th:href="@{/restaurant_owner}" class="btn btn-outline-info" role="button">Owner Home</a>
-            </form>
-            <form class="d-flex">
-                <a th:href="@{/logout}" class="btn btn-outline-danger" role="button">Logout</a>
-            </form>
-        </div>
-    </div>
-</nav>
 <main class="container">
     <div style="background-color:rgb(190,190,190);" class=" p-5 rounded">
         <form th:action="@{/restaurant_owner/menu_management/{dishCode}(dishCode=${dishDTO.dishCode})}" enctype="multipart/form-data" th:method="PATCH">
