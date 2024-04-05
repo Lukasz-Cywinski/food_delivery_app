@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.project.api.dto.PageNavigationDTO;
+import pl.project.domain.exception.ExceptionMessages;
+import pl.project.domain.exception.customer.CustomerSearchFiltersException;
 import pl.project.domain.model.PageableProperties;
 
 @Service
@@ -20,24 +22,28 @@ public class PageableService {
     }
 
     public PageNavigationDTO buildPageNavigation(Integer allMatchedObjects, PageableProperties pageableProperties) {
-        Integer objectsPerPage = pageableProperties.getObjectsPerPage();
+        try {
+            Integer objectsPerPage = pageableProperties.getObjectsPerPage();
 
-        Integer lastPage = 1;
-        if(allMatchedObjects > objectsPerPage) {
-            lastPage = (allMatchedObjects % objectsPerPage == 0) ?
-                    (allMatchedObjects / objectsPerPage) : ((allMatchedObjects / objectsPerPage) + 1);
+            Integer lastPage = 0;
+            if(allMatchedObjects > objectsPerPage) {
+                lastPage = (allMatchedObjects % objectsPerPage == 0) ?
+                        ((allMatchedObjects / objectsPerPage) - 1) : (allMatchedObjects / objectsPerPage);
+            }
+            Integer firstPage = 0;
+            Integer currentPage = pageableProperties.getPageNumber();
+            Integer previousPage = (currentPage.equals(firstPage)) ? firstPage : currentPage - 1;
+            Integer nextPage = (currentPage.equals(lastPage)) ? lastPage : currentPage + 1;
+
+            return PageNavigationDTO.builder()
+                    .firstPage(firstPage)
+                    .lastPage(lastPage)
+                    .currentPage(currentPage)
+                    .previousPage(previousPage)
+                    .nextPage(nextPage)
+                    .build();
+        } catch (Exception e) {
+            throw new CustomerSearchFiltersException(ExceptionMessages.SEARCH_FILTER_EXCEPTION, e);
         }
-        Integer firstPage = 1;
-        Integer currentPage = pageableProperties.getPageNumber();
-        Integer previousPage = (currentPage.equals(firstPage)) ? firstPage : currentPage - 1;
-        Integer nextPage = (currentPage.equals(lastPage)) ? lastPage : currentPage + 1;
-
-        return PageNavigationDTO.builder()
-                .firstPage(firstPage)
-                .lastPage(lastPage)
-                .currentPage(currentPage)
-                .previousPage(previousPage)
-                .nextPage(nextPage)
-                .build();
     }
 }

@@ -7,7 +7,7 @@
                     <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">
                     <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">
                     <input type="hidden" th:name="isAscending" th:value="*{isAscending}">
-                    <button type="submit" class="page-link" th:text="${pageNavigationDTO.firstPage}"></button>
+                    <button type="submit" class="page-link" th:text="'1'"></button>
                 </form>
             </li>
             <li class="page-item">
@@ -25,7 +25,7 @@
                     <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">
                     <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">
                     <input type="hidden" th:name="isAscending" th:value="*{isAscending}">
-                    <button type="submit" class="page-link active" th:text="${pageNavigationDTO.currentPage + '(act)'}"></button>
+                    <button type="submit" class="page-link active" th:text="${pageNavigationDTO.currentPage + 1 + '(act)'}"></button>
                 </form>
             </li>
             <li class="page-item">
@@ -43,7 +43,7 @@
                     <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">
                     <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">
                     <input type="hidden" th:name="isAscending" th:value="*{isAscending}">
-                    <button type="submit" class="page-link" th:text="${pageNavigationDTO.lastPage}"></button>
+                    <button type="submit" class="page-link" th:text="${pageNavigationDTO.lastPage + 1}"></button>
                 </form>
             </li>
         </ul>

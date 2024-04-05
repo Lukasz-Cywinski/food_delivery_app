@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import pl.project.api.dto.PageNavigationDTO;
@@ -27,7 +28,7 @@ import static pl.project.api.controller.addresses.CustomerAddresses.ORDER_CREATI
 @RequestMapping(ORDER_CREATION)
 public class OrderCreationController {
 
-//    static final String RESTAURANTS_LIST_PAGE_NUMBER = "/{pageNumber}";
+    static final String RESTAURANT_DISH_LIST = "/{restaurantCode}";
 
     private final ProjectUserDetailsService projectUserDetailsService;
     private final PageableService pageableService;
@@ -82,11 +83,10 @@ public class OrderCreationController {
                 SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
-//    @GetMapping(RESTAURANTS_LIST_PAGE_NUMBER)
-//    public ModelAndView currentRestaurantsListPage(
-//            PageablePropertiesDTO pageablePropertiesDTO
-//    ){
-//        System.out.println();
-//        return new ModelAndView("customer/test");
-//    }
+    @GetMapping(RESTAURANT_DISH_LIST)
+    public ModelAndView restaurantDishList(
+            @PathVariable String restaurantCode
+    ){
+        return new ModelAndView("customer/restaurant_dish_list");
+    }
 }
