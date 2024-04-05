@@ -6,15 +6,12 @@ import org.springframework.stereotype.Repository;
 import pl.project.business.dao.DishCompositionDAO;
 import pl.project.domain.model.DishComposition;
 import pl.project.domain.model.Order;
-import pl.project.domain.model.Restaurant;
 import pl.project.infrastructure.database.repository.jpa.DishCompositionJpaRepository;
 import pl.project.infrastructure.database.repository.mapper.DishCompositionEntityMapper;
 import pl.project.infrastructure.database.repository.mapper.OrderEntityMapper;
-import pl.project.infrastructure.database.repository.mapper.RestaurantEntityMapper;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 @AllArgsConstructor
@@ -22,7 +19,6 @@ public class DishCompositionRepository implements DishCompositionDAO {
 
     private final DishCompositionJpaRepository dishCompositionJpaRepository;
     private final DishCompositionEntityMapper dishCompositionEntityMapper;
-    private final RestaurantEntityMapper restaurantEntityMapper;
     private final OrderEntityMapper orderEntityMapper;
 
     @Override

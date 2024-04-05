@@ -19,7 +19,7 @@ import pl.project.api.dto.mapper.DishMapper;
 import pl.project.api.dto.mapper.RestaurantMapper;
 import pl.project.business.services.restaurant_owner.MenuManagementService;
 import pl.project.business.services.restaurant_owner.RestaurantManagementService;
-import pl.project.business.services.restaurant_owner.UserManagementService;
+import pl.project.business.services.restaurant_owner.UserOwnerManagementService;
 import pl.project.domain.model.Dish;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
@@ -41,7 +41,7 @@ public class MenuManagementController {
 
     RestaurantManagementService restaurantManagementService;
     ProjectUserDetailsService projectUserDetailsService;
-    UserManagementService userManagementService;
+    UserOwnerManagementService userOwnerManagementService;
     MenuManagementService menuManagementService;
 
     DishCategoryMapper dishCategoryMapper;

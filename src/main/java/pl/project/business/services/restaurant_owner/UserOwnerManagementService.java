@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.project.business.dao.RestaurantOwnerDAO;
-import pl.project.domain.exception.restaurant_owner.OwnerResourceCreateException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceUpdateException;
 import pl.project.domain.model.RestaurantOwner;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
-import pl.project.infrastructure.security.User;
 
 import java.util.Objects;
 
@@ -17,7 +15,7 @@ import static pl.project.domain.exception.ExceptionMessages.*;
 
 @Service
 @AllArgsConstructor
-public class UserManagementService {
+public class UserOwnerManagementService {
 
     private final RestaurantOwnerDAO restaurantOwnerDAO;
     private final ProjectUserDetailsService projectUserDetailsService;
@@ -45,7 +43,7 @@ public class UserManagementService {
 
                 }
                 if (Objects.nonNull(newPhoneNumber) && !newPhoneNumber.isEmpty()) {
-                    restaurantOwnerDAO.changeRestaurantOwnerPhoneNumber(updatedRestaurantOwner.getPhoneNumber(), restaurantOwnerEmail);
+                    restaurantOwnerDAO.changeRestaurantOwnerPhoneNumber(newPhoneNumber, restaurantOwnerEmail);
                 }
         }
         catch (Exception e){

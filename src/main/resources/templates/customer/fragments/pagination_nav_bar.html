@@ -1,0 +1,131 @@
+<div th:fragment="paginationNavBar">
+    <nav aria-label="..." class="d-flex justify-content-center">
+        <ul class="pagination" th:object="${pageNavigationDTO}">
+            <li class="page-item">
+                <form th:object="${pageablePropertiesDTO}" class="page-link" th:action="@{/customer/order_creation}" method="GET">
+                    <input type="hidden" th:name="pageNumber" th:value="${pageNavigationDTO.firstPage}">
+                    <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">
+                    <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">
+                    <input type="hidden" th:name="isAscending" th:value="*{isAscending}">
+                    <button type="submit" class="page-link" th:text="${pageNavigationDTO.firstPage}"></button>
+                </form>
+            </li>
+            <li class="page-item">
+                <form th:object="${pageablePropertiesDTO}" class="page-link" th:action="@{/customer/order_creation}" method="GET">
+                    <input type="hidden" th:name="pageNumber" th:value="${pageNavigationDTO.previousPage}">
+                    <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">
+                    <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">
+                    <input type="hidden" th:name="isAscending" th:value="*{isAscending}">
+                    <button type="submit" class="page-link" th:text="'Previous'"></button>
+                </form>
+            </li>
+            <li class="page-item">
+                <form th:object="${pageablePropertiesDTO}" class="page-link" th:action="@{/customer/order_creation}" method="GET">
+                    <input type="hidden" th:name="pageNumber" th:value="${pageNavigationDTO.currentPage}">
+                    <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">
+                    <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">
+                    <input type="hidden" th:name="isAscending" th:value="*{isAscending}">
+                    <button type="submit" class="page-link active" th:text="${pageNavigationDTO.currentPage + '(act)'}"></button>
+                </form>
+            </li>
+            <li class="page-item">
+                <form th:object="${pageablePropertiesDTO}" class="page-link" th:action="@{/customer/order_creation}" method="GET">
+                    <input type="hidden" th:name="pageNumber" th:value="${pageNavigationDTO.nextPage}">
+                    <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">
+                    <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">
+                    <input type="hidden" th:name="isAscending" th:value="*{isAscending}">
+                    <button type="submit" class="page-link" th:text="'Next'"></button>
+                </form>
+            </li>
+            <li class="page-item">
+                <form th:object="${pageablePropertiesDTO}" class="page-link" th:action="@{/customer/order_creation}" method="GET">
+                    <input type="hidden" th:name="pageNumber" th:value="${pageNavigationDTO.lastPage}">
+                    <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">
+                    <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">
+                    <input type="hidden" th:name="isAscending" th:value="*{isAscending}">
+                    <button type="submit" class="page-link" th:text="${pageNavigationDTO.lastPage}"></button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<!--<div th:fragment="paginationNavBar">-->
+<!--    <nav aria-label="..." class="d-flex justify-content-center">-->
+<!--        <ul class="pagination" th:object="${pageNavigationDTO}">-->
+<!--            <li class="page-item">-->
+<!--                <form th:object="${pageablePropertiesDTO}" class="page-link" th:action="@{/customer/order_creation/{pageNumber}(pageNumber=${pageNavigationDTO.firstPage})}" method="GET">-->
+<!--                    <input type="hidden" th:name="pageNumber" th:value="*{pageNumber}">-->
+<!--                    <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">-->
+<!--                    <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">-->
+<!--                    <input type="hidden" th:name="isAscending" th:value="*{isAscending}">-->
+<!--                    <button type="submit" class="page-link" th:text="'1'"></button>-->
+<!--                </form>-->
+<!--            </li>-->
+<!--            <li class="page-item">-->
+<!--                <form th:object="${pageablePropertiesDTO}" class="page-link" th:action="@{/customer/order_creation/{pageNumber}(pageNumber=${pageNavigationDTO.previousPage})}" method="GET">-->
+<!--                    <input type="hidden" th:name="pageNumber" th:value="*{pageNumber}">-->
+<!--                    <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">-->
+<!--                    <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">-->
+<!--                    <input type="hidden" th:name="isAscending" th:value="*{isAscending}">-->
+<!--                    <button type="submit" class="page-link" th:text="'Previous'"></button>-->
+<!--                </form>-->
+<!--            </li>-->
+<!--            <li class="page-item">-->
+<!--                <form th:object="${pageablePropertiesDTO}" class="page-link" th:action="@{/customer/order_creation/{pageNumber}(pageNumber=${pageNavigationDTO.currentPage})}" method="GET">-->
+<!--                    <input type="hidden" th:name="pageNumber" th:value="*{pageNumber}">-->
+<!--                    <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">-->
+<!--                    <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">-->
+<!--                    <input type="hidden" th:name="isAscending" th:value="*{isAscending}">-->
+<!--                    <button type="submit" class="page-link active" th:text="${pageNavigationDTO.currentPage + '(act)'}"></button>-->
+<!--                </form>-->
+<!--            </li>-->
+<!--            <li class="page-item">-->
+<!--                <form th:object="${pageablePropertiesDTO}" class="page-link" th:action="@{/customer/order_creation/{pageNumber}(pageNumber=${pageNavigationDTO.nextPage})}" method="GET">-->
+<!--                    <input type="hidden" th:name="pageNumber" th:value="*{pageNumber}">-->
+<!--                    <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">-->
+<!--                    <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">-->
+<!--                    <input type="hidden" th:name="isAscending" th:value="*{isAscending}">-->
+<!--                    <button type="submit" class="page-link" th:text="'Next'"></button>-->
+<!--                </form>-->
+<!--            </li>-->
+<!--            <li class="page-item">-->
+<!--                <form th:object="${pageablePropertiesDTO}" class="page-link" th:action="@{/customer/order_creation/{pageNumber}(pageNumber=${pageNavigationDTO.lastPage})}" method="GET">-->
+<!--                    <input type="hidden" th:name="pageNumber" th:value="*{pageNumber}">-->
+<!--                    <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">-->
+<!--                    <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">-->
+<!--                    <input type="hidden" th:name="isAscending" th:value="*{isAscending}">-->
+<!--                    <button type="submit" class="page-link" th:text="${pageNavigationDTO.lastPage}"></button>-->
+<!--                </form>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </nav>-->
+<!--</div>-->
+
+<!---->
+<!---->
+
+<!--<nav aria-label="...">-->
+<!--    <ul class="pagination" th:object="${pageNavigationDTO}">-->
+<!--        <li class="page-item">-->
+<!--            <a class="page-link" th:href="@{/customer/order_creation/{pageNumber}(pageNumber=${pageNavigationDTO.firstPage})}" th:text="'1'">-->
+<!--                <input type="hidden" th:value="${pageablePropertiesDTO.pageNumber}">-->
+<!--                <input type="hidden" th:value="${pageablePropertiesDTO.objectsPerPage}">-->
+<!--                <input type="hidden" th:value="${pageablePropertiesDTO.sortedBy}">-->
+<!--                <input type="hidden" th:value="${pageablePropertiesDTO.isAscending}">-->
+<!--            </a>-->
+<!--        </li>-->
+<!--        <li class="page-item">-->
+<!--            <a class="page-link" th:href="@{/customer/order_creation/{pageNumber}(pageNumber=${pageNavigationDTO.previousPage})}" th:text="'Previous'"></a>-->
+<!--        </li>-->
+<!--        <li class="page-item active">-->
+<!--            <a class="page-link" th:href="@{/customer/order_creation/{pageNumber}(pageNumber=${pageNavigationDTO.currentPage})}" th:text="${pageNavigationDTO.currentPage + '(act)'}"></a>-->
+<!--        </li>-->
+<!--        <li class="page-item">-->
+<!--            <a class="page-link" th:href="@{/customer/order_creation/{pageNumber}(pageNumber=${pageNavigationDTO.nextPage})}" th:text="'Next'"></a>-->
+<!--        </li>-->
+<!--        <li class="page-item">-->
+<!--            <a class="page-link"  th:href="@{/customer/order_creation/{pageNumber}(pageNumber=${pageNavigationDTO.lastPage})}" th:text="${pageNavigationDTO.lastPage}"></a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</nav>-->

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.project.business.dao.DishOpinionDAO;
-import pl.project.business.services.subsidiary.pageable.PageableService;
+import pl.project.business.services.pageable.PageableService;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceCreateException;
 import pl.project.domain.exception.restaurant_owner.OwnerResourceReadException;
 import pl.project.domain.model.Dish;

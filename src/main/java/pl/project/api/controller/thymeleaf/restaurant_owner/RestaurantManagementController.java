@@ -14,7 +14,7 @@ import pl.project.api.dto.ServedAddressDTO;
 import pl.project.api.dto.mapper.RestaurantMapper;
 import pl.project.api.dto.mapper.ServedAddressMapper;
 import pl.project.business.services.restaurant_owner.RestaurantManagementService;
-import pl.project.business.services.restaurant_owner.UserManagementService;
+import pl.project.business.services.restaurant_owner.UserOwnerManagementService;
 import pl.project.domain.model.Restaurant;
 import pl.project.domain.model.ServedAddress;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
@@ -37,7 +37,7 @@ public class RestaurantManagementController {
     static final String REDIRECT_RESTAURANT_MANAGEMENT = "redirect:%s".formatted(RESTAURANT_MANAGEMENT);
 
     private final ProjectUserDetailsService projectUserDetailsService;
-    UserManagementService userManagementService;
+    UserOwnerManagementService userOwnerManagementService;
     RestaurantManagementService restaurantManagementService;
     RestaurantMapper restaurantMapper;
     ServedAddressMapper servedAddressMapper;

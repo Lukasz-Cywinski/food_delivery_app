@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
-class UserManagementServiceTest {
+class UserOwnerManagementServiceTest {
 
 //    @InjectMocks
 //    private RestaurantOwnerService restaurantOwnerService;

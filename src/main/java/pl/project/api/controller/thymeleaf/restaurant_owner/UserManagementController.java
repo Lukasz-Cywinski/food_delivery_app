@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import pl.project.api.controller.exception.OwnerIncorrectInputException;
 import pl.project.api.dto.RestaurantOwnerDTO;
 import pl.project.api.dto.mapper.RestaurantOwnerMapper;
-import pl.project.business.services.restaurant_owner.UserManagementService;
+import pl.project.business.services.restaurant_owner.UserOwnerManagementService;
 import pl.project.domain.model.RestaurantOwner;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
@@ -29,7 +29,7 @@ public class UserManagementController {
     static final String REDIRECT_MENU_MANAGEMENT = "redirect:%s".formatted(USER_MANAGEMENT);
 
     ProjectUserDetailsService projectUserDetailsService;
-    UserManagementService userManagementService;
+    UserOwnerManagementService userOwnerManagementService;
     RestaurantOwnerMapper restaurantOwnerMapper;
 
     @GetMapping
@@ -39,7 +39,7 @@ public class UserManagementController {
     }
 
     private Map<String, ?> populateUserManagementWithData() {
-        RestaurantOwnerDTO restaurantOwnerDTO = restaurantOwnerMapper.mapToDTO(userManagementService.getRestaurantOwner(getActiveUserEmail()));
+        RestaurantOwnerDTO restaurantOwnerDTO = restaurantOwnerMapper.mapToDTO(userOwnerManagementService.getRestaurantOwner(getActiveUserEmail()));
         return Map.of(
                 "restaurantOwnerDTO", restaurantOwnerDTO
         );
@@ -52,7 +52,7 @@ public class UserManagementController {
             BindingResult result
     ){
         validateRestaurantOwnerInput(result);
-        userManagementService.modifyRestaurantOwnerPersonalData(restaurantOwnerMapper.mapFromDTO(restaurantOwnerDTO), oldEmail);
+        userOwnerManagementService.modifyRestaurantOwnerPersonalData(restaurantOwnerMapper.mapFromDTO(restaurantOwnerDTO), oldEmail);
         return REDIRECT_MENU_MANAGEMENT;
     }
 

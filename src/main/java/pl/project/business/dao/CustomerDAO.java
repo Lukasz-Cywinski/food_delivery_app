@@ -10,7 +10,7 @@ public interface CustomerDAO {
 
     Optional<Customer> createCustomer(Customer customer);
 
-    Optional<Customer> getCustomerByEmail(String email);
+    Optional<Customer> findCustomerByEmail(String email);
 
     List<Customer> getActiveCustomers();
 

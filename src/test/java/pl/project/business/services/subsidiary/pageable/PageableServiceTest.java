@@ -7,6 +7,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import pl.project.business.services.pageable.PageableService;
 import pl.project.domain.model.PageableProperties;
 
 import static org.junit.jupiter.api.Assertions.*;

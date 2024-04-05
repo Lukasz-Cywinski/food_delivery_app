@@ -14,7 +14,7 @@ public class CustomerHomeController {
 
     @GetMapping
     public String homePage(){
-        return "customer/customer_home";
+        return "customer/home";
     }
 
 }
