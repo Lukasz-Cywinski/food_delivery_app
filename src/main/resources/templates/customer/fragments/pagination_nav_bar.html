@@ -7,7 +7,7 @@
                     <input type="hidden" th:name="objectsPerPage" th:value="*{objectsPerPage}">
                     <input type="hidden" th:name="sortedBy" th:value="*{sortedBy}">
                     <input type="hidden" th:name="isAscending" th:value="*{isAscending}">
-                    <button type="submit" class="page-link" th:text="'1'"></button>
+                    <button type="submit" class="page-link" th:text="${pageNavigationDTO.firstPage + 1}"></button>
                 </form>
             </li>
             <li class="page-item">

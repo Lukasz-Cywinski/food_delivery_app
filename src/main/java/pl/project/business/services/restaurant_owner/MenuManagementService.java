@@ -67,7 +67,7 @@ public class MenuManagementService {
     }
 
     @Transactional
-    public List<Dish> getActiveDishesForRestaurants(String restaurantCode) {
+    public List<Dish> getActiveDishesForRestaurant(String restaurantCode) {
         try {
             return dishDAO.findActiveDishesByRestaurant(restaurantCode);
         } catch (Exception e) {
@@ -126,24 +126,4 @@ public class MenuManagementService {
                     .formatted(Dish.class.getSimpleName(), dishCode));
         }
     }
-
-
-// TO DEAL LATER
-
-
-//    public DishCategory getDishCategoryById(Integer id){
-//        return dishCategoryDAO.getDishCategoryByDishCategoryId(id)
-//                .orElseThrow(() -> new OwnerResourceReadException(ENTITY_READ_EXCEPTION.formatted(DishCategoryEntity.class, id)));
-//    }
-//
-//
-//    public boolean modifyDishData(Dish dish, String dishCode) {
-//        return (dishDAO.changeDishName(dish.getName(), dishCode)
-//                + dishDAO.changeDishDescription(dish.getDescription(), dishCode)
-//                + dishDAO.changeDishPrice(dish.getPrice(), dishCode)
-//                + dishDAO.changeDishPreparationTime(dish.getAveragePreparationTimeMin(), dishCode)
-//                + dishDAO.changeDishCategory(dish.getDishCategory(), dishCode))
-//                > 0;
-//    }
-
 }

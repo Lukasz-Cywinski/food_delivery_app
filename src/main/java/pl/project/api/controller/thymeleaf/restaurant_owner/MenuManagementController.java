@@ -68,7 +68,7 @@ public class MenuManagementController {
 
         if (Objects.isNull(restaurantCode)) restaurantCode = "";
         else {
-            dishes = menuManagementService.getActiveDishesForRestaurants(restaurantCode).stream()
+            dishes = menuManagementService.getActiveDishesForRestaurant(restaurantCode).stream()
                     .map(a -> dishMapper.mapToDTO(a))
                     .toList();
         }
