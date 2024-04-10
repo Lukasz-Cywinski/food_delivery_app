@@ -1,4 +1,4 @@
-package pl.project.api.controller.thymeleaf.customer;
+package pl.project.api.controller.view.customer;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;

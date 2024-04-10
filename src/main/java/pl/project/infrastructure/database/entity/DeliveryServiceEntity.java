@@ -35,7 +35,7 @@ public class DeliveryServiceEntity {
     @TimeZoneStorage(TimeZoneStorageType.NORMALIZE)
     private OffsetDateTime completedDateTime;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "delivery_man_id")
     private DeliveryManEntity deliveryMan;
 

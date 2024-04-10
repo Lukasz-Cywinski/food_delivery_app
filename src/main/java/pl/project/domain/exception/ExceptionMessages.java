@@ -13,4 +13,5 @@ public class ExceptionMessages {
     public final static String DISH_PHOTO_STORAGE_DELETE_EXCEPTION = "Failed to delete photo: %s";
     public final static String REGISTRATION_EXCEPTION = "Failed to register user: %s %n Internal server error or user parameter is occupied by other user";
     public final static String SEARCH_FILTER_EXCEPTION = "Failed to use search filters";
+    public final static String NO_AVAILABLE_DELIVERY_MAN_EXCEPTION = "No available delivery man";
 }

@@ -1,4 +1,4 @@
-package pl.project.api.controller.thymeleaf.restaurant_owner;
+package pl.project.api.controller.view.restaurant_owner;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;

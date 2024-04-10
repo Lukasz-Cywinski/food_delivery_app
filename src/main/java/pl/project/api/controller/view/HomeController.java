@@ -1,19 +1,18 @@
-package pl.project.api.controller.thymeleaf.restaurant_owner;
+package pl.project.api.controller.view;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import static pl.project.api.controller.addresses.HomeAddresses.RESTAURANT_OWNER_HOME;
+import pl.project.api.controller.addresses.HomeAddresses;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping(RESTAURANT_OWNER_HOME)
-public class RestaurantOwnerHomeController {
-
+@RequestMapping(HomeAddresses.HOME)
+public class HomeController {
     @GetMapping
     public String homePage(){
-        return "restaurant_owner/home";
+        return "home";
     }
+
 }

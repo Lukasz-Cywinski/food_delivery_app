@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>Restaurant dish list</title>
+    <title>Order confirmation</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/navbar-static/">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
@@ -35,47 +35,54 @@
 <div th:insert="~{customer/nav_bar :: navBar}"></div>
 
 <main class="container">
-    <form th:action="@{/customer/order_creation/{restaurantCode}(restaurantCode=${restaurantCode})/order_confirmation}" method="GET">
+    <form th:action="@{/customer/order_creation/{restaurantCode}(restaurantCode=${restaurantCode})/order_confirmation}" method="POST">
         <table class="table table-striped table-dark text-center align-baseline">
             <thead>
             <tr>
                 <th scope="col">No</th>
                 <th scope="col">Name</th>
-                <th scope="col">Description</th>
                 <th scope="col">Price [€]</th>
                 <th scope="col">Preparation time [min]</th>
-                <th scope="col">Category</th>
-                <th scope="col">Photo</th>
                 <th scope="col">Quantity</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="dish, index : ${dishDTOs}">
+            <tr th:each="entry, index : ${dishCompositionDTO.compositions}">
                 <td th:text="${index.index + 1}"></td>
-                <td th:text="${dish.name}"></td>
-                <td th:text="${dish.description}"></td>
-                <td th:text="${dish.price}"></td>
-                <td th:text="${dish.averagePreparationTimeMin}"></td>
-                <td th:text="${dish.dishCategoryName}"></td>
-                <td th:if="${dish.dishPhotoURL != null}">
-                    <img th:src="@{${dish.dishPhotoURL}}" th:alt="${dish.dishPhotoName}" style="width:256px;height:auto;">
-                </td>
-                <td th:if="${dish.dishPhotoURL == null}" th:text="${dish.dishPhotoName}"></td>
-                <td>
-                    <div th:object="${dishList}">
-                        <select  th:field="*{items[__${index.index}__]}" id="quantity" name="number">
-                            <option
-                                    th:each="i : ${#numbers.sequence(0, 20)}"
-                                    th:value="${i + ';' + dish.dishCode}"
-                                    th:text="${i}">0</option>
-                        </select>
-                    </div>
-                </td>
+                <td th:text="${entry.key.name}"></td>
+                <td th:text="${entry.key.price}"></td>
+                <td th:text="${entry.key.averagePreparationTimeMin}"></td>
+                <td th:text="${entry.value}"></td>
             </tr>
             </tbody>
         </table>
+        <h1>Summary</h1>
+        <table class="table table-striped table-dark text-center align-baseline">
+            <thead>
+            <tr>
+                <th scope="col">Parameters</th>
+                <th scope="col">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${'Your original order code:'}"></td>
+                <td th:text="${dishCompositionDTO.orderCode}"></td>
+            </tr>
+            <tr>
+                <td th:text="${'Total price:'}"></td>
+                <td th:text="${dishCompositionDTO.totalPrice + ' €'}"></td>
+            </tr>
+            <tr>
+                <td th:text="${'Estimated preparation time (simplified -> selected longest):'}"></td>
+                <td th:text="${dishCompositionDTO.estimatedPreparationTime + ' min'}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="hidden" id="dishCompositions" name="summaryContent" th:value="${summaryContent}">
+        <input type="hidden" id="orderCode" name="orderCode" th:value="${orderCode}">
         <div class="row mt-3">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Confirm order</button>
         </div>
     </form>
 </main>

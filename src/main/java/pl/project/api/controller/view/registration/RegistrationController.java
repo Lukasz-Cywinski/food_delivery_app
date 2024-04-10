@@ -1,4 +1,4 @@
-package pl.project.api.controller.thymeleaf.registration;
+package pl.project.api.controller.view.registration;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
