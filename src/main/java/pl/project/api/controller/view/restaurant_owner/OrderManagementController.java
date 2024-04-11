@@ -7,13 +7,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import pl.project.api.dto.OrderDTO;
 import pl.project.api.dto.RestaurantDTO;
+import pl.project.api.dto.mapper.OrderMapper;
 import pl.project.api.dto.mapper.RestaurantMapper;
 import pl.project.business.services.restaurant_owner.OrderManagementService;
 import pl.project.business.services.restaurant_owner.RestaurantManagementService;
 import pl.project.domain.model.Order;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -29,7 +34,9 @@ public class OrderManagementController {
     private final ProjectUserDetailsService projectUserDetailsService;
     private final RestaurantManagementService restaurantManagementService;
 
+    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final RestaurantMapper restaurantMapper;
+    private final OrderMapper orderMapper;
 
     @GetMapping
     public ModelAndView orderManagement(
@@ -40,16 +47,25 @@ public class OrderManagementController {
     }
 
     private Map<String, ?> populateOrderManagementWithData(String restaurantCode) {
-        List<Order> orderDTOs = orderManagementService.getOrdersForRestaurant(restaurantCode);
+        List<OrderDTO> orderDTOs = orderManagementService.getOrdersForRestaurant(restaurantCode).stream()
+                .map(orderMapper::mapToDTO)
+                .toList();
         List<RestaurantDTO> restaurantDTOs = restaurantManagementService
                 .getRestaurantsByRestaurantOwner(getActiveUserEmail()).stream()
                 .map(restaurantMapper::mapToDTO)
                 .toList();
         if(Objects.isNull(restaurantCode)) restaurantCode = "";
+
+
+        List<Long> timeLeft = orderDTOs.stream()
+                .map(order -> LocalDateTime.parse(order.getReceivedDateTime(), FORMATTER).until(LocalDateTime.now(), ChronoUnit.SECONDS))
+                .toList();
+
         return Map.of(
                 "orderDTOs", orderDTOs,
                 "restaurantDTOs", restaurantDTOs,
-                "restaurantCode", restaurantCode
+                "restaurantCode", restaurantCode,
+                "timeLeft", timeLeft
         );
     }
 
@@ -58,11 +74,5 @@ public class OrderManagementController {
                 SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
-//    @PostMapping
-//    public String test(
-//            String restaurantCode
-//    ) {
-//        System.out.println();
-//        return "restaurant_owner/restaurant_owner_home";
-//    }
+
 }

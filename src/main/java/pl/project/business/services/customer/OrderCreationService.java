@@ -108,9 +108,12 @@ public class OrderCreationService {
             ));
 
         } catch (Exception e) {
+            if (e instanceof NoAvailableDeliveryManException){
+                throw new NoAvailableDeliveryManException(ExceptionMessages.NO_AVAILABLE_DELIVERY_MAN_EXCEPTION);
+            }
             throw new CustomerResourceCreateException(RESOURCE_CREATION_EXCEPTION
                     .formatted(Order.class.getSimpleName(),
-                            "%s - %s".formatted(orderCode, "parameters was incorrect or all delivery man are busy, try again")), e);
+                            "%s - %s".formatted(orderCode, "parameters were incorrect")), e);
         }
     }
 
@@ -130,7 +133,7 @@ public class OrderCreationService {
     private DeliveryMan getAvailableDeliveryMan() {
         List<DeliveryMan> deliveryMen = deliveryManDAO.getAvailableDeliveryMen();
         if (deliveryMen.isEmpty())
-            throw new NoAvailableDeliveryManException(ExceptionMessages.NO_AVAILABLE_DELIVERY_MAN_EXCEPTION);
+            throw new NoAvailableDeliveryManException();
         return deliveryMen.getFirst();
     }
 }

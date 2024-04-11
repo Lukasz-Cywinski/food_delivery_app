@@ -14,6 +14,6 @@ import java.time.OffsetDateTime;
 public class OrderDTO {
 
     String orderCode;
-    OffsetDateTime receivedDateTime;
-    OffsetDateTime completedDateTime;
+    String receivedDateTime;
+    String completedDateTime;
 }

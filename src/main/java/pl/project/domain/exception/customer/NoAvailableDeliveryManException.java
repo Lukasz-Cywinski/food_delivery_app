@@ -1,6 +1,10 @@
 package pl.project.domain.exception.customer;
 
 public class NoAvailableDeliveryManException extends RuntimeException{
+
+    public NoAvailableDeliveryManException() {
+    }
+
     public NoAvailableDeliveryManException(String message) {
         super(message);
     }
