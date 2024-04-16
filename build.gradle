@@ -63,4 +63,12 @@ test {
 	}
 }
 
+bootJar {
+	archiveFileName = "food_delivery.${archiveExtension.get()}"
+}
+
+jar {
+	enabled = false
+}
+
 compileJava.options.encoding = 'UTF-8'

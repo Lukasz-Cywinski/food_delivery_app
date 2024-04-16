@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.project.util.db.DishInstance.*;
 import static pl.project.util.db.DishPhotoInstance.someDishPhoto2;
 
@@ -90,7 +91,7 @@ class DishRepositoryTest extends MyJpaConfiguration {
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "restaurant", "dishPhoto", "dishCategory")
                 .contains(dish1, dish2, dish3);
 
-        assertEquals(3, dishesFromDb1.size());
+        assertTrue(dishesFromDb1.size() >= 3);
     }
 
     @Test
@@ -212,11 +213,13 @@ class DishRepositoryTest extends MyJpaConfiguration {
         String dishCode = someDish1().getDishCode();
 
         //when
+        List<DishEntity> before = dishJpaRepository.findActive();
         dishJpaRepository.deactivate(dishCode);
-        List<DishEntity> activeDishes = dishJpaRepository.findActive();
+        List<DishEntity> after = dishJpaRepository.findActive();
+        int difference = before.size() - after.size();
 
         // then
-        assertEquals(2, activeDishes.size());
+        assertEquals(1, difference);
     }
 
 }

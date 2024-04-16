@@ -15,9 +15,9 @@ public interface DishCompositionJpaRepository extends JpaRepository<DishComposit
 
     @Query("""
                 SELECT d_co FROM DishCompositionEntity d_co
-                WHERE d_co.order = ?1
+                WHERE d_co.order.orderCode = ?1
                 """)
-    List<DishCompositionEntity> findByOrder(OrderEntity order);
+    List<DishCompositionEntity> findByOrder(String orderCode);
 
 //@Query("""
 //                SELECT o FROM DishCompositionEntity d_co

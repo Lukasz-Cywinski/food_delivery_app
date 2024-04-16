@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface DishCompositionDAO {
 
-    List<DishComposition> findDishCompositionByOrder(Order order);
+    List<DishComposition> findDishCompositionByOrder(String orderCode);
 
     Optional<DishComposition> createDishComposition(DishComposition dishComposition);
 

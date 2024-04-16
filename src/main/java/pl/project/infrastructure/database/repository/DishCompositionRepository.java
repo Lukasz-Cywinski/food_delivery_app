@@ -22,8 +22,8 @@ public class DishCompositionRepository implements DishCompositionDAO {
     private final OrderEntityMapper orderEntityMapper;
 
     @Override
-    public List<DishComposition> findDishCompositionByOrder(Order order) {
-        return dishCompositionJpaRepository.findByOrder(orderEntityMapper.mapToEntity(order)).stream()
+    public List<DishComposition> findDishCompositionByOrder(String orderCode) {
+        return dishCompositionJpaRepository.findByOrder(orderCode).stream()
                 .map(dishCompositionEntityMapper::mapFromEntity)
                 .toList();
     }

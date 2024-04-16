@@ -1,7 +1,13 @@
 server:
+#  tomcat:
+#    max-http-form-post-size: 5MB
+#    max-swallow-size: 5MB
   port: 8080
   servlet:
     context-path: /food-delivery
+#    multipart:
+#      max-file-size: 5MB
+#      max-request-size: 5MB
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
@@ -22,5 +28,9 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   security:
     enabled: true
+#  mvc:
+#    hiddenMethod:
+#      filter:
+#        enabled: true
   flyway:
     baseline-on-migrate: true

@@ -7,6 +7,7 @@ import pl.project.business.dao.DishPhotoFileStorageDAO;
 import pl.project.domain.exception.storage.DishPhotoStorageException;
 import pl.project.domain.model.DishPhoto;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -20,6 +21,8 @@ public class DishPhotoFileStorageService implements DishPhotoFileStorageDAO {
     @Override
     public void savePhotoInStorage(MultipartFile dishPhotoContent, DishPhoto dishPhoto) {
         try {
+            File directory = new File(PATH_TO_PHOTO_STORAGE_WITH_FORMATTER.formatted(""));
+            if (!directory.exists()) directory.mkdirs();
             dishPhotoContent.transferTo(Paths.get(
                     PATH_TO_PHOTO_STORAGE_WITH_FORMATTER.formatted(dishPhoto.getName())));
         } catch (Exception e) {
