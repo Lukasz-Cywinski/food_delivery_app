@@ -55,9 +55,10 @@ or
 
 ### Executing program
 
+![main_panel](./images/main-panel.png)
+
 * Run URL: http://localhost:8080/food-delivery/ in your browser
-* Main panel:
-![main_panel](./images/Main panel.png)
+* You will see main panel
 * From there You can create new user for chosen role or log in
 * You can use default log in authentication values shown on main page
 
