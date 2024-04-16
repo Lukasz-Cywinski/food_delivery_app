@@ -57,7 +57,7 @@ or
 
 * Run URL: http://localhost:8080/food-delivery/ in your browser
 * Main panel:
-![](./Main panel.PNG)
+![main_panel](./images/Main panel.png)
 * From there You can create new user for chosen role or log in
 * You can use default log in authentication values shown on main page
 
