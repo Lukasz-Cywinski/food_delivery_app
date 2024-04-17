@@ -1,6 +1,7 @@
 package pl.project.business.services.restaurant_owner;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,11 +18,13 @@ import pl.project.domain.model.Restaurant;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static pl.project.api.controller.addresses.ResourcePaths.URL_TO_PHOTO_STORAGE_WITH_FORMATTER;
 import static pl.project.domain.exception.ExceptionMessages.*;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class MenuManagementService {
@@ -119,11 +122,21 @@ public class MenuManagementService {
             if (Objects.nonNull(newDishPrice)) dishDAO.changeDishPrice(newDishPrice, dishCode);
             if (Objects.nonNull(newDishAveragePreparationTime)) dishDAO.changeDishPreparationTime(newDishAveragePreparationTime, dishCode);
             if (Objects.nonNull(newDishCategoryId)) dishDAO.changeDishCategory(newDishCategoryId, dishCode);
-            if (!dishPhotoContent.isEmpty()) dishPhotoFileStorageDAO.updatePhotoInStorage(dishPhotoContent, dishPhotoUrl);
+            if (!dishPhotoContent.isEmpty()) {
+                Optional<DishPhoto> dishPhoto = dishPhotoDAO.getDishPhotoByUrl(dishPhotoUrl);
+                if (dishPhoto.isPresent()) dishPhotoFileStorageDAO.updatePhotoInStorage(dishPhotoContent, dishPhotoUrl);
+                else addPhotoToExistingDish(dishPhotoContent, dishCode);
+            }
         }
         catch (Exception e){
             throw new OwnerResourceUpdateException(RESOURCE_MODIFICATION_EXCEPTION
                     .formatted(Dish.class.getSimpleName(), dishCode));
         }
+    }
+
+    private void addPhotoToExistingDish(MultipartFile dishPhotoContent, String dishCode){
+        Dish dish = dishDAO.findDishByDishCode(dishCode).orElseThrow(RuntimeException::new);
+        DishPhoto dishPhoto = createDishPhoto(dishPhotoContent);
+        dishDAO.createDish(dish.withDishPhoto(dishPhoto));
     }
 }

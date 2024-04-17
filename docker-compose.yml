@@ -2,6 +2,9 @@ version: "v2.23.3-desktop.2"
 services:
   backend:
     build: .
+    volumes:
+      - image_storage:/src/main/resources/storage/dish_photo
+      - actual_logs:/logs
     ports:
       - 8080:8080
     environment:
@@ -33,5 +36,7 @@ services:
       retries: 5
 volumes:
   db-data:
+  image_storage:
+  actual_logs:
 networks:
   spring-boot-postgres:

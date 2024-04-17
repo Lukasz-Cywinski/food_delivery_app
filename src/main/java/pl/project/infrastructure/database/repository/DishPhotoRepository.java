@@ -36,4 +36,10 @@ public class DishPhotoRepository implements DishPhotoDAO {
     public Integer changePhotoName(String newPhotoName, Integer dishPhotoId) {
         return dishPhotoJpaRepository.changePhotoName(newPhotoName, dishPhotoId);
     }
+
+    @Override
+    public Optional<DishPhoto> getDishPhotoByUrl(String url) {
+        return dishPhotoJpaRepository.findByOrderUrl(url).map(
+                dishPhotoEntityMapper::mapFromEntity);
+    }
 }

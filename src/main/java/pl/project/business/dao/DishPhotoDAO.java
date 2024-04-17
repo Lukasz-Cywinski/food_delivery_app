@@ -11,4 +11,6 @@ public interface DishPhotoDAO {
     void deleteDishPhoto (DishPhoto dishPhoto);
 
     Integer changePhotoName(String newPhotoName, Integer dishPhotoId);
+
+    Optional<DishPhoto> getDishPhotoByUrl(String url);
 }
