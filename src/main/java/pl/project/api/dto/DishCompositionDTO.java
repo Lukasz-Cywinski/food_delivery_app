@@ -5,17 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.util.Map;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DishCompositionDTO {
-    Map<DishDTO, String> compositions;
-    BigDecimal totalPrice;
-    String orderCode;
-    Integer estimatedPreparationTime;
 
+    Integer quantity;
+    String dishName;
+    String dishCode;
 }

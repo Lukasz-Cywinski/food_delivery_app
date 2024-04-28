@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import pl.project.domain.formatter.Formatters;
 import pl.project.infrastructure.database.entity.OrderEntity;
 import pl.project.infrastructure.database.repository.jpa.*;
 import pl.project.infrastructure.security.db.UserRepository;
@@ -18,6 +19,7 @@ import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static pl.project.domain.formatter.Formatters.*;
 import static pl.project.util.db.OrderInstance.*;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -39,7 +41,6 @@ class OrderRepositoryTest extends MyJpaConfiguration {
     private UserRepository userRepository;
 
     private final Initializer initializer = new Initializer();
-    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @BeforeEach
     void initializeDbData(){
@@ -85,16 +86,16 @@ class OrderRepositoryTest extends MyJpaConfiguration {
                 .usingRecursiveFieldByFieldElementComparatorOnFields("orderCode")
                 .contains(order1, order2, order3);
 
-        assertEquals(order1.getReceivedDateTime().format(FORMATTER), orderFromDb1.getReceivedDateTime().format(FORMATTER));
-        assertEquals(order2.getReceivedDateTime().format(FORMATTER), orderFromDb2.getReceivedDateTime().format(FORMATTER));
-        assertEquals(order3.getReceivedDateTime().format(FORMATTER), orderFromDb3.getReceivedDateTime().format(FORMATTER));
+        assertEquals(order1.getReceivedDateTime().format(DATE_TIME_FORMATTER), orderFromDb1.getReceivedDateTime().format(DATE_TIME_FORMATTER));
+        assertEquals(order2.getReceivedDateTime().format(DATE_TIME_FORMATTER), orderFromDb2.getReceivedDateTime().format(DATE_TIME_FORMATTER));
+        assertEquals(order3.getReceivedDateTime().format(DATE_TIME_FORMATTER), orderFromDb3.getReceivedDateTime().format(DATE_TIME_FORMATTER));
 
         if (Objects.nonNull(orderFromDb1.getCompletedDateTime())
                 && Objects.nonNull(orderFromDb2.getCompletedDateTime())
                 && Objects.nonNull(orderFromDb3.getCompletedDateTime())) {
-            assertEquals(order1.getCompletedDateTime().format(FORMATTER), orderFromDb1.getCompletedDateTime().format(FORMATTER));
-            assertEquals(order2.getCompletedDateTime().format(FORMATTER), orderFromDb2.getCompletedDateTime().format(FORMATTER));
-            assertEquals(order3.getCompletedDateTime().format(FORMATTER), orderFromDb3.getCompletedDateTime().format(FORMATTER));
+            assertEquals(order1.getCompletedDateTime().format(DATE_TIME_FORMATTER), orderFromDb1.getCompletedDateTime().format(DATE_TIME_FORMATTER));
+            assertEquals(order2.getCompletedDateTime().format(DATE_TIME_FORMATTER), orderFromDb2.getCompletedDateTime().format(DATE_TIME_FORMATTER));
+            assertEquals(order3.getCompletedDateTime().format(DATE_TIME_FORMATTER), orderFromDb3.getCompletedDateTime().format(DATE_TIME_FORMATTER));
         }
         assertEquals(3, orders.size());
     }
@@ -111,6 +112,6 @@ class OrderRepositoryTest extends MyJpaConfiguration {
         OrderEntity orderFromDb1 = orderJpaRepository.findByOrderCode(orderCode).orElseThrow();
 
         //then
-        assertEquals(completedDateTime.format(FORMATTER), orderFromDb1.getCompletedDateTime().format(FORMATTER));
+        assertEquals(completedDateTime.format(DATE_TIME_FORMATTER), orderFromDb1.getCompletedDateTime().format(DATE_TIME_FORMATTER));
     }
 }

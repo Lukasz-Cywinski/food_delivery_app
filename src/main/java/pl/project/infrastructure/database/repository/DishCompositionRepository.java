@@ -23,7 +23,7 @@ public class DishCompositionRepository implements DishCompositionDAO {
 
     @Override
     public List<DishComposition> findDishCompositionByOrder(String orderCode) {
-        return dishCompositionJpaRepository.findByOrder(orderCode).stream()
+        return dishCompositionJpaRepository.findByOrder_OrderCode(orderCode).stream()
                 .map(dishCompositionEntityMapper::mapFromEntity)
                 .toList();
     }

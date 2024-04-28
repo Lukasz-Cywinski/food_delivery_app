@@ -12,7 +12,7 @@ public class DeliveryAddressImp implements DeliveryAddressMapper {
         return DeliveryAddress.builder()
                 .city(dto.getCity())
                 .street(dto.getStreet())
-                .buildingNumber(dto.getBuildingNumber())
+                .postalCode(dto.getBuildingNumber())
                 .build();
     }
 }

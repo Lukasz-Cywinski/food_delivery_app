@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.project.infrastructure.database.entity.DishCompositionEntity;
 import pl.project.infrastructure.database.entity.OrderEntity;
-import pl.project.infrastructure.database.entity.RestaurantEntity;
 
 import java.util.List;
 import java.util.Set;
@@ -13,20 +12,7 @@ import java.util.Set;
 @Repository
 public interface DishCompositionJpaRepository extends JpaRepository<DishCompositionEntity, Integer> {
 
-    @Query("""
-                SELECT d_co FROM DishCompositionEntity d_co
-                WHERE d_co.order.orderCode = ?1
-                """)
-    List<DishCompositionEntity> findByOrder(String orderCode);
-
-//@Query("""
-//                SELECT o FROM DishCompositionEntity d_co
-//                JOIN d_co.order o
-//                JOIN d_co.dish d
-//                WHERE d.restaurant = ?1
-//                AND o.completedDateTime IS NULL
-//                """)
-//    Set<OrderEntity> findActiveOrdersForRestaurant(RestaurantEntity restaurant);
+    List<DishCompositionEntity> findByOrder_OrderCode(String orderCode);
 
     @Query("""
                 SELECT o FROM DishCompositionEntity d_co

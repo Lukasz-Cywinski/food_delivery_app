@@ -1,16 +1,16 @@
 package pl.project.api.controller.view.customer;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import pl.project.api.controller.exception.CustomerIncorrectInputException;
-import pl.project.api.controller.exception.ExceptionMessages;
 import pl.project.api.dto.*;
 import pl.project.api.dto.mapper.DishMapper;
 import pl.project.api.dto.mapper.PageablePropertiesMapper;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 import static pl.project.api.controller.addresses.CustomerAddresses.ACTIVE_ORDERS_MANAGEMENT;
 import static pl.project.api.controller.addresses.CustomerAddresses.ORDER_CREATION;
-import static pl.project.api.controller.exception.ExceptionMessages.*;
+import static pl.project.api.controller.exception.ExceptionMessages.INCORRECT_INPUT_EXCEPTION;
 
 @Controller
 @AllArgsConstructor
@@ -109,8 +109,7 @@ public class OrderCreationController {
 
         return Map.of(
                 "dishDTOs", dishDTOs,
-                "dishList", DataListDTO.builder().items(dishList).build(),
-                "outputTest", ""
+                "dishList", DataListDTO.builder().items(dishList).build()
         );
     }
 
@@ -141,7 +140,7 @@ public class OrderCreationController {
                 .orElseThrow(() -> new CustomerIncorrectInputException(INCORRECT_INPUT_EXCEPTION.formatted("Preparation time","Order confirmation")))
                 .getAveragePreparationTimeMin();
 
-        DishCompositionDTO dishCompositionDTO = DishCompositionDTO.builder()
+        DishCompositionSummaryDTO dishCompositionSummaryDTO = DishCompositionSummaryDTO.builder()
                 .compositions(dishCompositions)
                 .totalPrice(totalPrice)
                 .orderCode(orderCode)
@@ -149,7 +148,7 @@ public class OrderCreationController {
                 .build();
         String summaryContent;
         try {
-            Map<String, String> content = dishCompositionDTO.getCompositions().entrySet().stream()
+            Map<String, String> content = dishCompositionSummaryDTO.getCompositions().entrySet().stream()
                     .collect(Collectors.toMap(
                             entry -> entry.getKey().getDishCode(),
                             Map.Entry::getValue
@@ -162,7 +161,7 @@ public class OrderCreationController {
         }
 
         return Map.of(
-              "dishCompositionDTO", dishCompositionDTO,
+              "dishCompositionSummaryDTO", dishCompositionSummaryDTO,
                 "summaryContent", summaryContent,
                 "orderCode", orderCode
         );

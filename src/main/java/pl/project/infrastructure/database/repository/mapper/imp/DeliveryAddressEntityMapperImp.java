@@ -1,8 +1,6 @@
 package pl.project.infrastructure.database.repository.mapper.imp;
 
 
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.project.domain.model.DeliveryAddress;
 import pl.project.infrastructure.database.entity.DeliveryAddressEntity;
@@ -15,7 +13,7 @@ public class DeliveryAddressEntityMapperImp implements DeliveryAddressEntityMapp
         return DeliveryAddress.builder()
                 .id(entity.getId())
                 .city(entity.getCity())
-                .buildingNumber(entity.getBuildingNumber())
+                .postalCode(entity.getBuildingNumber())
                 .street(entity.getStreet())
                 .build();
     }
@@ -24,7 +22,7 @@ public class DeliveryAddressEntityMapperImp implements DeliveryAddressEntityMapp
         return DeliveryAddressEntity.builder()
                 .id(domainObj.getId())
                 .city(domainObj.getCity())
-                .buildingNumber(domainObj.getBuildingNumber())
+                .buildingNumber(domainObj.getPostalCode())
                 .street(domainObj.getStreet())
                 .build();
     }

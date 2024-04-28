@@ -9,12 +9,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import pl.project.api.dto.DishCompositionDTO;
 import pl.project.api.dto.OrderDTO;
+import pl.project.api.dto.OrderDetailsDTO;
 import pl.project.api.dto.RestaurantDTO;
+import pl.project.api.dto.mapper.DishCompositionMapper;
+import pl.project.api.dto.mapper.OrderDetailsMapper;
 import pl.project.api.dto.mapper.OrderMapper;
 import pl.project.api.dto.mapper.RestaurantMapper;
 import pl.project.business.services.restaurant_owner.OrderManagementService;
 import pl.project.business.services.restaurant_owner.RestaurantManagementService;
+import pl.project.domain.formatter.Formatters;
 import pl.project.domain.model.DishComposition;
 import pl.project.infrastructure.security.ProjectUserDetailsService;
 
@@ -26,6 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static pl.project.api.controller.addresses.RestaurantOwnerAddresses.ORDER_MANAGEMENT;
+import static pl.project.domain.formatter.Formatters.*;
 
 @Controller
 @AllArgsConstructor
@@ -39,7 +45,8 @@ public class OrderManagementController {
     private final ProjectUserDetailsService projectUserDetailsService;
     private final RestaurantManagementService restaurantManagementService;
 
-    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final DishCompositionMapper dishCompositionMapper;
+    private final OrderDetailsMapper orderDetailsMapper;
     private final RestaurantMapper restaurantMapper;
     private final OrderMapper orderMapper;
 
@@ -63,7 +70,7 @@ public class OrderManagementController {
 
 
         List<Long> timeLeft = orderDTOs.stream()
-                .map(order -> LocalDateTime.parse(order.getReceivedDateTime(), FORMATTER).until(LocalDateTime.now(), ChronoUnit.SECONDS))
+                .map(order -> LocalDateTime.parse(order.getReceivedDateTime(), DATE_TIME_FORMATTER).until(LocalDateTime.now(), ChronoUnit.SECONDS))
                 .toList();
 
         return Map.of(
@@ -83,13 +90,13 @@ public class OrderManagementController {
     }
 
     private Map<String, ?> populateOrderDetailsWithData(String orderCode) {
-        OrderDTO orderDTO = orderMapper.mapToDTO(orderManagementService.getOrder(orderCode));
-
-        List<DishComposition> dishCompositions = orderManagementService.getDishCompositions(orderCode);
-        System.out.println();
-
+        List<DishCompositionDTO> dishCompositionDTOs = orderManagementService.getDishCompositions(orderCode).stream()
+                .map(dishCompositionMapper::mapToDTO)
+                .toList();
+        OrderDetailsDTO orderDetailsDTO = orderDetailsMapper.mapToDTO(orderManagementService.getOrder(orderCode));
         return Map.of(
-
+                "dishCompositionDTOs", dishCompositionDTOs,
+                "orderDetailsDTO", orderDetailsDTO
         );
     }
 
@@ -97,6 +104,8 @@ public class OrderManagementController {
     public String notifyDeliveryMan(
             @PathVariable String orderCode
     ){
+        // it is simplified - order is "delivered" immediately
+        orderManagementService.notifyDeliveryService(orderCode);
         return REDIRECT_ORDER_MANAGEMENT;
     }
 

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import pl.project.domain.formatter.Formatters;
 import pl.project.infrastructure.database.entity.*;
 import pl.project.infrastructure.database.repository.jpa.*;
 import pl.project.infrastructure.security.db.UserRepository;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static pl.project.domain.formatter.Formatters.*;
 import static pl.project.util.db.DishInstance.*;
 import static pl.project.util.db.RestaurantInstance.*;
 import static pl.project.util.db.ServedAddressInstance.someServedAddress1;
@@ -43,7 +45,6 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
     private UserRepository userRepository;
 
     private final Initializer initializer = new Initializer();
-    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @BeforeEach
     void initializeDbData() {
@@ -95,12 +96,12 @@ class RestaurantRepositoryTest extends MyJpaConfiguration {
                 .usingRecursiveFieldByFieldElementComparatorOnFields("restaurantCode", "name", "isActive")
                 .contains(restaurant1, restaurant2, restaurant3);
 
-        assertThat(restaurant1.getAdded().format(FORMATTER))
-                .isEqualTo(restaurantFromDb1.getAdded().format(FORMATTER));
-        assertThat(restaurant2.getAdded().format(FORMATTER))
-                .isEqualTo(restaurantFromDb2.getAdded().format(FORMATTER));
-        assertThat(restaurant3.getAdded().format(FORMATTER))
-                .isEqualTo(restaurantFromDb3.getAdded().format(FORMATTER));
+        assertThat(restaurant1.getAdded().format(DATE_TIME_FORMATTER))
+                .isEqualTo(restaurantFromDb1.getAdded().format(DATE_TIME_FORMATTER));
+        assertThat(restaurant2.getAdded().format(DATE_TIME_FORMATTER))
+                .isEqualTo(restaurantFromDb2.getAdded().format(DATE_TIME_FORMATTER));
+        assertThat(restaurant3.getAdded().format(DATE_TIME_FORMATTER))
+                .isEqualTo(restaurantFromDb3.getAdded().format(DATE_TIME_FORMATTER));
 
         assertTrue(activeSortedRestaurants.size() >= 3);
     }

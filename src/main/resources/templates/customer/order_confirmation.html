@@ -47,7 +47,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="entry, index : ${dishCompositionDTO.compositions}">
+            <tr th:each="entry, index : ${dishCompositionSummaryDTO.compositions}">
                 <td th:text="${index.index + 1}"></td>
                 <td th:text="${entry.key.name}"></td>
                 <td th:text="${entry.key.price}"></td>
@@ -67,15 +67,15 @@
             <tbody>
             <tr>
                 <td th:text="${'Your original order code:'}"></td>
-                <td th:text="${dishCompositionDTO.orderCode}"></td>
+                <td th:text="${dishCompositionSummaryDTO.orderCode}"></td>
             </tr>
             <tr>
                 <td th:text="${'Total price:'}"></td>
-                <td th:text="${dishCompositionDTO.totalPrice + ' €'}"></td>
+                <td th:text="${dishCompositionSummaryDTO.totalPrice + ' €'}"></td>
             </tr>
             <tr>
                 <td th:text="${'Estimated preparation time (simplified -> selected longest):'}"></td>
-                <td th:text="${dishCompositionDTO.estimatedPreparationTime + ' min'}"></td>
+                <td th:text="${dishCompositionSummaryDTO.estimatedPreparationTime + ' min'}"></td>
             </tr>
             </tbody>
         </table>

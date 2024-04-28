@@ -85,7 +85,7 @@ class DishCompositionRepositoryTest extends MyJpaConfiguration {
         //when
         List<DishCompositionEntity> dishCompositions = dishCompositionJpaRepository.findAll();
         String orderCode = dishCompositions.getFirst().getOrder().getOrderCode();
-        List<DishCompositionEntity> dishCompositionsByOrder = dishCompositionJpaRepository.findByOrder(orderCode);
+        List<DishCompositionEntity> dishCompositionsByOrder = dishCompositionJpaRepository.findByOrder_OrderCode(orderCode);
 
         //then
         assertThat(dishCompositionsByOrder)
