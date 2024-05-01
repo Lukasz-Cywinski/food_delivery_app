@@ -41,7 +41,7 @@ public class DishEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private RestaurantEntity restaurant;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dish_photo_id", nullable = false)
     private DishPhotoEntity dishPhoto;
 

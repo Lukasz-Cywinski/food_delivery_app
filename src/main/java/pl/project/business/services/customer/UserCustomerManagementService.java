@@ -18,8 +18,8 @@ import static pl.project.domain.exception.ExceptionMessages.RESOURCE_READ_EXCEPT
 @AllArgsConstructor
 public class UserCustomerManagementService {
 
-    CustomerDAO customerDAO;
-    ProjectUserDetailsService projectUserDetailsService;
+    private final CustomerDAO customerDAO;
+    private final ProjectUserDetailsService projectUserDetailsService;
 
     @Transactional
     public void modifyCustomerPersonalData(Customer updatedCustomer, String customerEmail) {

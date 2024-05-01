@@ -39,7 +39,7 @@ public class OrderEntity {
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "delivery_service_id", nullable = false)
     private DeliveryServiceEntity deliveryService;
 

@@ -13,5 +13,5 @@ public interface OrderDAO {
 
     Integer reportCompletedDateTime(OffsetDateTime deliveryDateTime, String orderCode);
 
-    void deleteOrder(Order order);
+    Integer deleteOrder(String orderCode);
 }

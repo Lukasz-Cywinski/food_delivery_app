@@ -39,8 +39,7 @@ public class OrderRepository implements OrderDAO {
     }
 
     @Override
-    public void deleteOrder(Order order) {
-        orderJpaRepository.delete(
-                orderEntityMapper.mapToEntity(order));
+    public Integer deleteOrder(String orderCode) {
+        return orderJpaRepository.deleteByOrderCode(orderCode);
     }
 }

@@ -131,6 +131,9 @@ public class OrderCreationController {
                         composition -> composition[0]
                 ));
 
+        if (dishCompositions.isEmpty()) throw new CustomerIncorrectInputException(INCORRECT_INPUT_EXCEPTION.formatted(
+                "EMPTY ORDER", "Order confirmation"));
+
         BigDecimal totalPrice = dishCompositions.entrySet().stream()
                 .map(entry -> entry.getKey().getPrice().multiply(new BigDecimal(entry.getValue())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

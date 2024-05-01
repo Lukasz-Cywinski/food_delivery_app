@@ -13,6 +13,17 @@ import java.util.Set;
 public interface DishCompositionJpaRepository extends JpaRepository<DishCompositionEntity, Integer> {
 
     List<DishCompositionEntity> findByOrder_OrderCode(String orderCode);
+    Integer deleteByOrder_OrderCode(String orderCode);
+
+    @Query("""
+                SELECT d_co FROM DishCompositionEntity d_co
+                JOIN d_co.order o
+                JOIN d_co.dish d
+                JOIN o.customer c
+                WHERE c.email = ?1
+                AND o.completedDateTime IS NULL
+                """)
+    List<DishCompositionEntity> findActiveForCustomer(String customerEmail); //TODO JPA test
 
     @Query("""
                 SELECT o FROM DishCompositionEntity d_co
@@ -33,4 +44,12 @@ public interface DishCompositionJpaRepository extends JpaRepository<DishComposit
                 AND o.completedDateTime IS NOT NULL
                 """)
     Set<OrderEntity> findRealizedOrdersForRestaurant(String restaurantCode);
+
+//    @Query("""
+//                DELETE d_co FROM DishCompositionEntity d_co
+//                JOIN d_co.order o
+//                WHERE o.orderCode = ?1
+//                """)
+//    @Modifying(clearAutomatically = true)
+//    Integer deleteDishCompositionsForOrder(String orderCode); //TODO JPA TEST
 }

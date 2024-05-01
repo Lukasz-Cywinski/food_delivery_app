@@ -18,11 +18,11 @@ insert into food_delivery_user (id, user_name, email,  password, active) values 
 
 
 insert into delivery_address (id, city, building_number, street) values (-1, 'my_city', 'my_building_number', 'my_street');
-insert into customer (id, name, surname, phone_number, email, delivery_address_id, is_active, user_id) values (-1, 'customer_name', 'customer_surname', 'customer_number', 'customerEmail@mail.com', -1, true, -1);
+insert into customer (id, name, surname, phone_number, email, delivery_address_id, is_active, user_id) values (-1, 'customer_name', 'customer_surname', '+03 030 030 000', 'customerEmail@mail.com', -1, true, -1);
 
-insert into restaurant_owner (id, name, surname, phone_number, email, is_active, user_id) values (-1, 'owner_name', 'owner_surname', 'owner_number', 'restaurantOwnerEmail@mail.com', true, -2);
+insert into restaurant_owner (id, name, surname, phone_number, email, is_active, user_id) values (-1, 'owner_name', 'owner_surname', '+02 020 020 000', 'restaurantOwnerEmail@mail.com', true, -2);
 
-insert into delivery_man (id, personal_code, name, surname, phone_number, is_available, is_active, user_id) values (-1, 'deliveryM_name', 'deliveryM_code', 'deliveryM_surname', 'deliveryM_number', true, true, -3);
+insert into delivery_man (id, personal_code, name, surname, phone_number, is_available, is_active, user_id) values (-1, 'deliveryM_name', 'deliveryM_code', 'deliveryM_surname', '+01 010 010 000', true, true, -3);
 
 insert into food_delivery_role (id, role) values (1, 'CUSTOMER'), (2, 'RESTAURANT_OWNER'), (3, 'DELIVERY_MAN'), (4, 'REST_API'), (5, 'ADMIN');
 

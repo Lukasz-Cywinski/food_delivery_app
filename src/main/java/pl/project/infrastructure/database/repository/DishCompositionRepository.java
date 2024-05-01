@@ -54,8 +54,14 @@ public class DishCompositionRepository implements DishCompositionDAO {
     }
 
     @Override
-    public void deleteDishComposition(DishComposition dishComposition) {
-        dishCompositionJpaRepository.delete(
-                dishCompositionEntityMapper.mapToEntity(dishComposition));
+    public Integer deleteDishComposition(String orderCode) {
+        return dishCompositionJpaRepository.deleteByOrder_OrderCode(orderCode);
+    }
+
+    @Override
+    public List<DishComposition> getActiveOrdersForCustomer(String customerEmail) {
+        return dishCompositionJpaRepository.findActiveForCustomer(customerEmail).stream()
+                .map(dishCompositionEntityMapper::mapFromEntity)
+                .toList();
     }
 }

@@ -25,14 +25,14 @@ import static pl.project.domain.exception.ExceptionMessages.RESOURCE_READ_EXCEPT
 @Service
 @AllArgsConstructor
 public class OrderCreationService {
-    PageableService pageableService;
-    DeliveryServiceDAO deliveryServiceDAO;
-    DishCompositionDAO dishCompositionDAO;
-    DeliveryManDAO deliveryManDAO;
-    RestaurantDAO restaurantDAO;
-    CustomerDAO customerDAO;
-    OrderDAO orderDAO;
-    DishDAO dishDAO;
+    private final PageableService pageableService;
+    private final DeliveryServiceDAO deliveryServiceDAO;
+    private final DishCompositionDAO dishCompositionDAO;
+    private final DeliveryManDAO deliveryManDAO;
+    private final RestaurantDAO restaurantDAO;
+    private final CustomerDAO customerDAO;
+    private final OrderDAO orderDAO;
+    private final DishDAO dishDAO;
 
     @Transactional
     public List<Restaurant> getRestaurantsForYourAddress(PageableProperties properties, String customerEmail) {

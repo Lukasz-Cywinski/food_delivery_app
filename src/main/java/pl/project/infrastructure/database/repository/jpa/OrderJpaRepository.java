@@ -14,12 +14,14 @@ public interface OrderJpaRepository extends JpaRepository<OrderEntity, Integer> 
 
     Optional<OrderEntity> findByOrderCode(String deliveryServiceCode);
 
+    Integer deleteByOrderCode(String orderCode);
+
     @Query("""
                 UPDATE OrderEntity o
                 SET o.completedDateTime = ?1
                 WHERE o.orderCode = ?2
                 """)
     @Modifying(clearAutomatically = true)
-    Integer reportCompletedDateTime(OffsetDateTime deliveryDateTime, String orderCode);
+    Integer reportCompletedDateTime(OffsetDateTime completedDateTime, String orderCode);
 
 }

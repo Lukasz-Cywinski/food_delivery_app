@@ -17,5 +17,7 @@ public interface DishCompositionDAO {
 
     List <Order> getRealizedOrdersForRestaurant(String restaurantCode);
 
-    void deleteDishComposition(DishComposition dishComposition);
+    Integer deleteDishComposition(String orderCode);
+
+    List<DishComposition> getActiveOrdersForCustomer(String customerEmail);
 }
