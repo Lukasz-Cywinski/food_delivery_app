@@ -65,10 +65,10 @@ or
 * Run URL: http://localhost:8081/food-delivery/ in your browser (if you run it locally) or open deployed instance: http://lukascywin.com:8081/food-delivery/
 * You will see main panel
 * From there You can create new user for chosen role or log in
-* You can use default log in authentication values shown on main page
 
 * Restaurant owner - main functionalities almost finished
 * Customer - allows creating new order, many functionalities still in development
+* * Customer sees only restaurants matches his current address (city and street)
 * Delivery man - only account creation, log in / log out available
 * Rest api user - only account creation, log in / log out available
 
