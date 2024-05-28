@@ -6,7 +6,7 @@ services:
       - image_storage:/src/main/resources/storage/dish_photo
       - actual_logs:/logs
     ports:
-      - 8080:8080
+      - 8081:8081
     environment:
       - SPRING_PROFILES_ACTIVE=local
       - SPRING_DATASOURCE_URL=jdbc:postgresql://PostgreSQL:5432/food_delivery
